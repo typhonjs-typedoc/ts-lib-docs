@@ -1,0 +1,38 @@
+{
+  "name": "@typhonjs-svelte/api-docs-typescript-libs",
+  "version": "2023.0.0",
+  "description": "Provides generated documentation for Typescript libs.",
+  "license": "MPL-2.0",
+  "type": "module",
+  "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
+  "contributors": [
+    "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
+  ],
+  "sideEffects": false,
+  "exports": {
+    "./plugin/ts-links": {
+      "types": "./types/index-plugin.d.ts",
+      "require": "./dist/plugin/ts-links/index.cjs"
+    }
+  },
+  "devDependencies": {
+    "@typhonjs-build-test/node": "^0.0.9",
+    "@typhonjs-utils/file-util": "^0.0.8",
+    "sirv": "^2",
+    "polka": "^0.5.2",
+    "typedoc": "^0.23",
+    "typedoc-plugin-coverage": "^2.1.0",
+    "typedoc-plugin-mdn-links": "^3.0.3",
+    "typedoc-theme-yaf": "^0.0.4",
+    "typescript": "^5.0.4",
+    "upath": "^2.0.1"
+  },
+  "browserslist": [">5%", "not IE 11"],
+  "scripts": {
+    "build-docs": "node src/generate/generate.js",
+    "build-plugin": "rollup -c",
+    "build-lib": "rollup -c rollup.config.libs.mjs",
+    "serve": "node src/serve/serve.js",
+    "eslint": "eslint ."
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "@typhonjs-config/eslint-config/esm/2022/node"
+  ]
+}

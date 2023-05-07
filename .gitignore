@@ -1,0 +1,6 @@
+.idea
+.DS_Store
+.doc-gen/
+dist/
+docs/
+node_modules/

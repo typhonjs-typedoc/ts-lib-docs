@@ -1,7 +1,7 @@
 {
-  "name": "@typhonjs-svelte/api-docs-typescript-libs",
+  "name": "@typhonjs-typescript/api-docs-libs",
   "version": "2023.0.0",
-  "description": "Provides generated documentation for Typescript libs.",
+  "description": "Provides generated documentation for built-in Typescript lib declarations and a TypeDoc plugin to link symbols to the published docs.",
   "license": "MPL-2.0",
   "type": "module",
   "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",

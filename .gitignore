@@ -2,5 +2,7 @@
 .DS_Store
 .doc-gen/
 dist/
-docs/
+docs-dom/
+docs-esm/
+docs-worker/
 node_modules/

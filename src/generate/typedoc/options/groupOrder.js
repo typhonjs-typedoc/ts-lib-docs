@@ -6,8 +6,8 @@
 export const groupOrder = [
    'Classes',
    'Functions',
-   'Namespaces',
    'Variables',
+   'Namespaces',
    'Enumerations',
    'Interfaces',
    'Type Aliases',

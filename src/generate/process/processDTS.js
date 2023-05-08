@@ -1,6 +1,7 @@
+import path             from 'node:path';
+
 import { getFileList }  from "@typhonjs-utils/file-util";
 import fs               from 'fs-extra';
-import upath            from 'upath';
 
 /**
  * Processes TRL runtime & standard libraries along with the Svelte library moving DTS files to `.doc-gen`.
@@ -59,12 +60,7 @@ function processDTSFile(srcFilepath, destFilepath)
 
 const skipFilenames = [
    'lib.decorators.legacy',
-   'lib.dom',
-   'lib.dom.iterable',
-   'lib.scripthost',
-   'lib.webworker',
-   'lib.webworker.importscripts',
-   'lib.webworker.iterable'
+   'lib.scripthost'
 ];
 
 /**
@@ -76,7 +72,7 @@ async function processPackageTypescript()
 
    for (const filepath of filepaths)
    {
-      const name = upath.basename(filepath, '.d.ts');
+      const name = path.basename(filepath, '.d.ts');
       if (name.startsWith('lib.') && !skipFilenames.includes(name))
       {
          if (processDTSFile(filepath, `./.doc-gen/source/${name}.d.ts`)) { console.log(name); }

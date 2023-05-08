@@ -1,26 +1,56 @@
+import fs                  from 'fs-extra';
+
 import {
    Application,
-   Logger,
    LogLevel,
    TSConfigReader }        from 'typedoc';
 
 import {
-   entryPoints,
-   externalSymbolLinkMappings,
-   // groupOrder,
+   groupOrder,
    kindSortOrder,
-   navigationLinks,
    searchGroupBoosts }     from './options/index.js';
+
+const configDOM = {
+   name: 'Typescript Library Declarations (DOM)',
+   entryPoints: ['./.doc-gen/bundled/index-dom.d.ts'],
+   out: 'docs-dom',
+   tsconfig: './tsconfig-dom.json'
+}
+
+const configESM = {
+   name: 'Typescript Library Declarations (ES2023)',
+   entryPoints: ['./.doc-gen/bundled/index-esm.d.ts'],
+   out: 'docs-esm',
+   tsconfig: './tsconfig-esm.json'
+}
+
+const configWorker = {
+   name: 'Typescript Library Declarations (Web Worker)',
+   entryPoints: ['./.doc-gen/bundled/index-worker.d.ts'],
+   out: 'docs-worker',
+   tsconfig: './tsconfig-worker.json'
+}
+
+export async function typedoc(logLevel = LogLevel.Info)
+{
+   // if (fs.existsSync(configDOM.entryPoints[0])) { await generate(logLevel, configDOM); }
+   // if (fs.existsSync(configESM.entryPoints[0])) { await generate(logLevel, configESM); }
+   if (fs.existsSync(configWorker.entryPoints[0])) { await generate(logLevel, configWorker); }
+}
 
 /**
  * Generate docs from TS declarations in `.doc-gen`.
  *
- * @param {LogLevel} [logLevel=LogLevel.Info] The log level to use when generating Typedoc documentation.
+ * @param {LogLevel} [logLevel=LogLevel.Info] - The log level to use when generating Typedoc documentation.
+ *
+ * @param {{ name: string, entryPoints: string[], out: string, tsconfig: string }} config -
  *
  * @returns {Promise<void>}
  */
-export async function typedoc(logLevel = LogLevel.Info)
+export async function generate(logLevel = LogLevel.Info, config)
 {
+   fs.emptydirSync(`./${config.out}`);
+
    // Create a new TypeDoc application instance
    const app = new Application();
 
@@ -28,66 +58,38 @@ export async function typedoc(logLevel = LogLevel.Info)
    app.options.addReader(new TSConfigReader());
 
    app.bootstrap({
-      name: 'Typescript Library Declarations (ES2023)',
-
-      // Provide a link for the title / name.
-      // TODO: not supported by typedoc-theme-yaf.
-      // titleLink: '',
-
-      // Provides custom CSS.
-      // TODO: typedoc-theme-yaf doesn't link it; this needs to be added: <link rel="stylesheet" href="../assets/custom.css">
-      customCss: './styles/custom.css',
+      name: config.name,
 
       // Disables the source links as they reference the d.ts files.
-      // TODO: typedoc-theme-yaf does not completely remove text as "Defined in:" still displays.
       disableSources: true,
 
-      entryPoints,
+      entryPoints: config.entryPoints,
+
       entryPointStrategy: 'expand',
 
-      // Excludes any private members including the `#private;` member added by Typescript.
-      excludePrivate: true,
-
-      // For external API linking for @link tags.
-      externalSymbolLinkMappings,
-
       // For Typedoc v0.24+; sorts the main index for a namespace; not the sidebar tab.
-      // TODO: Enable when switching to Typedoc 0.24+
-      // groupOrder,
+      groupOrder,
 
       // Sorts the sidebar symbol types.
-      // TODO: not supported by typedoc-theme-yaf.
       kindSortOrder,
 
       // Hide the documentation generator footer.
-      // TODO: not supported by typedoc-theme-yaf.
       hideGenerator: true,
-
-      // Sets the custom logger for Typedoc 0.23; unnecessary for 0.24+
-      // TODO: Remove when switching to Typedoc `0.24+`.
-      logger: new CustomLogger(logLevel),
 
       // Sets log level.
       logLevel,
 
-      // Provides links for the top nav bar
-      // TODO: not supported by typedoc-theme-yaf.
-      navigationLinks,
-
       // Output directory for the generated documentation
-      out: 'docs',
+      out: config.out,
 
-      plugin: [
-         // './dist/plugin/foundry-links/index.cjs',
-         'typedoc-plugin-coverage',
-         'typedoc-plugin-mdn-links',
-         'typedoc-theme-yaf'
-      ],
+      plugin: [],
 
       // Boosts relevance for classes and function in search.
       searchGroupBoosts,
 
-      theme: 'yaf'
+      theme: 'default',
+
+      tsconfig: config.tsconfig
    });
 
    // Convert TypeScript sources to a TypeDoc ProjectReflection
@@ -96,52 +98,10 @@ export async function typedoc(logLevel = LogLevel.Info)
    // Generate the documentation
    if (project)
    {
-      return app.generateDocs(project, 'docs');
+      return app.generateDocs(project, config.out);
    }
    else
    {
       console.error('Error: No project generated');
-   }
-}
-
-/**
- * Create a custom Typedoc logger.
- *
- * TODO: Remove when switching to Typedoc `0.24+`.
- */
-class CustomLogger extends Logger
-{
-   /** @type {LogLevel} */
-   #logLevel;
-
-   /**
-    * @param {LogLevel} [logLevel=LogLevel.Info] The logging level for generated logs.
-    */
-   constructor(logLevel = LogLevel.Info)
-   {
-      super();
-
-      this.#logLevel = logLevel;
-   }
-
-   log(message, level)
-   {
-      if (level < this.#logLevel) { return; }
-
-      switch (level)
-      {
-         case LogLevel.Verbose:
-         case LogLevel.Info:
-            console.log(message);
-            break;
-
-         case LogLevel.Warn:
-            console.warn(message);
-            break;
-
-         case LogLevel.Error:
-            console.error(message);
-            break;
-      }
    }
 }

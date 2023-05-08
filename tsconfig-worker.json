@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "es2022",
+    "target": "es2022",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "moduleResolution" : "NodeNext",
+    "lib": ["ES2022", "WebWorker"]
+  },
+  "include" : [
+    "./.doc-gen/bundled/index-worker.d.ts"
+  ]
+}

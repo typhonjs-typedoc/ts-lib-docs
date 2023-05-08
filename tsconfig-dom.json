@@ -8,6 +8,6 @@
     "lib": ["DOM", "ES2022"]
   },
   "include" : [
-    "./.doc-gen/bundled/**/*.d.ts"
+    "./.doc-gen/bundled/index-dom.d.ts"
   ]
 }

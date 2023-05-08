@@ -18,20 +18,18 @@
   "devDependencies": {
     "@typhonjs-build-test/node": "^0.0.9",
     "@typhonjs-utils/file-util": "^0.0.8",
-    "sirv": "^2",
     "polka": "^0.5.2",
+    "sirv": "^2",
+    "ts-morph": "^18",
     "typedoc": "^0.23",
-    "typedoc-plugin-coverage": "^2.1.0",
-    "typedoc-plugin-mdn-links": "^3.0.3",
     "typedoc-theme-yaf": "^0.0.4",
-    "typescript": "^5.0.4",
-    "upath": "^2.0.1"
+    "typescript": "5.0.4",
+    "upath": "^2"
   },
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
     "build-docs": "node src/generate/generate.js",
     "build-plugin": "rollup -c",
-    "build-lib": "rollup -c rollup.config.libs.mjs",
     "serve": "node src/serve/serve.js",
     "eslint": "eslint ."
   }

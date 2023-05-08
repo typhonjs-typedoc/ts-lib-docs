@@ -18,13 +18,9 @@
   "devDependencies": {
     "@typhonjs-build-test/node": "^0.0.9",
     "@typhonjs-utils/file-util": "^0.0.8",
-    "polka": "^0.5.2",
-    "sirv": "^2",
     "ts-morph": "^18",
-    "typedoc": "^0.23",
-    "typedoc-theme-yaf": "^0.0.4",
-    "typescript": "5.0.4",
-    "upath": "^2"
+    "typedoc": "^0.24",
+    "typescript": "5.0.4"
   },
   "browserslist": [">5%", "not IE 11"],
   "scripts": {

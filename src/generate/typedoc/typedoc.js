@@ -33,8 +33,8 @@ const configWorker = {
 
 export async function typedoc(logLevel = LogLevel.Info)
 {
-   // if (fs.existsSync(configDOM.entryPoints[0])) { await generate(logLevel, configDOM); }
-   // if (fs.existsSync(configESM.entryPoints[0])) { await generate(logLevel, configESM); }
+   if (fs.existsSync(configDOM.entryPoints[0])) { await generate(logLevel, configDOM); }
+   if (fs.existsSync(configESM.entryPoints[0])) { await generate(logLevel, configESM); }
    if (fs.existsSync(configWorker.entryPoints[0])) { await generate(logLevel, configWorker); }
 }
 

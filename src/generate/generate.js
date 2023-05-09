@@ -15,14 +15,14 @@ const generate = {
 }
 
 // Initial processing of TS declaration libraries moving DTS files to `.doc-gen/source`.
-// await processDTS();
+await processDTS();
 
 // Transform TS libraries combining all symbols together across all DTS files and output individual DTS files to
 // `.doc-gen/transformed`.
-// await transformDTS(generate);
+await transformDTS(generate);
 
 // Bundle transformed DTS files into a single declaration file.
-// await bundleDTS(generate);
+await bundleDTS(generate);
 
 // Generate TypeDoc documentation from `.doc-gen/bundled`.
 await typedoc();

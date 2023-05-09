@@ -6,12 +6,12 @@ import { typedoc }      from './typedoc/typedoc.js';
 /**
  * Controls which libs are generated. The DOM libs are separated from the ESM libs
  *
- * @type {{ dom: boolean, esm: boolean, worker: boolean }}
+ * @type {GenerateConfig}
  */
-const generate = {
-   dom: true,
+const generateConfig = {
+   dom: false,
    esm: true,
-   worker: true
+   worker: false
 }
 
 // Initial processing of TS declaration libraries moving DTS files to `.doc-gen/source`.
@@ -19,10 +19,20 @@ await processDTS();
 
 // Transform TS libraries combining all symbols together across all DTS files and output individual DTS files to
 // `.doc-gen/transformed`.
-await transformDTS(generate);
+await transformDTS(generateConfig);
 
 // Bundle transformed DTS files into a single declaration file.
-await bundleDTS(generate);
+await bundleDTS(generateConfig);
 
 // Generate TypeDoc documentation from `.doc-gen/bundled`.
 await typedoc();
+
+/**
+ * @typedef {object} GenerateConfig Defines which lib categories to generate.
+ *
+ * @property {boolean} dom Docs for DOM related lib declarations.
+ *
+ * @property {boolean} esm Docs for ESM / Javascript related lib declarations.
+ *
+ * @property {boolean} worker Docs for Web Worker related lib declarations.
+ */

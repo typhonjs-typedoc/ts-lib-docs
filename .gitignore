@@ -5,4 +5,5 @@ dist/
 docs-dom/
 docs-esm/
 docs-worker/
+json/
 node_modules/

@@ -2,10 +2,12 @@ import fs                     from 'fs-extra';
 import ts                     from 'typescript';
 
 import {
+   FunctionDeclaration,
    InterfaceDeclaration,
    Project,
    VariableDeclaration,
-   SyntaxKind }               from 'ts-morph';
+   SyntaxKind
+} from 'ts-morph';
 
 import { TransformData }      from './TransformData.js';
 
@@ -83,7 +85,8 @@ export class TransformProject
 
       // console.log(`!!! Tracked: \n`, this.#transformData.toString());
 
-      // await this.#transformInterfaces();
+      await this.#transformFunctions();
+      await this.#transformInterfaces();
       await this.#transformVariables();
    }
 
@@ -117,6 +120,30 @@ export class TransformProject
        (member) => member.getFullText()).join('')}\n}`);
    }
 
+
+   /**
+    * There may be one or more functions with different parameters, so output all functions.
+    *
+    * @returns {Promise<void>}
+    */
+   async #transformFunctions()
+   {
+      for (const [name, nodes] of this.#transformData.getEntries(FunctionDeclaration))
+      {
+         // Create a new source file.
+         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/function-${name}.d.ts`);
+
+         // Add functions to the new source file.
+         for (const node of nodes)
+         {
+            newSourceFile.addFunction(node.getStructure());
+         }
+
+         // Save the new source file to disk
+         await newSourceFile.save();
+      }
+   }
+
    /**
     * Transforms each interface tracked by name either adding new methods or replacing method declarations with updated
     * signatures.
@@ -133,8 +160,6 @@ export class TransformProject
          {
             console.log(`Updating interface: ${name}`);
 
-            const interfaceMembers = interfaceNode.getMembers();
-
             for (let cntr = 1; cntr < nodes.length; cntr++)
             {
                const copyInterface = nodes[cntr];
@@ -146,24 +171,9 @@ export class TransformProject
 
                   if (!copyMemberName) { continue; }
 
-                  const targetMember = interfaceMembers.find((member) =>
-                  {
-                     const memberSymbol = member.getSymbol();
-                     return memberSymbol && memberSymbol.getName() === copyMemberName
-                  });
+                  console.log(`\tadding member: ${copyMemberName}`);
 
-                  if (targetMember)
-                  {
-                     console.log(`\treplacing member: ${copyMemberName}`);
-
-                     targetMember.replaceWithText(copyMember.getText());
-                  }
-                  else
-                  {
-                     console.log(`\tadding member: ${copyMemberName}`);
-
-                     interfaceNode.addMember(copyMember.getStructure());
-                  }
+                  interfaceNode.addMember(copyMember.getStructure());
                }
             }
 

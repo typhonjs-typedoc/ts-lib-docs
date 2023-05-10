@@ -1,10 +1,16 @@
 import {
+   FunctionDeclaration,
    InterfaceDeclaration,
    Node,
-   VariableDeclaration }   from 'ts-morph';
+   SyntaxKind,
+   VariableDeclaration
+} from 'ts-morph';
 
 export class TransformData
 {
+   /** @type {Map<string, FunctionDeclaration[]>} */
+   #functions = new Map();
+
    /** @type {Map<string, InterfaceDeclaration[]>} */
    #interfaces = new Map();
 
@@ -12,8 +18,7 @@ export class TransformData
    #variables = new Map();
 
    /**
-    *
-    * @param {import('ts-morph').ExportedDeclarations} node -
+    * @param {import('ts-morph').Node} node -
     *
     * @returns {boolean}
     */
@@ -25,18 +30,22 @@ export class TransformData
 
       const name = symbol.getName();
 
-      // Handle InterfaceDeclaration nodes
-      if (Node.isInterfaceDeclaration(node))
+      switch(node.getKind())
       {
-         if (!this.#interfaces.has(name)) { this.#interfaces.set(name, [node]); }
-         else { this.#interfaces.get(name).push(node); }
-         return true;
-      }
-      else if (Node.isVariableDeclaration(node))
-      {
-         if (!this.#variables.has(name)) { this.#variables.set(name, [node]); }
-         else { this.#variables.get(name).push(node); }
-         return true;
+         case SyntaxKind.FunctionDeclaration:
+            if (!this.#functions.has(name)) { this.#functions.set(name, [node]); }
+            else { this.#functions.get(name).push(node); }
+            return true;
+
+         case SyntaxKind.InterfaceDeclaration:
+            if (!this.#interfaces.has(name)) { this.#interfaces.set(name, [node]); }
+            else { this.#interfaces.get(name).push(node); }
+            return true;
+
+         case SyntaxKind.VariableDeclaration:
+            if (!this.#variables.has(name)) { this.#variables.set(name, [node]); }
+            else { this.#variables.get(name).push(node); }
+            return true;
       }
 
       return false;
@@ -53,6 +62,9 @@ export class TransformData
    {
       switch (kind)
       {
+         case FunctionDeclaration:
+            return this.#functions.entries();
+
          case InterfaceDeclaration:
             return this.#interfaces.entries();
 
@@ -72,6 +84,18 @@ export class TransformData
    toString()
    {
       let result = '';
+
+      const functionNames = Array.from(this.#functions.keys()).sort();
+
+      if (functionNames.length)
+      {
+         result += 'Functions:\n';
+
+         for (const name of functionNames)
+         {
+            result += `\t${name}: ${this.#functions.get(name).length}\n`;
+         }
+      }
 
       const interfaceNames = Array.from(this.#interfaces.keys()).sort();
 
@@ -102,5 +126,5 @@ export class TransformData
 }
 
 /**
- * @typedef {InterfaceDeclaration | VariableDeclaration} NodeTypes
+ * @typedef {FunctionDeclaration | InterfaceDeclaration | VariableDeclaration} NodeTypes
  */

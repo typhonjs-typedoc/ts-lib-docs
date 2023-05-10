@@ -1,14 +1,9 @@
-import fs                  from 'fs-extra';
+import fs            from 'fs-extra';
 
 import {
    Application,
    LogLevel,
-   TSConfigReader }        from 'typedoc';
-
-import {
-   groupOrder,
-   kindSortOrder,
-   searchGroupBoosts }     from './options/index.js';
+   TSConfigReader }  from 'typedoc';
 
 const configDOM = {
    name: 'Typescript Library Declarations (DOM)',
@@ -31,11 +26,17 @@ const configWorker = {
    tsconfig: './tsconfig-worker.json'
 }
 
-export async function typedoc(logLevel = LogLevel.Info)
+/**
+ *
+ * @param {GenerateConfig} generateConfig -
+ *
+ * @param {import('typedoc').LogLevel} logLevel -
+ */
+export async function typedoc(generateConfig, logLevel = LogLevel.Info)
 {
-   if (fs.existsSync(configDOM.entryPoints[0])) { await generate(logLevel, configDOM); }
-   if (fs.existsSync(configESM.entryPoints[0])) { await generate(logLevel, configESM); }
-   if (fs.existsSync(configWorker.entryPoints[0])) { await generate(logLevel, configWorker); }
+   if (generateConfig.dom && fs.existsSync(configDOM.entryPoints[0])) { await generate(logLevel, configDOM); }
+   if (generateConfig.esm && fs.existsSync(configESM.entryPoints[0])) { await generate(logLevel, configESM); }
+   if (generateConfig.worker && fs.existsSync(configWorker.entryPoints[0])) { await generate(logLevel, configWorker); }
 }
 
 /**
@@ -67,12 +68,6 @@ export async function generate(logLevel = LogLevel.Info, config)
 
       entryPointStrategy: 'expand',
 
-      // For Typedoc v0.24+; sorts the main index for a namespace; not the sidebar tab.
-      groupOrder,
-
-      // Sorts the sidebar symbol types.
-      kindSortOrder,
-
       // Hide the documentation generator footer.
       hideGenerator: true,
 
@@ -83,9 +78,6 @@ export async function generate(logLevel = LogLevel.Info, config)
       out: config.out,
 
       plugin: [],
-
-      // Boosts relevance for classes and function in search.
-      searchGroupBoosts,
 
       theme: 'default',
 

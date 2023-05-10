@@ -5,7 +5,8 @@
     "noImplicitAny": true,
     "sourceMap": false,
     "moduleResolution" : "NodeNext",
-    "lib": ["ES2022"]
+    "lib": ["ES2022"],
+    "skipLibCheck" : true
   },
   "include" : [
     "./.doc-gen/bundled/index-esm.d.ts"

@@ -3,6 +3,7 @@ import {
    InterfaceDeclaration,
    Node,
    SyntaxKind,
+   TypeAliasDeclaration,
    VariableDeclaration
 } from 'ts-morph';
 
@@ -13,6 +14,9 @@ export class TransformData
 
    /** @type {Map<string, InterfaceDeclaration[]>} */
    #interfaces = new Map();
+
+   /** @type {Map<string, TypeAliasDeclaration[]>} */
+   #typeAliases = new Map();
 
    /** @type {Map<string, VariableDeclaration[]>} */
    #variables = new Map();
@@ -42,6 +46,11 @@ export class TransformData
             else { this.#interfaces.get(name).push(node); }
             return true;
 
+         case SyntaxKind.TypeAliasDeclaration:
+            if (!this.#typeAliases.has(name)) { this.#typeAliases.set(name, [node]); }
+            else { this.#typeAliases.get(name).push(node); }
+            return true;
+
          case SyntaxKind.VariableDeclaration:
             if (!this.#variables.has(name)) { this.#variables.set(name, [node]); }
             else { this.#variables.get(name).push(node); }
@@ -68,11 +77,14 @@ export class TransformData
          case InterfaceDeclaration:
             return this.#interfaces.entries();
 
+         case TypeAliasDeclaration:
+            return this.#typeAliases.entries();
+
          case VariableDeclaration:
             return this.#variables.entries();
 
          default:
-            throw new Error(`TransformData.getEntries error; unknown StructureKind: ${kind}`);
+            throw new Error(`TransformData.getEntries error; unknown node kind: ${kind}`);
       }
    }
 
@@ -86,39 +98,31 @@ export class TransformData
       let result = '';
 
       const functionNames = Array.from(this.#functions.keys()).sort();
-
       if (functionNames.length)
       {
          result += 'Functions:\n';
-
-         for (const name of functionNames)
-         {
-            result += `\t${name}: ${this.#functions.get(name).length}\n`;
-         }
+         for (const name of functionNames) { result += `\t${name}: ${this.#functions.get(name).length}\n`; }
       }
 
       const interfaceNames = Array.from(this.#interfaces.keys()).sort();
-
       if (interfaceNames.length)
       {
          result += 'Interfaces:\n';
+         for (const name of interfaceNames) { result += `\t${name}: ${this.#interfaces.get(name).length}\n`; }
+      }
 
-         for (const name of interfaceNames)
-         {
-            result += `\t${name}: ${this.#interfaces.get(name).length}\n`;
-         }
+      const typeAliasNames = Array.from(this.#typeAliases.keys()).sort();
+      if (typeAliasNames.length)
+      {
+         result += 'Type Aliases:\n';
+         for (const name of typeAliasNames) { result += `\t${name}: ${this.#typeAliases.get(name).length}\n`; }
       }
 
       const variableNames = Array.from(this.#variables.keys()).sort();
-
       if (variableNames.length)
       {
          result += 'Variables:\n';
-
-         for (const name of variableNames)
-         {
-            result += `\t${name}: ${this.#variables.get(name).length}\n`;
-         }
+         for (const name of variableNames) { result += `\t${name}: ${this.#variables.get(name).length}\n`; }
       }
 
       return result;

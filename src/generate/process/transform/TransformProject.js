@@ -5,8 +5,9 @@ import {
    FunctionDeclaration,
    InterfaceDeclaration,
    Project,
-   VariableDeclaration,
-   SyntaxKind
+   SyntaxKind,
+   TypeAliasDeclaration,
+   VariableDeclaration
 } from 'ts-morph';
 
 import { TransformData }      from './TransformData.js';
@@ -87,6 +88,7 @@ export class TransformProject
 
       await this.#transformFunctions();
       await this.#transformInterfaces();
+      await this.#transformTypeAliases();
       await this.#transformVariables();
    }
 
@@ -119,7 +121,6 @@ export class TransformProject
        `<${typeParameters}>` : ''} ${heritageClauses ? heritageClauses : ''} {\n${sortedMembers.map(
        (member) => member.getFullText()).join('')}\n}`);
    }
-
 
    /**
     * There may be one or more functions with different parameters, so output all functions.
@@ -185,6 +186,29 @@ export class TransformProject
 
          // Add the interface to the new source file.
          newSourceFile.addInterface(interfaceNode.getStructure());
+
+         // Save the new source file to disk
+         await newSourceFile.save();
+      }
+   }
+
+   /**
+    * There may be one or more functions with different parameters, so output all functions.
+    *
+    * @returns {Promise<void>}
+    */
+   async #transformTypeAliases()
+   {
+      for (const [name, nodes] of this.#transformData.getEntries(TypeAliasDeclaration))
+      {
+         // Create a new source file.
+         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/typealias-${name}.d.ts`);
+
+         // Add functions to the new source file.
+         for (const node of nodes)
+         {
+            newSourceFile.addTypeAlias(node.getStructure());
+         }
 
          // Save the new source file to disk
          await newSourceFile.save();

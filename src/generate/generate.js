@@ -9,9 +9,9 @@ import { typedoc }      from './typedoc.js';
  * @type {GenerateConfig}
  */
 const generateConfig = {
-   dom: false,
+   dom: true,
    esm: true,
-   worker: false
+   worker: true
 };
 
 // Initial processing of TS declaration libraries moving DTS files to `.doc-gen/source`.

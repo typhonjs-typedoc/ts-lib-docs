@@ -1,7 +1,7 @@
 import { bundleDTS }    from './process/bundleDTS.js';
 import { processDTS }   from './process/processDTS.js';
 import { transformDTS } from './process/transformDTS.js';
-import { typedoc }      from './typedoc/typedoc.js';
+import { typedoc }      from './typedoc.js';
 
 /**
  * Controls which libs are generated. The DOM libs are separated from the ESM libs
@@ -25,7 +25,7 @@ await transformDTS(generateConfig);
 await bundleDTS(generateConfig);
 
 // Generate TypeDoc documentation from `.doc-gen/bundled`.
-await typedoc();
+await typedoc(generateConfig);
 
 /**
  * @typedef {object} GenerateConfig Defines which lib categories to generate.

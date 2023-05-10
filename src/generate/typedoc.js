@@ -1,4 +1,4 @@
-import fs            from 'fs-extra';
+import fs                from 'fs-extra';
 
 import {
    Application,
@@ -8,7 +8,7 @@ import {
 const configDOM = {
    name: 'Typescript Library Declarations (DOM)',
    entryPoints: ['./.doc-gen/bundled/index-dom.d.ts'],
-   json: './json/dom.json',
+   json: './.doc-gen/json/dom.json',
    out: 'docs-dom',
    tsconfig: './tsconfig-dom.json'
 };
@@ -16,7 +16,7 @@ const configDOM = {
 const configESM = {
    name: 'Typescript Library Declarations (ES2023)',
    entryPoints: ['./.doc-gen/bundled/index-esm.d.ts'],
-   json: './json/esm.json',
+   json: './.doc-gen/json/esm.json',
    out: 'docs-esm',
    tsconfig: './tsconfig-esm.json'
 };
@@ -24,7 +24,7 @@ const configESM = {
 const configWorker = {
    name: 'Typescript Library Declarations (Web Worker)',
    entryPoints: ['./.doc-gen/bundled/index-worker.d.ts'],
-   json: './json/worker.json',
+   json: './.doc-gen/json/worker.json',
    out: 'docs-worker',
    tsconfig: './tsconfig-worker.json'
 };

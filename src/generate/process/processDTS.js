@@ -38,15 +38,11 @@ function processDTSFile(srcFilepath, destFilepath)
 
    // Remove code that causes further downstream problems.
 
-   // Remove copyright
+   // Remove copyright comment blocks.
    srcData = srcData.replaceAll(/\/\*!(.|\n)*?\*\//gm, '');
 
-   // All files have this reference that needs to be removed.
-   srcData = srcData.replaceAll(`/// <reference no-default-lib="true"/>`, ``);
-
-   // This replacement only affects `intrinsic` definitions in `lib.es5.d.ts` for Lowercase, Uppercase, Capitalize and
-   // Uncapitalize.
-   srcData = srcData.replaceAll(/^export.*intrinsic;$/gm, ``);
+   // Remove all reference comments.
+   srcData = srcData.replaceAll(/\/\/\/ <reference.*\/>/gm, ``);
 
    // Only write files that have actual data / exports.
    if ((/^export/gm).test(srcData))

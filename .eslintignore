@@ -1,5 +1,8 @@
-.dts/
+.docs-gen/
 .github/
 *.d.ts
-docs/
+dist/
+docs-dom/
+docs-esm/
+docs-worker/
 prepend/

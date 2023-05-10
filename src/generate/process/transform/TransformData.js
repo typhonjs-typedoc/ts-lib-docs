@@ -1,11 +1,12 @@
 import {
    FunctionDeclaration,
    InterfaceDeclaration,
+   ModuleDeclaration,
+   ModuleDeclarationKind,
    Node,
    SyntaxKind,
    TypeAliasDeclaration,
-   VariableDeclaration
-} from 'ts-morph';
+   VariableDeclaration } from 'ts-morph';
 
 export class TransformData
 {
@@ -14,6 +15,9 @@ export class TransformData
 
    /** @type {Map<string, InterfaceDeclaration[]>} */
    #interfaces = new Map();
+
+   /** @type {Map<string, ModuleDeclaration[]>} */
+   #namespaces = new Map();
 
    /** @type {Map<string, TypeAliasDeclaration[]>} */
    #typeAliases = new Map();
@@ -46,6 +50,18 @@ export class TransformData
             else { this.#interfaces.get(name).push(node); }
             return true;
 
+         case SyntaxKind.ModuleDeclaration:
+            if (node.getDeclarationKind() === ModuleDeclarationKind.Namespace)
+            {
+               if (!this.#namespaces.has(name)) { this.#namespaces.set(name, [node]); }
+               else { this.#namespaces.get(name).push(node); }
+               return true;
+            }
+            else
+            {
+               return false;
+            }
+
          case SyntaxKind.TypeAliasDeclaration:
             if (!this.#typeAliases.has(name)) { this.#typeAliases.set(name, [node]); }
             else { this.#typeAliases.get(name).push(node); }
@@ -76,6 +92,9 @@ export class TransformData
 
          case InterfaceDeclaration:
             return this.#interfaces.entries();
+
+         case ModuleDeclaration:
+            return this.#namespaces.entries();
 
          case TypeAliasDeclaration:
             return this.#typeAliases.entries();
@@ -111,6 +130,13 @@ export class TransformData
          for (const name of interfaceNames) { result += `\t${name}: ${this.#interfaces.get(name).length}\n`; }
       }
 
+      const namespaceNames = Array.from(this.#namespaces.keys()).sort();
+      if (namespaceNames.length)
+      {
+         result += 'Namespaces:\n';
+         for (const name of namespaceNames) { result += `\t${name}: ${this.#namespaces.get(name).length}\n`; }
+      }
+
       const typeAliasNames = Array.from(this.#typeAliases.keys()).sort();
       if (typeAliasNames.length)
       {
@@ -130,5 +156,11 @@ export class TransformData
 }
 
 /**
- * @typedef {FunctionDeclaration | InterfaceDeclaration | VariableDeclaration} NodeTypes
+ * @typedef {(
+ *    FunctionDeclaration |
+ *    InterfaceDeclaration |
+ *    ModuleDeclaration |
+ *    TypeAliasDeclaration |
+ *    VariableDeclaration
+ * )} NodeTypes
  */

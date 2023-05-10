@@ -4,11 +4,12 @@ import ts                     from 'typescript';
 import {
    FunctionDeclaration,
    InterfaceDeclaration,
+   ModuleDeclaration,
    Project,
    SyntaxKind,
    TypeAliasDeclaration,
-   VariableDeclaration
-} from 'ts-morph';
+   VariableDeclaration,
+   VariableDeclarationKind }  from 'ts-morph';
 
 import { TransformData }      from './TransformData.js';
 
@@ -88,8 +89,151 @@ export class TransformProject
 
       await this.#transformFunctions();
       await this.#transformInterfaces();
+      await this.#transformNamespaces();
       await this.#transformTypeAliases();
       await this.#transformVariables();
+   }
+
+   /**
+    * Merges two InterfaceDeclaration from target into source.
+    *
+    * @param {InterfaceDeclaration} sourceNode - Source interface.
+    *
+    * @param {InterfaceDeclaration} targetNode - Target interface to merge.
+    *
+    * @param {object}               [options] - Options.
+    *
+    * @param {string}               [options.indent='\t'] - Indent string to prepend.
+    *
+    * @param {boolean}              [options.overwrite=false] - Overwrite duplicate members.
+    */
+   #mergeInterfaces(sourceNode, targetNode, { indent = '\t', overwrite = false } = {})
+   {
+      const targetMembers = targetNode.getMembers();
+
+      for (const targetMember of targetMembers)
+      {
+         const targetMemberName = targetMember.getSymbol()?.getName();
+         if (!targetMemberName) { continue; }
+
+         if (overwrite)
+         {
+            const sourceMembers = sourceNode.getMembers();
+            const sourceMember = sourceMembers.find((member) => member.getSymbol()?.getName() === targetMemberName)
+
+            if (!sourceMember)
+            {
+               console.log(`${indent}adding member: ${targetMemberName}`);
+               sourceNode.addMember(targetMember.getStructure());
+            }
+            else
+            {
+               console.log(`${indent}replacing member: ${targetMemberName}`);
+               sourceMember.remove();
+               sourceNode.addMember(targetMember.getStructure());
+            }
+         }
+         else
+         {
+            console.log(`${indent}adding member: ${targetMemberName}`);
+            sourceNode.addMember(targetMember.getStructure());
+         }
+      }
+   }
+
+   /**
+    * Merges a source and target namespace / ModuleDeclaration adding or replacing interfaces, types, and variables.
+    *
+    * @param {ModuleDeclaration} sourceNode - Source namespace node.
+    *
+    * @param {ModuleDeclaration} targetNode - Target namespace node to merge into source.
+    */
+   #mergeNamespaces(sourceNode, targetNode)
+   {
+      const targetInterfaces = targetNode.getInterfaces();
+      for (const targetInterface of targetInterfaces)
+      {
+         const targetInterfaceName = targetInterface.getSymbol()?.getName();
+         if (!targetInterfaceName) { continue; }
+
+         const sourceInterface = sourceNode.getInterface(targetInterfaceName);
+         if (!sourceInterface)
+         {
+            console.log(`\tadding interface: ${targetInterfaceName}`);
+            sourceNode.addInterface(targetInterface.getStructure());
+         }
+         else
+         {
+            console.log(`\tmerging interface: ${targetInterfaceName}`);
+            this.#mergeInterfaces(sourceInterface, targetInterface, { indent: '\t\t', overwrite: true });
+         }
+      }
+
+      const targetTypeAliases = targetNode.getTypeAliases();
+      for (const targetTypeAlias of targetTypeAliases)
+      {
+         const targetTypeAliasName = targetTypeAlias.getSymbol()?.getName();
+         if (!targetTypeAliasName) { continue; }
+
+         const sourceTypeAlias = sourceNode.getTypeAlias(targetTypeAliasName);
+
+         if (!sourceTypeAlias)
+         {
+            console.log(`\tadding type alias: ${targetTypeAliasName}`);
+            sourceNode.addTypeAlias(targetTypeAlias.getStructure());
+         }
+         else
+         {
+            console.log(`\treplacing type alias: ${targetTypeAliasName}`);
+            sourceTypeAlias.set(targetTypeAlias.getStructure());
+         }
+      }
+
+      const targetVariableDeclarations = targetNode.getVariableDeclarations();
+      for (const targetVariableDeclaration of targetVariableDeclarations)
+      {
+         const targetVariableDeclarationName = targetVariableDeclaration.getSymbol()?.getName();
+         if (!targetVariableDeclarationName) { continue; }
+
+         const sourceVariableDeclaration = sourceNode.getVariableDeclaration(targetVariableDeclarationName);
+
+         if (!sourceVariableDeclaration)
+         {
+            // Create a VariableStatement and add the VariableDeclaration to it.
+            const variableStatementStructure = {
+               declarationKind: VariableDeclarationKind.Const,
+               declarations: [targetVariableDeclaration.getStructure()],
+            };
+
+            console.log(`\tadding variable: ${targetVariableDeclarationName}`);
+            sourceNode.addVariableStatement(variableStatementStructure);
+         }
+         else
+         {
+            console.log(`\treplacing variable: ${targetVariableDeclarationName}`);
+            sourceVariableDeclaration.set(targetVariableDeclaration.getStructure());
+         }
+      }
+
+      const targetVariablesStatements = targetNode.getVariableStatements();
+      for (const targetVariableStatement of targetVariablesStatements)
+      {
+         const targetVariableStatementName = targetVariableStatement.getSymbol()?.getName();
+         if (!targetVariableStatementName) { continue; }
+
+         const sourceVariableStatement = sourceNode.getVariableStatement(targetVariableStatementName);
+
+         if (!sourceVariableStatement)
+         {
+            console.log(`\tadding variable: ${targetVariableStatementName}`);
+            sourceNode.addVariableStatement(targetVariableStatement.getStructure());
+         }
+         else
+         {
+            console.log(`\treplacing variable: ${targetVariableStatementName}`);
+            sourceVariableStatement.set(targetVariableStatement.getStructure());
+         }
+      }
    }
 
    /**
@@ -146,8 +290,7 @@ export class TransformProject
    }
 
    /**
-    * Transforms each interface tracked by name either adding new methods or replacing method declarations with updated
-    * signatures.
+    * Transforms each interface tracked by name either adding new methods declarations.
     *
     * @returns {Promise<void>}
     */
@@ -161,22 +304,7 @@ export class TransformProject
          {
             console.log(`Updating interface: ${name}`);
 
-            for (let cntr = 1; cntr < nodes.length; cntr++)
-            {
-               const copyInterface = nodes[cntr];
-               const copyMembers = copyInterface.getMembers();
-
-               for (const copyMember of copyMembers)
-               {
-                  const copyMemberName = copyMember.getSymbol()?.getName();
-
-                  if (!copyMemberName) { continue; }
-
-                  console.log(`\tadding member: ${copyMemberName}`);
-
-                  interfaceNode.addMember(copyMember.getStructure());
-               }
-            }
+            for (let cntr = 1; cntr < nodes.length; cntr++) { this.#mergeInterfaces(interfaceNode, nodes[cntr]); }
 
             this.#sortInterfaceMembers(interfaceNode);
          }
@@ -186,6 +314,38 @@ export class TransformProject
 
          // Add the interface to the new source file.
          newSourceFile.addInterface(interfaceNode.getStructure());
+
+         // Save the new source file to disk
+         await newSourceFile.save();
+      }
+   }
+
+   /**
+    * Transforms each namespace tracked by name either adding new methods or replacing method declarations with updated
+    * signatures.
+    *
+    * @returns {Promise<void>}
+    */
+   async #transformNamespaces()
+   {
+      for (const [name, nodes] of this.#transformData.getEntries(ModuleDeclaration))
+      {
+         const namespaceNode = nodes[0];
+
+         // if (nodes.length > 1) { continue; }
+
+         if (nodes.length > 1)
+         {
+            console.log(`Updating namespace: ${name}`);
+
+            for (let cntr = 1; cntr < nodes.length; cntr++) { this.#mergeNamespaces(namespaceNode, nodes[cntr]); }
+         }
+
+         // Create a new source file.
+         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/namespace-${name}.d.ts`);
+
+         // Add the interface to the new source file.
+         newSourceFile.addModule(namespaceNode.getStructure());
 
          // Save the new source file to disk
          await newSourceFile.save();

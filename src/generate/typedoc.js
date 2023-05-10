@@ -10,21 +10,21 @@ const configDOM = {
    entryPoints: ['./.doc-gen/bundled/index-dom.d.ts'],
    out: 'docs-dom',
    tsconfig: './tsconfig-dom.json'
-}
+};
 
 const configESM = {
    name: 'Typescript Library Declarations (ES2023)',
    entryPoints: ['./.doc-gen/bundled/index-esm.d.ts'],
    out: 'docs-esm',
    tsconfig: './tsconfig-esm.json'
-}
+};
 
 const configWorker = {
    name: 'Typescript Library Declarations (Web Worker)',
    entryPoints: ['./.doc-gen/bundled/index-worker.d.ts'],
    out: 'docs-worker',
    tsconfig: './tsconfig-worker.json'
-}
+};
 
 /**
  *

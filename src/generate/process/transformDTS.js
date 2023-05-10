@@ -20,7 +20,7 @@ const docsDOM = {
       './.doc-gen/source/lib.dom.d.ts',
       './.doc-gen/source/lib.dom.iterable.d.ts'
    ]
-}
+};
 
 /** @type {DocData} */
 const docsESM = {
@@ -76,7 +76,7 @@ const docsESM = {
       './.doc-gen/source/lib.es2022.string.d.ts',
       './.doc-gen/source/lib.es2023.array.d.ts'
    ]
-}
+};
 
 /** @type {DocData} */
 const docsWorker = {
@@ -87,4 +87,4 @@ const docsWorker = {
       './.doc-gen/source/lib.webworker.importscripts.d.ts',
       './.doc-gen/source/lib.webworker.iterable.d.ts'
    ]
-}
+};

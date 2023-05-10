@@ -12,7 +12,7 @@ const generateConfig = {
    dom: false,
    esm: true,
    worker: false
-}
+};
 
 // Initial processing of TS declaration libraries moving DTS files to `.doc-gen/source`.
 await processDTS();

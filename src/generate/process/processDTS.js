@@ -68,7 +68,7 @@ const skipFilenames = [
  */
 async function processPackageTypescript()
 {
-   const filepaths = await getFileList({ dir: './node_modules/typescript/lib', ext: new Set(['.ts'])})
+   const filepaths = await getFileList({ dir: './node_modules/typescript/lib', ext: new Set(['.ts']) });
 
    for (const filepath of filepaths)
    {

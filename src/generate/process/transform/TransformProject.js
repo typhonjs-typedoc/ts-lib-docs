@@ -19,7 +19,7 @@ export class TransformProject
    #docData;
 
    /** @type {Project} */
-   #project
+   #project;
 
    /** @type {TransformData} */
    #transformData;
@@ -32,7 +32,7 @@ export class TransformProject
       this.#docData = docData;
 
       fs.ensureDirSync(docData.outDir);
-      fs.emptydirSync(docData.outDir)
+      fs.emptydirSync(docData.outDir);
 
       this.#project = new Project({
          compilerOptions: {
@@ -76,7 +76,7 @@ export class TransformProject
 
          const exportedDeclarations = sourceFile.getExportedDeclarations();
 
-         for (const [_, declarations] of exportedDeclarations)
+         for (const [_, declarations] of exportedDeclarations) // eslint-disable-line no-unused-vars
          {
             for (const declaration of declarations)
             {
@@ -119,7 +119,7 @@ export class TransformProject
          if (overwrite)
          {
             const sourceMembers = sourceNode.getMembers();
-            const sourceMember = sourceMembers.find((member) => member.getSymbol()?.getName() === targetMemberName)
+            const sourceMember = sourceMembers.find((member) => member.getSymbol()?.getName() === targetMemberName);
 
             if (!sourceMember)
             {
@@ -255,15 +255,15 @@ export class TransformProject
          return aName.localeCompare(bName);
       });
 
-      const modifiers = interfaceNode.getModifiers().map(modifier => modifier.getText()).join(' ');
-      const typeParameters = interfaceNode.getTypeParameters().map(param => param.getText()).join(', ');
-      const heritageClauses = interfaceNode.getHeritageClauses().map(clause => clause.getText()).join(' ');
+      const modifiers = interfaceNode.getModifiers().map((modifier) => modifier.getText()).join(' ');
+      const typeParameters = interfaceNode.getTypeParameters().map((param) => param.getText()).join(', ');
+      const heritageClauses = interfaceNode.getHeritageClauses().map((clause) => clause.getText()).join(' ');
 
       // Replace the original interface with a new one containing sorted members while preserving the interface
       // signature and comments.
       interfaceNode.replaceWithText(`${modifiers} interface ${interfaceNode.getName()}${typeParameters ?
        `<${typeParameters}>` : ''} ${heritageClauses ? heritageClauses : ''} {\n${sortedMembers.map(
-       (member) => member.getFullText()).join('')}\n}`);
+        (member) => member.getFullText()).join('')}\n}`);
    }
 
    /**

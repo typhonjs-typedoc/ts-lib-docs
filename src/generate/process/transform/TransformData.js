@@ -3,7 +3,6 @@ import {
    InterfaceDeclaration,
    ModuleDeclaration,
    ModuleDeclarationKind,
-   Node,
    SyntaxKind,
    TypeAliasDeclaration,
    VariableDeclaration } from 'ts-morph';
@@ -28,7 +27,7 @@ export class TransformData
    /**
     * @param {import('ts-morph').Node} node -
     *
-    * @returns {boolean}
+    * @returns {boolean} Whether Node is added to tracked data to transform.
     */
    addNode(node)
    {
@@ -38,7 +37,7 @@ export class TransformData
 
       const name = symbol.getName();
 
-      switch(node.getKind())
+      switch (node.getKind())
       {
          case SyntaxKind.FunctionDeclaration:
             if (!this.#functions.has(name)) { this.#functions.set(name, [node]); }
@@ -77,11 +76,11 @@ export class TransformData
    }
 
    /**
-    * @template T=NodeTypes
+    * @template [T=NodeTypes]
     *
-    * @param {T} kind -
+    * @param {T} kind - The kind of Node to retrieve.
     *
-    * @returns {IterableIterator<[string, T]>}
+    * @returns {IterableIterator<[string, T]>} The entries iterator for the given Node kind.
     */
    getEntries(kind)
    {

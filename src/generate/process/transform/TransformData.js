@@ -63,6 +63,42 @@ export class TransformData
             throw new Error(`TransformData.getEntries error; unknown StructureKind: ${kind}`);
       }
    }
+
+   /**
+    * Provides an overview of symbols by name and how many duplicate references are tracked.
+    *
+    * @returns {string} Tracked data overview.
+    */
+   toString()
+   {
+      let result = '';
+
+      const interfaceNames = Array.from(this.#interfaces.keys()).sort();
+
+      if (interfaceNames.length)
+      {
+         result += 'Interfaces:\n';
+
+         for (const name of interfaceNames)
+         {
+            result += `\t${name}: ${this.#interfaces.get(name).length}\n`;
+         }
+      }
+
+      const variableNames = Array.from(this.#variables.keys()).sort();
+
+      if (variableNames.length)
+      {
+         result += 'Variables:\n';
+
+         for (const name of variableNames)
+         {
+            result += `\t${name}: ${this.#variables.get(name).length}\n`;
+         }
+      }
+
+      return result;
+   }
 }
 
 /**

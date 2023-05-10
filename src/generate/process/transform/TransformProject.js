@@ -1,12 +1,13 @@
-import fs                  from 'fs-extra';
-import ts                  from 'typescript';
+import fs                     from 'fs-extra';
+import ts                     from 'typescript';
 
 import {
    InterfaceDeclaration,
    Project,
-   VariableDeclaration }   from 'ts-morph';
+   VariableDeclaration,
+   SyntaxKind }               from 'ts-morph';
 
-import { TransformData }   from './TransformData.js';
+import { TransformData }      from './TransformData.js';
 
 export class TransformProject
 {
@@ -39,6 +40,26 @@ export class TransformProject
       this.#transformData = new TransformData();
    }
 
+   /**
+    * A helper to detect a lowercase starting letter in a string. Supports OSes like Windows where multiple files can
+    * conflict with same name and variations of lower / upper case.
+    *
+    * @param {string}   value - Value to check.
+    *
+    * @returns {boolean} Is lowercase.
+    */
+   #isLowerCase(value)
+   {
+      const firstLetter = value[0];
+      return firstLetter === firstLetter.toLowerCase();
+   }
+
+   /**
+    * Initiates transforming the processed source TS lib declarations outputting combined individual declarations files
+    * for each symbol in the respective `./.doc-gen/transformed/<XXX>` folder.
+    *
+    * @returns {Promise<void>}
+    */
    async transform()
    {
       const sourceFiles = this.#docData.sourceFiles.map((filepath) => this.#project.addSourceFileAtPath(filepath));
@@ -60,7 +81,10 @@ export class TransformProject
          }
       }
 
-      await this.#transformInterfaces();
+      // console.log(`!!! Tracked: \n`, this.#transformData.toString());
+
+      // await this.#transformInterfaces();
+      await this.#transformVariables();
    }
 
    /**
@@ -94,6 +118,9 @@ export class TransformProject
    }
 
    /**
+    * Transforms each interface tracked by name either adding new methods or replacing method declarations with updated
+    * signatures.
+    *
     * @returns {Promise<void>}
     */
    async #transformInterfaces()
@@ -151,6 +178,52 @@ export class TransformProject
 
          // Save the new source file to disk
          await newSourceFile.save();
+      }
+   }
+
+   /**
+    * Transforms each variable tracked by name simply using the last defined Node as variables redefined will overwrite
+    * previous declarations. It should be noted that in general there are no redefinitions of variables, but this case
+    * is handled nonetheless.
+    *
+    * @returns {Promise<void>}
+    */
+   async #transformVariables()
+   {
+      for (const [name, nodes] of this.#transformData.getEntries(VariableDeclaration))
+      {
+         /** @type {VariableDeclaration} */
+         let variableNode = nodes[0];
+
+         if (nodes.length > 1)
+         {
+            console.log(`Updating variable: ${name}`);
+            variableNode = nodes[nodes.length - 1];
+         }
+
+         // Get the parent VariableDeclarationList node.
+         const variableDeclarationList = variableNode.getParentIfKind(SyntaxKind.VariableDeclarationList);
+
+         // Get the parent VariableStatement node.
+         const variableStatement = variableDeclarationList?.getParentIfKind(SyntaxKind.VariableStatement);
+
+         if (variableStatement)
+         {
+            const adjustedName = this.#isLowerCase(name) ? `___${name}` : name;
+
+            // Create a new source file.
+            const newSourceFile = this.#project.createSourceFile(
+             `${this.#docData.outDir}/variable-${adjustedName}.d.ts`);
+
+            newSourceFile.addVariableStatement(variableStatement.getStructure());
+
+            // Save the new source file.
+            await newSourceFile.save();
+         }
+         else
+         {
+            console.log(`Could not find parent variable statement for: ${name}`);
+         }
       }
    }
 }

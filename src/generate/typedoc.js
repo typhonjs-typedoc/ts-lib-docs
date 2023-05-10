@@ -8,6 +8,7 @@ import {
 const configDOM = {
    name: 'Typescript Library Declarations (DOM)',
    entryPoints: ['./.doc-gen/bundled/index-dom.d.ts'],
+   json: './json/dom.json',
    out: 'docs-dom',
    tsconfig: './tsconfig-dom.json'
 };
@@ -15,6 +16,7 @@ const configDOM = {
 const configESM = {
    name: 'Typescript Library Declarations (ES2023)',
    entryPoints: ['./.doc-gen/bundled/index-esm.d.ts'],
+   json: './json/esm.json',
    out: 'docs-esm',
    tsconfig: './tsconfig-esm.json'
 };
@@ -22,6 +24,7 @@ const configESM = {
 const configWorker = {
    name: 'Typescript Library Declarations (Web Worker)',
    entryPoints: ['./.doc-gen/bundled/index-worker.d.ts'],
+   json: './json/worker.json',
    out: 'docs-worker',
    tsconfig: './tsconfig-worker.json'
 };
@@ -44,11 +47,11 @@ export async function typedoc(generateConfig, logLevel = LogLevel.Info)
  *
  * @param {LogLevel} [logLevel=LogLevel.Info] - The log level to use when generating Typedoc documentation.
  *
- * @param {{ name: string, entryPoints: string[], out: string, tsconfig: string }} config -
+ * @param {{ name: string, entryPoints: string[], json: string, out: string, tsconfig: string }} config -
  *
  * @returns {Promise<void>}
  */
-export async function generate(logLevel = LogLevel.Info, config)
+async function generate(logLevel = LogLevel.Info, config)
 {
    fs.emptydirSync(`./${config.out}`);
 
@@ -74,7 +77,7 @@ export async function generate(logLevel = LogLevel.Info, config)
       // Sets log level.
       logLevel,
 
-      // Output directory for the generated documentation
+      // Output directory for the generated documentation.
       out: config.out,
 
       plugin: [],
@@ -90,7 +93,8 @@ export async function generate(logLevel = LogLevel.Info, config)
    // Generate the documentation
    if (project)
    {
-      return app.generateDocs(project, config.out);
+      await app.generateDocs(project, config.out);
+      return app.generateJson(project, config.json);
    }
    else
    {

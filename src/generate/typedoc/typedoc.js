@@ -1,14 +1,15 @@
-import fs                from 'fs-extra';
+import fs                  from 'fs-extra';
 
 import {
    Application,
    LogLevel,
-   TSConfigReader }  from 'typedoc';
+   TSConfigReader }        from 'typedoc';
+
+import { generateUrlMap }  from './generateUrlMap.js';
 
 const configDOM = {
    name: 'Typescript Library Declarations (DOM)',
    entryPoints: ['./.doc-gen/bundled/index-dom.d.ts'],
-   json: './.doc-gen/json/dom.json',
    out: 'docs-dom',
    tsconfig: './tsconfig-dom.json'
 };
@@ -16,7 +17,6 @@ const configDOM = {
 const configESM = {
    name: 'Typescript Library Declarations (ES2023)',
    entryPoints: ['./.doc-gen/bundled/index-esm.d.ts'],
-   json: './.doc-gen/json/esm.json',
    out: 'docs-esm',
    tsconfig: './tsconfig-esm.json'
 };
@@ -24,7 +24,6 @@ const configESM = {
 const configWorker = {
    name: 'Typescript Library Declarations (Web Worker)',
    entryPoints: ['./.doc-gen/bundled/index-worker.d.ts'],
-   json: './.doc-gen/json/worker.json',
    out: 'docs-worker',
    tsconfig: './tsconfig-worker.json'
 };
@@ -87,14 +86,15 @@ async function generate(logLevel = LogLevel.Info, config)
       tsconfig: config.tsconfig
    });
 
-   // Convert TypeScript sources to a TypeDoc ProjectReflection
+   // Create TypeDoc ProjectReflection.
    const project = app.convert();
 
-   // Generate the documentation
+   // Generate documentation and URL map.
    if (project)
    {
       await app.generateDocs(project, config.out);
-      return app.generateJson(project, config.json);
+
+      generateUrlMap(app, project);
    }
    else
    {

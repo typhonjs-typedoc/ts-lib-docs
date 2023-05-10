@@ -1,7 +1,7 @@
 import { bundleDTS }    from './process/bundleDTS.js';
 import { processDTS }   from './process/processDTS.js';
 import { transformDTS } from './process/transformDTS.js';
-import { typedoc }      from './typedoc.js';
+import { typedoc }      from './typedoc/typedoc.js';
 
 /**
  * Controls which libs are generated. The DOM libs are separated from the ESM libs

@@ -28,6 +28,7 @@ const docsESM = {
 
    sourceFiles: [
       './.doc-gen/source/lib.decorators.d.ts',
+      './.doc-gen/source/lib.decorators.legacy.d.ts',
       './.doc-gen/source/lib.es5.d.ts',
       './.doc-gen/source/lib.es2015.collection.d.ts',
       './.doc-gen/source/lib.es2015.core.d.ts',

@@ -54,8 +54,12 @@ function processDTSFile(srcFilepath, destFilepath)
    return false;
 }
 
+/**
+ * Exclude Windows specific lib declaration.
+ *
+ * @type {string[]}
+ */
 const skipFilenames = [
-   'lib.decorators.legacy',
    'lib.scripthost'
 ];
 

@@ -16,10 +16,13 @@
     }
   },
   "devDependencies": {
+    "@types/dom-webcodecs": "^0.1.7",
     "@typhonjs-build-test/node": "^0.0.9",
     "@typhonjs-utils/file-util": "^0.0.8",
+    "@webgpu/types": "^0.1.32",
     "ts-morph": "^18",
     "typedoc": "^0.24",
+    "typedoc-plugin-extras": "^2.3.3",
     "typescript": "5.0.4"
   },
   "files": [

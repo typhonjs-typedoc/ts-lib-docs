@@ -1,5 +1,7 @@
 import fs               from 'fs-extra';
-import { DefaultTheme } from 'typedoc';
+import {
+   DefaultTheme,
+   ReflectionKind }     from 'typedoc';
 
 /**
  * @param {import('typedoc').Application} app -
@@ -47,15 +49,16 @@ function collectAnchors(reflection, prefix = '')
 {
    const anchors = [];
 
-   if (reflection.kindString === 'Class' || reflection.kindString === 'Interface' || reflection.kindString === 'Enum' ||
-    reflection.kindString === 'Type alias' || reflection.kindString === 'Namespace')
+   if (reflection.kind === ReflectionKind.Class || reflection.kind === ReflectionKind.Interface ||
+    reflection.kind === ReflectionKind.Enum || reflection.kind === ReflectionKind.TypeAlias ||
+     reflection.kind === ReflectionKind.Namespace)
    {
       prefix = `${reflection.name}.`;
    }
 
-   if (reflection.signatures || reflection.kindString === 'Property' || reflection.kindString === 'Method' ||
-    reflection.kindString === 'Accessor' || reflection.kindString === 'Function' ||
-    reflection.kindString === 'Enumeration member')
+   if (reflection.kind === ReflectionKind.Property || reflection.kind === ReflectionKind.Method ||
+    reflection.kind === ReflectionKind.Accessor || reflection.kind === ReflectionKind.Function ||
+     reflection.kind === ReflectionKind.EnumMember)
    {
       anchors.push({
          name: `${prefix}${reflection.name}`,

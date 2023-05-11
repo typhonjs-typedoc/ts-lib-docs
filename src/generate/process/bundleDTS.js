@@ -11,10 +11,11 @@ import fs               from 'fs-extra';
 export async function bundleDTS(generateConfig)
 {
    fs.ensureDirSync('./.doc-gen/bundled');
-   fs.emptydirSync('./.doc-gen/bundled');
 
    if (generateConfig.dom && fs.existsSync('./.doc-gen/transformed/dom'))
    {
+      fs.unlinkSync('./.doc-gen/bundled/index-dom.d.ts');
+
       const filepaths = await getFileList({ dir: './.doc-gen/transformed/dom' });
       for (const filepath of filepaths)
       {
@@ -24,6 +25,8 @@ export async function bundleDTS(generateConfig)
 
    if (generateConfig.esm && fs.existsSync('./.doc-gen/transformed/esm'))
    {
+      fs.unlinkSync('./.doc-gen/bundled/index-esm.d.ts');
+
       const filepaths = await getFileList({ dir: './.doc-gen/transformed/esm' });
       for (const filepath of filepaths)
       {
@@ -33,6 +36,8 @@ export async function bundleDTS(generateConfig)
 
    if (generateConfig.worker && fs.existsSync('./.doc-gen/transformed/worker'))
    {
+      fs.unlinkSync('./.doc-gen/bundled/index-worker.d.ts');
+
       const filepaths = await getFileList({ dir: './.doc-gen/transformed/worker' });
       for (const filepath of filepaths)
       {

@@ -12,6 +12,7 @@ export async function processDTS()
    fs.emptyDirSync('./.doc-gen/source');
 
    await processPackageTypescript();
+   await processPackageWebGPUAndCodecs();
 }
 
 /**
@@ -25,11 +26,16 @@ export async function processDTS()
  *
  * @param {string}   destFilepath - Destination file path.
  *
+ * @param {(string) => string} [preProcess] - A function to provide extra pre-processing.
+ *
  * @returns {boolean} Wrote file.
  */
-function processDTSFile(srcFilepath, destFilepath)
+function processDTSFile(srcFilepath, destFilepath, preProcess)
 {
    let srcData = fs.readFileSync(srcFilepath, 'utf-8');
+
+   // Run any pre processing.
+   if (typeof preProcess === 'function') { srcData = preProcess(srcData); }
 
    // Substitute imported declarations to local `imports` from `package.json`.
    srcData = srcData.replaceAll(/^interface/gm, `export interface`);
@@ -77,5 +83,47 @@ async function processPackageTypescript()
       {
          if (processDTSFile(filepath, `./.doc-gen/source/${name}.d.ts`)) { console.log(name); }
       }
+   }
+}
+
+/**
+ * Processes the WebGPU library declarations.
+ */
+async function processPackageWebGPUAndCodecs()
+{
+   // For WebGPU -----------------------------------------------------------------------------------------------------
+
+   if (processDTSFile('./node_modules/@webgpu/types/dist/index.d.ts', `./.doc-gen/source/extra.dom.webgpu.d.ts`))
+   {
+      console.log('extra.dom.webgpu');
+   }
+
+   // For WebCodecs --------------------------------------------------------------------------------------------------
+
+   if (processDTSFile('./node_modules/@types/dom-webcodecs/index.d.ts', `./.doc-gen/source/extra.dom.webcodecs.d.ts`))
+   {
+      console.log('extra.dom.webcodecs');
+   }
+
+   // Currently in the @types/dom-webcodecs package several required type aliases are commented out (2023.5.10).
+   const preProcess = (srcData) => {
+      srcData = srcData.replace('// type AlphaOption', 'type AlphaOption');
+      srcData = srcData.replace('// type AvcBitstreamFormat', 'type AvcBitstreamFormat');
+      srcData = srcData.replace('// type BitrateMode', 'type BitrateMode');
+      srcData = srcData.replace('// type CodecState', 'type CodecState');
+      srcData = srcData.replace('// type EncodedVideoChunkType', 'type EncodedVideoChunkType');
+      srcData = srcData.replace('// type LatencyMode', 'type LatencyMode');
+      srcData = srcData.replace('// type VideoPixelFormat', 'type VideoPixelFormat');
+
+      // Entirely missing from types!
+      srcData += 'type VideoEncoderBitrateMode = "constant" | "variable";'
+
+      return srcData;
+   }
+
+   if (processDTSFile('./node_modules/@types/dom-webcodecs/webcodecs.generated.d.ts',
+    `./.doc-gen/source/extra.dom.webcodecs.generated.d.ts`, preProcess))
+   {
+      console.log('extra.dom.webcodecs.generated');
    }
 }

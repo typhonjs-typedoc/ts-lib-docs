@@ -9,27 +9,30 @@ import {
 
 export class TransformData
 {
-   /** @type {Map<string, FunctionDeclaration[]>} */
+   /** @type {Map<string, { node: FunctionDeclaration, mergeOverride: boolean }[]>} */
    #functions = new Map();
 
-   /** @type {Map<string, InterfaceDeclaration[]>} */
+   /** @type {Map<string, { node: InterfaceDeclaration, mergeOverride: boolean }[]>} */
    #interfaces = new Map();
 
-   /** @type {Map<string, ModuleDeclaration[]>} */
+   /** @type {Map<string, { node: ModuleDeclaration, mergeOverride: boolean }[]>} */
    #namespaces = new Map();
 
-   /** @type {Map<string, TypeAliasDeclaration[]>} */
+   /** @type {Map<string, { node: TypeAliasDeclaration, mergeOverride: boolean }[]>} */
    #typeAliases = new Map();
 
-   /** @type {Map<string, VariableDeclaration[]>} */
+   /** @type {Map<string, { node: VariableDeclaration, mergeOverride: boolean }[]>} */
    #variables = new Map();
 
    /**
-    * @param {import('ts-morph').Node} node -
+    * @param {import('ts-morph').Node} node - Node to track.
+    *
+    * @param {boolean} [mergeOverride=false] - When merging declarations for this node are the merged / overriding
+    *        values?
     *
     * @returns {boolean} Whether Node is added to tracked data to transform.
     */
-   addNode(node)
+   addNode(node, mergeOverride = false)
    {
       const symbol = node.getSymbol();
 
@@ -40,20 +43,20 @@ export class TransformData
       switch (node.getKind())
       {
          case SyntaxKind.FunctionDeclaration:
-            if (!this.#functions.has(name)) { this.#functions.set(name, [node]); }
-            else { this.#functions.get(name).push(node); }
+            if (!this.#functions.has(name)) { this.#functions.set(name, [{ node, mergeOverride }]); }
+            else { this.#functions.get(name).push({ node, mergeOverride }); }
             return true;
 
          case SyntaxKind.InterfaceDeclaration:
-            if (!this.#interfaces.has(name)) { this.#interfaces.set(name, [node]); }
-            else { this.#interfaces.get(name).push(node); }
+            if (!this.#interfaces.has(name)) { this.#interfaces.set(name, [{ node, mergeOverride }]); }
+            else { this.#interfaces.get(name).push({ node, mergeOverride }); }
             return true;
 
          case SyntaxKind.ModuleDeclaration:
             if (node.getDeclarationKind() === ModuleDeclarationKind.Namespace)
             {
-               if (!this.#namespaces.has(name)) { this.#namespaces.set(name, [node]); }
-               else { this.#namespaces.get(name).push(node); }
+               if (!this.#namespaces.has(name)) { this.#namespaces.set(name, [{ node, mergeOverride }]); }
+               else { this.#namespaces.get(name).push({ node, mergeOverride }); }
                return true;
             }
             else
@@ -62,13 +65,13 @@ export class TransformData
             }
 
          case SyntaxKind.TypeAliasDeclaration:
-            if (!this.#typeAliases.has(name)) { this.#typeAliases.set(name, [node]); }
-            else { this.#typeAliases.get(name).push(node); }
+            if (!this.#typeAliases.has(name)) { this.#typeAliases.set(name, [{ node, mergeOverride }]); }
+            else { this.#typeAliases.get(name).push({ node, mergeOverride }); }
             return true;
 
          case SyntaxKind.VariableDeclaration:
-            if (!this.#variables.has(name)) { this.#variables.set(name, [node]); }
-            else { this.#variables.get(name).push(node); }
+            if (!this.#variables.has(name)) { this.#variables.set(name, [{ node, mergeOverride }]); }
+            else { this.#variables.get(name).push({ node, mergeOverride }); }
             return true;
       }
 
@@ -76,11 +79,12 @@ export class TransformData
    }
 
    /**
-    * @template [T=NodeTypes]
+    * @template T
     *
     * @param {T} kind - The kind of Node to retrieve.
     *
-    * @returns {IterableIterator<[string, T]>} The entries iterator for the given Node kind.
+    * @returns {IterableIterator<[string, { node: T, mergeOverride: boolean }[]]>} The entries iterator for the given
+    *          Node kind.
     */
    getEntries(kind)
    {
@@ -153,13 +157,3 @@ export class TransformData
       return result;
    }
 }
-
-/**
- * @typedef {(
- *    FunctionDeclaration |
- *    InterfaceDeclaration |
- *    ModuleDeclaration |
- *    TypeAliasDeclaration |
- *    VariableDeclaration
- * )} NodeTypes
- */

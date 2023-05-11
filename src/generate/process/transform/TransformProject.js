@@ -66,6 +66,7 @@ export class TransformProject
     */
    async transform()
    {
+      // Provide a specific order to traverse the source files specified as ts-morph will sort the project files.
       const sourceFiles = this.#docData.sourceFiles.map((filepath) => this.#project.addSourceFileAtPath(filepath));
 
       for (const sourceFile of sourceFiles)
@@ -74,18 +75,15 @@ export class TransformProject
 
          console.log(`Processing: ${sourceFile.getBaseName()}`);
 
+         const mergeOverride = this.#docData?.mergeOverride.has(sourceFile.getBaseName()) ?? false;
+
          const exportedDeclarations = sourceFile.getExportedDeclarations();
 
          for (const [_, declarations] of exportedDeclarations) // eslint-disable-line no-unused-vars
          {
-            for (const declaration of declarations)
-            {
-               this.#transformData.addNode(declaration);
-            }
+            for (const declaration of declarations) { this.#transformData.addNode(declaration, mergeOverride); }
          }
       }
-
-      // console.log(`!!! Tracked: \n`, this.#transformData.toString());
 
       await this.#transformFunctions();
       await this.#transformInterfaces();
@@ -105,9 +103,9 @@ export class TransformProject
     *
     * @param {string}               [options.indent='\t'] - Indent string to prepend.
     *
-    * @param {boolean}              [options.overwrite=false] - Overwrite duplicate members.
+    * @param {boolean}              [options.mergeOverride=false] - Override duplicate members.
     */
-   #mergeInterfaces(sourceNode, targetNode, { indent = '\t', overwrite = false } = {})
+   #mergeInterfaces(sourceNode, targetNode, { indent = '\t', mergeOverride = false } = {})
    {
       const targetMembers = targetNode.getMembers();
 
@@ -116,7 +114,7 @@ export class TransformProject
          const targetMemberName = targetMember.getSymbol()?.getName();
          if (!targetMemberName) { continue; }
 
-         if (overwrite)
+         if (mergeOverride)
          {
             const sourceMembers = sourceNode.getMembers();
             const sourceMember = sourceMembers.find((member) => member.getSymbol()?.getName() === targetMemberName);
@@ -164,8 +162,9 @@ export class TransformProject
          }
          else
          {
+            // Always merge override Namespace interfaces.
             console.log(`\tmerging interface: ${targetInterfaceName}`);
-            this.#mergeInterfaces(sourceInterface, targetInterface, { indent: '\t\t', overwrite: true });
+            this.#mergeInterfaces(sourceInterface, targetInterface, { indent: '\t\t', mergeOverride: true });
          }
       }
 
@@ -279,9 +278,9 @@ export class TransformProject
          const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/function-${name}.d.ts`);
 
          // Add functions to the new source file.
-         for (const node of nodes)
+         for (const nodeEntry of nodes)
          {
-            newSourceFile.addFunction(node.getStructure());
+            newSourceFile.addFunction(nodeEntry.node.getStructure());
          }
 
          // Save the new source file to disk
@@ -298,13 +297,17 @@ export class TransformProject
    {
       for (const [name, nodes] of this.#transformData.getEntries(InterfaceDeclaration))
       {
-         const interfaceNode = nodes[0];
+         const interfaceNode = nodes[0].node;
 
          if (nodes.length > 1)
          {
             console.log(`Updating interface: ${name}`);
 
-            for (let cntr = 1; cntr < nodes.length; cntr++) { this.#mergeInterfaces(interfaceNode, nodes[cntr]); }
+            for (let cntr = 1; cntr < nodes.length; cntr++)
+            {
+               const nodeEntry = nodes[cntr];
+               this.#mergeInterfaces(interfaceNode, nodeEntry.node, { mergeOverride: nodeEntry.mergeOverride });
+            }
 
             this.#sortInterfaceMembers(interfaceNode);
          }
@@ -330,15 +333,19 @@ export class TransformProject
    {
       for (const [name, nodes] of this.#transformData.getEntries(ModuleDeclaration))
       {
-         const namespaceNode = nodes[0];
-
-         // if (nodes.length > 1) { continue; }
+         const namespaceNode = nodes[0].node;
 
          if (nodes.length > 1)
          {
             console.log(`Updating namespace: ${name}`);
 
-            for (let cntr = 1; cntr < nodes.length; cntr++) { this.#mergeNamespaces(namespaceNode, nodes[cntr]); }
+            for (let cntr = 1; cntr < nodes.length; cntr++)
+            {
+               const nodeEntry = nodes[cntr];
+
+               // Note: when merging namespaces interfaces always merge override.
+               this.#mergeNamespaces(namespaceNode, nodeEntry.node);
+            }
          }
 
          // Create a new source file.
@@ -365,9 +372,9 @@ export class TransformProject
          const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/typealias-${name}.d.ts`);
 
          // Add functions to the new source file.
-         for (const node of nodes)
+         for (const nodeEntry of nodes)
          {
-            newSourceFile.addTypeAlias(node.getStructure());
+            newSourceFile.addTypeAlias(nodeEntry.node.getStructure());
          }
 
          // Save the new source file to disk
@@ -387,12 +394,12 @@ export class TransformProject
       for (const [name, nodes] of this.#transformData.getEntries(VariableDeclaration))
       {
          /** @type {VariableDeclaration} */
-         let variableNode = nodes[0];
+         let variableNode = nodes[0].node;
 
          if (nodes.length > 1)
          {
             console.log(`Updating variable: ${name}`);
-            variableNode = nodes[nodes.length - 1];
+            variableNode = nodes[nodes.length - 1].node;
          }
 
          // Get the parent VariableDeclarationList node.

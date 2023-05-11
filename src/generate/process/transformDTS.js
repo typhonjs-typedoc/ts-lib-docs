@@ -18,8 +18,16 @@ const docsDOM = {
 
    sourceFiles: [
       './.doc-gen/source/lib.dom.d.ts',
-      './.doc-gen/source/lib.dom.iterable.d.ts'
-   ]
+      './.doc-gen/source/lib.dom.iterable.d.ts',
+      './.doc-gen/source/extra.dom.webcodecs.d.ts',
+      './.doc-gen/source/extra.dom.webcodecs.generated.d.ts',
+      './.doc-gen/source/extra.dom.webgpu.d.ts'
+   ],
+
+   // The interfaces defined here must merge & override / replace any existing lib.dom values.
+   mergeOverride: new Set([
+      'extra.dom.webcodecs.generated.d.ts',
+   ])
 };
 
 /** @type {DocData} */
@@ -85,6 +93,14 @@ const docsWorker = {
    sourceFiles: [
       './.doc-gen/source/lib.webworker.d.ts',
       './.doc-gen/source/lib.webworker.importscripts.d.ts',
-      './.doc-gen/source/lib.webworker.iterable.d.ts'
-   ]
+      './.doc-gen/source/lib.webworker.iterable.d.ts',
+      './.doc-gen/source/extra.dom.webcodecs.d.ts',
+      './.doc-gen/source/extra.dom.webcodecs.generated.d.ts',
+      './.doc-gen/source/extra.dom.webgpu.d.ts'
+   ],
+
+   // The interfaces defined here must merge & override / replace any existing lib.dom values.
+   mergeOverride: new Set([
+      'extra.dom.webcodecs.generated.d.ts',
+   ])
 };

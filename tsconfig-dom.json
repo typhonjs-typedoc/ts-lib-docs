@@ -5,9 +5,8 @@
     "noImplicitAny": true,
     "sourceMap": false,
     "moduleResolution" : "NodeNext",
-    "lib": ["DOM", "ES2022"]
+    "lib": ["DOM", "ES2023"],
+    "types": []
   },
-  "include" : [
-    "./.doc-gen/bundled/index-dom.d.ts"
-  ]
+  "include" : ["./.doc-gen/bundled/index-dom.d.ts"]
 }

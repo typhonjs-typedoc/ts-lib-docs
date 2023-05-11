@@ -4,7 +4,7 @@ import { getFileList }  from "@typhonjs-utils/file-util";
 import fs               from 'fs-extra';
 
 /**
- * Processes TRL runtime & standard libraries along with the Svelte library moving DTS files to `.doc-gen`.
+ * Processes TS library and extra DTS files to `.doc-gen`.
  */
 export async function processDTS()
 {
@@ -18,9 +18,11 @@ export async function processDTS()
 /**
  * Processes all DTS files while copying from the original library to `.doc-gen`. There are two processing steps:
  *
- * 1. All references for `declare`, `interface`, `type` are transformed to be exported.
+ * 1. Run any custom pre-processing function if defined.
  *
- * 2. Removal of any problematic content.
+ * 2. All references for `declare`, `interface`, `type` are transformed to be exported.
+ *
+ * 3. Removal of any problematic content.
  *
  * @param {string}   srcFilepath - Source file path.
  *
@@ -34,7 +36,7 @@ function processDTSFile(srcFilepath, destFilepath, preProcess)
 {
    let srcData = fs.readFileSync(srcFilepath, 'utf-8');
 
-   // Run any pre processing.
+   // Run any pre-processing.
    if (typeof preProcess === 'function') { srcData = preProcess(srcData); }
 
    // Substitute imported declarations to local `imports` from `package.json`.
@@ -44,7 +46,7 @@ function processDTSFile(srcFilepath, destFilepath, preProcess)
 
    // Remove code that causes further downstream problems.
 
-   // Remove copyright comment blocks.
+   // Remove TS copyright comment blocks.
    srcData = srcData.replaceAll(/\/\*!(.|\n)*?\*\//gm, '');
 
    // Remove all reference comments.
@@ -87,7 +89,7 @@ async function processPackageTypescript()
 }
 
 /**
- * Processes the WebGPU library declarations.
+ * Processes the WebGPU and WebCodecs library declarations.
  */
 async function processPackageWebGPUAndCodecs()
 {

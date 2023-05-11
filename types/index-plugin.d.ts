@@ -1,7 +1,7 @@
 import * as typedoc from 'typedoc';
 
 /**
- * Provides a plugin for Typedoc to link Foundry VTT global and sript scoped API to Foundry documentation.
+ * Provides a basic plugin declaration for Typedoc.
  *
  * @param {import('typedoc').Application} app - Typedoc Application
  */

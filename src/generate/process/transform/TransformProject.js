@@ -75,7 +75,7 @@ export class TransformProject
 
          console.log(`Processing: ${sourceFile.getBaseName()}`);
 
-         const mergeOverride = this.#docData?.mergeOverride.has(sourceFile.getBaseName()) ?? false;
+         const mergeOverride = this.#docData?.mergeOverride?.has(sourceFile.getBaseName()) ?? false;
 
          const exportedDeclarations = sourceFile.getExportedDeclarations();
 

@@ -5,9 +5,8 @@
     "noImplicitAny": true,
     "sourceMap": false,
     "moduleResolution" : "NodeNext",
-    "lib": ["ES2023"],
-    "types": [],
-    "skipLibCheck" : true
+    "lib": ["ES2023", "WebWorker"],
+    "types": []
   },
-  "include" : ["./.doc-gen/bundled/index-esm.d.ts"]
+  "include" : ["./.doc-gen/bundled/index-worker.d.mts"]
 }

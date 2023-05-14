@@ -11,7 +11,7 @@ export class Resolver
    #app;
 
    /**
-    * Stores the `globalThis` and `foundry` namespaced symbols that failed to resolve.
+    * Stores the symbols that failed to resolve.
     *
     * @type {Set<string>}
     */
@@ -40,7 +40,7 @@ export class Resolver
    }
 
    /**
-    * Attempts to resolve an unknown symbol against global, script scope, and foundry namespaced symbols.
+    * Attempts to resolve unknown symbols against library declarations provided by this module.
     *
     * @param {import('typedoc').DeclarationReference} ref - Declaration reference.
     *
@@ -51,10 +51,6 @@ export class Resolver
       if (ref.moduleSource === 'typescript' || (!ref.moduleSource && ref.resolutionStart === 'global'))
       {
          const symbolPath = ref.symbolReference?.path ?? Resolver.#emptyArray;
-
-         // Only handle symbols that start with `globalThis`. All TRL source code uses `globalThis` to reference
-         // the Foundry API.
-         if (symbolPath.length < 2 || symbolPath?.[0]?.path !== 'global') { return; }
 
          const name = symbolPath?.map((path) => path.path).join('.');
 
@@ -67,7 +63,7 @@ export class Resolver
          if (!result && !this.#failed.has(name))
          {
             this.#failed.add(name);
-            this.#app.logger.verbose(`[typedoc-plugin-foundry-links]: Failed to resolve type: ${name}`);
+            this.#app.logger.verbose(`[typedoc-ts-links]: Failed to resolve type: ${name}`);
          }
 
          if (this.#supports.objectReturn && result)

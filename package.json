@@ -18,7 +18,8 @@
   "devDependencies": {
     "@types/dom-webcodecs": "^0.1.7",
     "@typhonjs-build-test/node": "^0.0.9",
-    "@typhonjs-utils/file-util": "^0.0.8",
+    "@typhonjs-utils/file-util": "^0.0.10",
+    "@typhonjs-utils/object": "^0.0.12",
     "@webgpu/types": "^0.1.32",
     "ts-morph": "^18",
     "typedoc": "^0.24",

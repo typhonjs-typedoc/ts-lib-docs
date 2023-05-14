@@ -15,7 +15,7 @@ export const worker = {
    }],
 
    transform: {
-      sourceFiles: [
+      filenames: [
          'lib.webworker.d.ts',
          'lib.webworker.importscripts.d.ts',
          'lib.webworker.iterable.d.ts'
@@ -24,7 +24,6 @@ export const worker = {
 
    typedoc: {
       name: 'Typescript Library Declarations (Web Worker)',
-      favicon: './assets/icons/worker.ico',
-      tsconfig: './tsconfig-worker.json'
+      favicon: './assets/icons/worker.ico'
    }
 };

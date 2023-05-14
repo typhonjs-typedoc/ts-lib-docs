@@ -20,6 +20,10 @@ export const dom = {
             {
                source: './node_modules/@webgpu/types/dist/index.d.ts',
                rename: 'extra.webgpu.d.ts'
+            },
+            {
+               source: './node_modules/@types/dom-webcodecs/index.d.ts',
+               rename: 'extra.dom.webcodecs.d.ts'
             }
          ],
 
@@ -27,11 +31,8 @@ export const dom = {
       },
 
       {
+         // Needs special handling to uncomment so types and add a missing type declaration.
          filepaths: [
-            {
-               source: './node_modules/@types/dom-webcodecs/index.d.ts',
-               rename: 'extra.dom.webcodecs.d.ts'
-            },
             {
                source: './node_modules/@types/dom-webcodecs/webcodecs.generated.d.ts',
                rename: 'extra.dom.webcodecs.generated.d.ts'
@@ -43,12 +44,12 @@ export const dom = {
    ],
 
    transform: {
-      sourceFiles: [
+      filenames: [
          'lib.dom.d.ts',
          'lib.dom.iterable.d.ts',
          'extra.dom.webcodecs.d.ts',
          'extra.dom.webcodecs.generated.d.ts',
-         'extra.dom.webgpu.d.ts'
+         'extra.webgpu.d.ts'
       ],
 
       // The interfaces defined here must merge & override / replace any existing lib.dom values.
@@ -59,8 +60,7 @@ export const dom = {
 
    typedoc: {
       name: 'Typescript Library Declarations (DOM)',
-      favicon: './assets/icons/dom.ico',
-      tsconfig: './tsconfig-dom.json'
+      favicon: './assets/icons/dom.ico'
    }
 };
 
@@ -82,7 +82,7 @@ function preProcessWebCodec(srcData)
    srcData = srcData.replace('// type VideoPixelFormat', 'type VideoPixelFormat');
 
    // Entirely missing from types!
-   srcData += 'type VideoEncoderBitrateMode = "constant" | "variable";'
+   srcData += 'type VideoEncoderBitrateMode = "constant" | "variable";';
 
    return srcData;
 }

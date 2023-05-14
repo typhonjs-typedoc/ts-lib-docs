@@ -15,24 +15,34 @@ import { TransformData }      from './TransformData.js';
 
 export class TransformProject
 {
-   /** @type {DocData} */
-   #docData;
+   /** @type {import('../../types').TransformConfig} */
+   #transformConfig;
+
+   /** @type {string} */
+   #outDir;
 
    /** @type {Project} */
    #project;
+
+   /** @type {string} */
+   #sourceDir;
 
    /** @type {TransformData} */
    #transformData;
 
    /**
-    * @param {DocData}  docData - Description of source data to process.
+    * @param {import('../../types').GenerateConfigEntry}  configEntry - Description of source data to process.
+    *
+    * @param {string}   name - Name of the TransformConfig
     */
-   constructor(docData)
+   constructor(configEntry, name)
    {
-      this.#docData = docData;
+      this.#transformConfig = configEntry.transform;
+      this.#sourceDir = `./.doc-gen/source/${name}`;
+      this.#outDir = `./.doc-gen/transformed/${name}`;
 
-      fs.ensureDirSync(docData.outDir);
-      fs.emptydirSync(docData.outDir);
+      fs.ensureDirSync(this.#outDir);
+      fs.emptydirSync(this.#outDir);
 
       this.#project = new Project({
          compilerOptions: {
@@ -67,17 +77,17 @@ export class TransformProject
    async transform()
    {
       // Provide a specific order to traverse the source files specified as ts-morph will sort the project files.
-      const sourceFiles = this.#docData.sourceFiles.map((filepath) => this.#project.addSourceFileAtPath(filepath));
-
-      for (const sourceFile of sourceFiles)
+      for (const filename of this.#transformConfig.filenames)
       {
-         if (!sourceFile.isDeclarationFile()) { continue; }
+         const projectSourceFile = this.#project.addSourceFileAtPath(`${this.#sourceDir}/${filename}`);
 
-         console.log(`Processing: ${sourceFile.getBaseName()}`);
+         if (!projectSourceFile.isDeclarationFile()) { continue; }
 
-         const mergeOverride = this.#docData?.mergeOverride?.has(sourceFile.getBaseName()) ?? false;
+         console.log(`Processing: ${projectSourceFile.getBaseName()}`);
 
-         const exportedDeclarations = sourceFile.getExportedDeclarations();
+         const mergeOverride = this.#transformConfig?.mergeOverride?.has(projectSourceFile.getBaseName()) ?? false;
+
+         const exportedDeclarations = projectSourceFile.getExportedDeclarations();
 
          for (const [_, declarations] of exportedDeclarations) // eslint-disable-line no-unused-vars
          {
@@ -275,7 +285,7 @@ export class TransformProject
       for (const [name, nodes] of this.#transformData.getEntries(FunctionDeclaration))
       {
          // Create a new source file.
-         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/function-${name}.d.ts`);
+         const newSourceFile = this.#project.createSourceFile(`${this.#outDir}/function-${name}.d.ts`);
 
          // Add functions to the new source file.
          for (const nodeEntry of nodes)
@@ -313,7 +323,7 @@ export class TransformProject
          }
 
          // Create a new source file.
-         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/interface-${name}.d.ts`);
+         const newSourceFile = this.#project.createSourceFile(`${this.#outDir}/interface-${name}.d.ts`);
 
          // Add the interface to the new source file.
          newSourceFile.addInterface(interfaceNode.getStructure());
@@ -349,7 +359,7 @@ export class TransformProject
          }
 
          // Create a new source file.
-         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/namespace-${name}.d.ts`);
+         const newSourceFile = this.#project.createSourceFile(`${this.#outDir}/namespace-${name}.d.ts`);
 
          // Add the interface to the new source file.
          newSourceFile.addModule(namespaceNode.getStructure());
@@ -369,7 +379,7 @@ export class TransformProject
       for (const [name, nodes] of this.#transformData.getEntries(TypeAliasDeclaration))
       {
          // Create a new source file.
-         const newSourceFile = this.#project.createSourceFile(`${this.#docData.outDir}/typealias-${name}.d.ts`);
+         const newSourceFile = this.#project.createSourceFile(`${this.#outDir}/typealias-${name}.d.ts`);
 
          // Add functions to the new source file.
          for (const nodeEntry of nodes)
@@ -413,8 +423,7 @@ export class TransformProject
             const adjustedName = this.#isLowerCase(name) ? `___${name}` : name;
 
             // Create a new source file.
-            const newSourceFile = this.#project.createSourceFile(
-             `${this.#docData.outDir}/variable-${adjustedName}.d.ts`);
+            const newSourceFile = this.#project.createSourceFile(`${this.#outDir}/variable-${adjustedName}.d.ts`);
 
             newSourceFile.addVariableStatement(variableStatement.getStructure());
 

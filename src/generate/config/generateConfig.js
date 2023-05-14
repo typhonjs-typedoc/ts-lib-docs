@@ -9,6 +9,6 @@ export const config = {
    esm,
    dom,
    worker
-}
+};
 
 

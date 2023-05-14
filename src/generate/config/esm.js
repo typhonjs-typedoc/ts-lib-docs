@@ -18,7 +18,7 @@ export const esm = {
 
    transform: {
       // In this case we need a specific order for processing.
-      sourceFiles: [
+      filenames: [
          'lib.decorators.d.ts',
          'lib.decorators.legacy.d.ts',
          'lib.es5.d.ts',
@@ -72,7 +72,6 @@ export const esm = {
 
    typedoc: {
       name: 'Typescript Library Declarations (ES2023)',
-      favicon: './assets/icons/esm.ico',
-      tsconfig: './tsconfig-esm.json'
+      favicon: './assets/icons/esm.ico'
    }
 };

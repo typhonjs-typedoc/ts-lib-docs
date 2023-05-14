@@ -4,44 +4,35 @@ import fs               from 'fs-extra';
 /**
  * Appends all transformed individual declarations into a single declaration file.
  *
- * @param {GenerateConfig}   generateConfig - Which doc categories to generate.
+ * @param {import('./types').GenerateConfig} config -
  *
  * @returns {Promise<void>}
  */
-export async function bundleDTS(generateConfig)
+export async function bundleDTS(config)
 {
    fs.ensureDirSync('./.doc-gen/bundled');
 
-   if (generateConfig.dom && fs.existsSync('./.doc-gen/transformed/dom'))
+   for (const name in config)
    {
-      fs.unlinkSync('./.doc-gen/bundled/index-dom.d.ts');
+      const transformDir = `./.doc-gen/transformed/${name}`;
+      const bundleFilepath = `./.doc-gen/bundled/index-${name}.d.mts`;
 
-      const filepaths = await getFileList({ dir: './.doc-gen/transformed/dom' });
-      for (const filepath of filepaths)
+      if (fs.existsSync(transformDir))
       {
-         fs.appendFileSync('./.doc-gen/bundled/index-dom.d.ts', fs.readFileSync(filepath));
+         console.log(`Bundling '${name}':`);
+
+         // Delete any existing bundled index.d.mts file.
+         if (fs.existsSync(bundleFilepath)) { fs.unlinkSync(bundleFilepath); }
+
+         const filepaths = await getFileList({ dir: transformDir, resolve: true });
+         for (const filepath of filepaths)
+         {
+            fs.appendFileSync(bundleFilepath, fs.readFileSync(filepath));
+         }
       }
-   }
-
-   if (generateConfig.esm && fs.existsSync('./.doc-gen/transformed/esm'))
-   {
-      fs.unlinkSync('./.doc-gen/bundled/index-esm.d.ts');
-
-      const filepaths = await getFileList({ dir: './.doc-gen/transformed/esm' });
-      for (const filepath of filepaths)
+      else
       {
-         fs.appendFileSync('./.doc-gen/bundled/index-esm.d.ts', fs.readFileSync(filepath));
-      }
-   }
-
-   if (generateConfig.worker && fs.existsSync('./.doc-gen/transformed/worker'))
-   {
-      fs.unlinkSync('./.doc-gen/bundled/index-worker.d.ts');
-
-      const filepaths = await getFileList({ dir: './.doc-gen/transformed/worker' });
-      for (const filepath of filepaths)
-      {
-         fs.appendFileSync('./.doc-gen/bundled/index-worker.d.ts', fs.readFileSync(filepath));
+         throw new Error(`There is no 'transformed' directory: ${transformDir}`);
       }
    }
 }

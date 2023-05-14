@@ -7,55 +7,61 @@ import {
 
 import { generateUrlMap }  from './generateUrlMap.js';
 
-const configDOM = {
-   name: 'Typescript Library Declarations (DOM)',
-   entryPoints: ['./.doc-gen/bundled/index-dom.d.ts'],
-   favicon: './assets/icons/dom.ico',
-   out: 'docs-dom',
-   tsconfig: './tsconfig-dom.json'
-};
-
-const configESM = {
-   name: 'Typescript Library Declarations (ES2023)',
-   entryPoints: ['./.doc-gen/bundled/index-esm.d.ts'],
-   favicon: './assets/icons/esm.ico',
-   out: 'docs-esm',
-   tsconfig: './tsconfig-esm.json'
-};
-
-const configWorker = {
-   name: 'Typescript Library Declarations (Web Worker)',
-   entryPoints: ['./.doc-gen/bundled/index-worker.d.ts'],
-   favicon: './assets/icons/worker.ico',
-   out: 'docs-worker',
-   tsconfig: './tsconfig-worker.json'
-};
-
 /**
  *
- * @param {GenerateConfig} generateConfig -
+ * @param {import('./types').GenerateConfig} config -
  *
  * @param {import('typedoc').LogLevel} logLevel -
  */
-export async function typedoc(generateConfig, logLevel = LogLevel.Info)
+export async function typedoc(config, logLevel = LogLevel.Info)
 {
-   if (generateConfig.dom && fs.existsSync(configDOM.entryPoints[0])) { await generate(logLevel, configDOM); }
-   if (generateConfig.esm && fs.existsSync(configESM.entryPoints[0])) { await generate(logLevel, configESM); }
-   if (generateConfig.worker && fs.existsSync(configWorker.entryPoints[0])) { await generate(logLevel, configWorker); }
+   for (const name in config)
+   {
+      /** @type {import('../types').TypeDocConfig} */
+      const typedocConfig = Object.assign({
+         entryPoints: [`./.doc-gen/bundled/index-${name}.d.mts`],
+         out: `docs-${name}`,
+         tsconfig: `./tsconfig-docs-${name}.json`
+      }, config[name].typedoc);
+
+      // Ensure that there is a plugin array defined and if `typedoc-plugin-extras` is not included then add it.
+      if (Array.isArray(typedocConfig.plugin))
+      {
+         if (!typedocConfig.plugin.includes('typedoc-plugin-extras'))
+         {
+            typedocConfig.plugin.push('typedoc-plugin-extras');
+         }
+      }
+      else
+      {
+         typedocConfig.plugin = ['typedoc-plugin-extras'];
+      }
+
+      if (fs.existsSync(typedocConfig.entryPoints[0]))
+      {
+         console.log(`Generating documentation for '${name}':`);
+         await generate(typedocConfig, logLevel);
+      }
+      else
+      {
+         throw new Error(
+          `Could not find bundled entry point for project '${name}': ${typedocConfig?.entryPoints?.[0]}`);
+      }
+   }
 }
 
 /**
  * Generate docs from TS declarations in `.doc-gen`.
  *
- * @param {LogLevel} logLevel - The log level to use when generating Typedoc documentation.
+ * @param {import('../types').TypeDocConfig} config -
  *
- * @param {{ name: string, entryPoints: string[], favicon: string, out: string, tsconfig: string }} config -
+ * @param {LogLevel} logLevel - The log level to use when generating Typedoc documentation.
  *
  * @returns {Promise<void>}
  */
-async function generate(logLevel, config)
+async function generate(config, logLevel)
 {
-   fs.emptydirSync(`./${config.out}`);
+   if (fs.existsSync(`./${config.out}`)) { fs.emptydirSync(`./${config.out}`); }
 
    // Create a new TypeDoc application instance
    const app = new Application();
@@ -67,22 +73,22 @@ async function generate(logLevel, config)
       name: config.name,
 
       // Disables the source links as they reference the d.ts files.
-      disableSources: true,
+      disableSources: config.disableSources ?? true,
 
       entryPoints: config.entryPoints,
 
       favicon: config.favicon,
 
       // Hide the documentation generator footer.
-      hideGenerator: true,
+      hideGenerator: config.hideGenerator ?? true,
 
       // Sets log level.
-      logLevel,
+      logLevel: config.logLevel ?? logLevel,
 
       // Output directory for the generated documentation.
       out: config.out,
 
-      plugin: ['typedoc-plugin-extras'],
+      plugin: config.plugin,
 
       theme: 'default',
 

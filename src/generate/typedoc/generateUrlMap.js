@@ -43,7 +43,7 @@ export function generateUrlMap(app, project)
  *
  * @param {string}   prefix -
  *
- * @returns {*[]}
+ * @returns {*[]} -
  */
 function collectAnchors(reflection, prefix = '')
 {
@@ -68,7 +68,8 @@ function collectAnchors(reflection, prefix = '')
 
    if (reflection.children)
    {
-      reflection.children.forEach((child) => {
+      reflection.children.forEach((child) =>
+      {
          anchors.push(...collectAnchors(child, prefix));
       });
    }

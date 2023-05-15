@@ -1,6 +1,8 @@
-import { Application }  from 'typedoc';
+import fs                     from 'node:fs';
+import path                   from 'node:path';
+import { fileURLToPath }      from 'node:url';
 
-import { resolvers }    from './resolvers/index.mjs';
+import { Application }        from 'typedoc';
 
 export class Resolver
 {
@@ -11,11 +13,9 @@ export class Resolver
    #app;
 
    /**
-    * Stores the symbols that failed to resolve.
-    *
-    * @type {Set<string>}
+    * @type {ResolverOptions}
     */
-   #failed = new Set();
+   #options;
 
    /**
     * Typedoc version support.
@@ -27,11 +27,40 @@ export class Resolver
    };
 
    /**
-    * @param {Application} app - Typedoc application
+    * @type {Map<string, import('../../../../../types/index-json').DataSymbolLinks>}
     */
-   constructor(app)
+   #urlMapping;
+
+   /**
+    * @param {Application} app - Typedoc application
+    *
+    * @param {ResolverOptions}   options - Options.
+    */
+   constructor(app, options)
    {
+      const pkgName = '[@typhonjs-typedoc/typedoc/ts-links]';
+
+      if (typeof options !== 'object') { throw new TypeError(`${pkgName} 'options' is not an object.`); }
+      if (typeof options?.year !== 'number') { throw new TypeError(`${pkgName} 'options.year' is not a number.`); }
+      if (typeof options?.lib !== 'string') { throw new TypeError(`${pkgName} 'options.lib' is not a string.`); }
+      if (typeof options?.host !== 'string') { throw new TypeError(`${pkgName} 'options.host' is not a string.`); }
+
       this.#app = app;
+      this.#options = options;
+
+      const dataPath = path.resolve(fileURLToPath(import.meta.url),
+       `../../../../../../../../data/${options.year}/${options.lib}/url-mapping.json`);
+
+      try
+      {
+         fs.accessSync(dataPath, fs.constants.R_OK);
+
+         this.#urlMapping = new Map(Object.entries(JSON.parse(fs.readFileSync(dataPath, 'utf-8'))));
+      }
+      catch (err)
+      {
+         throw new Error(`${pkgName} Could not open url mapping file at:\n${dataPath}\n${err.message}`);
+      }
 
       const version = Application.VERSION.split(/[.-]/);
       this.#supports.objectReturn = +version[1] > 23 || +version[2] >= 26;
@@ -44,7 +73,7 @@ export class Resolver
     *
     * @param {import('typedoc').DeclarationReference} ref - Declaration reference.
     *
-    * @returns {import('typedoc').ExternalResolveResult | string | void} Resolve result.
+    * @returns {import('typedoc').ExternalResolveResult | void} Resolve result.
     */
    #handleUnknownSymbol(ref)
    {
@@ -56,20 +85,13 @@ export class Resolver
 
          if (!name) { return; }
 
-         let result;
-
-         for (const resolver of resolvers) { result = resolver(name); }
-
-         if (!result && !this.#failed.has(name))
-         {
-            this.#failed.add(name);
-            this.#app.logger.verbose(`[typedoc-ts-links]: Failed to resolve type: ${name}`);
-         }
+         const result = this.#urlMapping.get(name)?.doc_url;
 
          if (this.#supports.objectReturn && result)
          {
+            /** @type {import('typedoc').ExternalResolveResult} */
             return {
-               target: result,
+               target: `${this.#options.host}/${result}`,
                caption: name,
             };
          }
@@ -78,3 +100,13 @@ export class Resolver
       }
    }
 }
+
+/**
+ * @typedef {object} ResolverOptions
+ *
+ * @property {number}   year - The generate config year to lookup.
+ *
+ * @property {string}   lib - The generate config lib to lookup.
+ *
+ * @property {string}   host - The main URL location of the hosted docs.
+ */

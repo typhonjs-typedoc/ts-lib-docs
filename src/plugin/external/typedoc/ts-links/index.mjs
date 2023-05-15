@@ -1,4 +1,4 @@
-import { Resolver } from './Resolver.mjs';
+import { Resolver }  from './Resolver.mjs';
 
 /**
  * Provides a plugin for Typedoc to link Typescript lib.d.ts symbols to external documentation.
@@ -7,6 +7,6 @@ import { Resolver } from './Resolver.mjs';
  */
 export function load(app)
 {
-   new Resolver(app);
+   new Resolver(app, { year: REPLACE_YEAR, lib: REPLACE_LIB, host: REPLACE_HOST }); // eslint-disable-line no-undef
 }
 

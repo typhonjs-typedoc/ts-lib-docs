@@ -8,5 +8,7 @@
     "lib": ["DOM", "ES2023"],
     "types": []
   },
-  "include" : ["../../../.doc-gen/bundled/2023/dom/index.d.mts"]
+  "include" : [
+    "../../../../.doc-gen/bundled/2023/dom/index.d.mts"
+  ]
 }

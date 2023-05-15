@@ -48,7 +48,7 @@
   ],
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
-    "build-docs": "node src/generate/generate.mjs",
+    "build-docs": "cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
     "build-plugins": "rollup -c",
     "eslint": "eslint ."
   }

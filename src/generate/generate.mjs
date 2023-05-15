@@ -1,9 +1,24 @@
-import { bundleDTS }    from './process/bundleDTS.mjs';
-import { processDTS }   from './process/processDTS.mjs';
-import { transformDTS } from './process/transformDTS.mjs';
-import { typedoc }      from './typedoc/typedoc.mjs';
+import { pathToFileURL }   from 'node:url';
+import path                from 'node:path';
 
-import { config }       from './config/2023/config.mjs';
+import fs                  from 'fs-extra';
+
+import { bundleDTS }       from './process/bundleDTS.mjs';
+import { processDTS }      from './process/processDTS.mjs';
+import { transformDTS }    from './process/transformDTS.mjs';
+import { typedoc }         from './typedoc/typedoc.mjs';
+
+const configPath = path.resolve(`./src/generate/config/${process.env.CONFIG_YEAR}/config.mjs`);
+
+if (!fs.existsSync(configPath)) { throw new Error(`Could not locate generate config at: \n${configPath}`); }
+
+const { config } = await import(pathToFileURL(configPath));
+
+if (typeof config !== 'object') { throw new Error(`Invalid config loaded at: \n${configPath}`); }
+if (typeof config?.year !== 'number') { throw new Error(`Invalid config loaded at: \n${configPath}`); }
+if (!Array.isArray(config.entries)) { throw new Error(`Invalid config loaded at: \n${configPath}`); }
+
+console.log(`Loaded config at: \n${configPath}\n`);
 
 // Initial processing of TS declaration libraries moving DTS files to `.doc-gen/source`.
 await processDTS(config);

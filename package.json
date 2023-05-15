@@ -22,13 +22,26 @@
       "types": "./types/index-json.d.mts",
       "require": "./data/*/worker/url-mapping.json"
     },
-    "./typedoc/ts-links/2023": {
+    "./typedoc/ts-links/dom/*": {
       "types": "./types/index-plugin.d.mts",
-      "require": "./dist/plugin/external/typedoc/ts-links/index.cjs"
+      "require": "./dist/plugin/external/typedoc/ts-links/*/dom/index.cjs"
+    },
+    "./typedoc/ts-links/esm/*": {
+      "types": "./types/index-plugin.d.mts",
+      "require": "./dist/plugin/external/typedoc/ts-links/*/esm/index.cjs"
+    },
+    "./typedoc/ts-links/worker/*": {
+      "types": "./types/index-plugin.d.mts",
+      "require": "./dist/plugin/external/typedoc/ts-links/*/worker/index.cjs"
+    },
+    "./typedoc/ts-links-checker": {
+      "types": "./types/index-plugin.d.mts",
+      "require": "./dist/plugin/external/typedoc/ts-links-checker.cjs"
     }
   },
   "devDependencies": {
     "@mdn/browser-compat-data" : "^5.2.57",
+    "@rollup/plugin-replace" : "^5.0.2",
     "@types/dom-webcodecs": "^0.1.7",
     "@typhonjs-build-test/node": "^0.0.9",
     "@typhonjs-utils/file-util": "^0.0.10",
@@ -50,7 +63,7 @@
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
     "build-docs": "cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
-    "build-plugins": "rollup -c",
+    "build-plugins": "rollup -c config/rollup/rollup.config.plugins.mjs",
     "eslint": "eslint ."
   }
 }

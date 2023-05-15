@@ -2,7 +2,5 @@
 .github/
 *.d.ts
 dist/
-docs-dom/
-docs-esm/
-docs-worker/
+docs/
 prepend/

@@ -22,7 +22,7 @@ export async function typedoc(config, logLevel = LogLevel.Info)
       const typedocConfig = Object.assign({
          entryPoints: [`./.doc-gen/bundled/${entryPath}/index.d.mts`],
          out: `docs/${entryPath}`,
-         tsconfig: `./tsconfig/${entryPath}/tsconfig-docs.json`
+         tsconfig: `./config/tsconfig/${entryPath}/tsconfig-docs.json`
       }, entry.typedoc);
 
       // Ensure that there is a plugin array defined and if `typedoc-plugin-extras` is not included then add it.

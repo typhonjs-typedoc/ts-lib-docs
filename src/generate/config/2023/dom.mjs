@@ -1,9 +1,11 @@
-import { preProcessTSLib } from './preProcessTSLib.js';
+import { preProcessTSLib } from '../util/preProcessTSLib.mjs';
 
 /**
- * @type {import('../types').GenerateConfigEntry}
+ * @type {import('../../types').GenerateConfigEntry}
  */
 export const dom = {
+   name: 'dom',
+
    process: [
       {
          filepaths: [

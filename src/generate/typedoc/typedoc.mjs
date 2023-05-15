@@ -3,6 +3,7 @@ import fs            from 'fs-extra';
 import {
    Application,
    LogLevel,
+   ParameterType,
    TSConfigReader }  from 'typedoc';
 
 /**
@@ -13,14 +14,16 @@ import {
  */
 export async function typedoc(config, logLevel = LogLevel.Info)
 {
-   for (const name in config)
+   for (const entry of config.entries)
    {
+      const entryPath = `${config.year}/${entry.name}`;
+
       /** @type {import('../types').TypeDocConfig} */
       const typedocConfig = Object.assign({
-         entryPoints: [`./.doc-gen/bundled/index-${name}.d.mts`],
-         out: `docs-${name}`,
-         tsconfig: `./tsconfig-docs-${name}.json`
-      }, config[name].typedoc);
+         entryPoints: [`./.doc-gen/bundled/${entryPath}/index.d.mts`],
+         out: `docs/${entryPath}`,
+         tsconfig: `./tsconfig/${entryPath}/tsconfig-docs.json`
+      }, entry.typedoc);
 
       // Ensure that there is a plugin array defined and if `typedoc-plugin-extras` is not included then add it.
       if (Array.isArray(typedocConfig.plugin))
@@ -40,13 +43,13 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 
       if (fs.existsSync(typedocConfig.entryPoints[0]))
       {
-         console.log(`Generating documentation for '${name}':`);
-         await generate(typedocConfig, logLevel);
+         console.log(`Generating documentation for '${entryPath}':`);
+         await generate(typedocConfig, logLevel, `./data/${entryPath}`);
       }
       else
       {
          throw new Error(
-          `Could not find bundled entry point for project '${name}': ${typedocConfig?.entryPoints?.[0]}`);
+          `Could not find bundled entry point for project '${entryPath}': ${typedocConfig?.entryPoints?.[0]}`);
       }
    }
 }
@@ -58,9 +61,11 @@ export async function typedoc(config, logLevel = LogLevel.Info)
  *
  * @param {LogLevel} logLevel - The log level to use when generating Typedoc documentation.
  *
+ * @param {string} mdnDataPath - The generate config data path for internal mdn-links plugin.
+ *
  * @returns {Promise<void>}
  */
-async function generate(config, logLevel)
+async function generate(config, logLevel, mdnDataPath)
 {
    if (fs.existsSync(`./${config.out}`)) { fs.emptydirSync(`./${config.out}`); }
 
@@ -70,8 +75,18 @@ async function generate(config, logLevel)
    // Set TypeDoc options
    app.options.addReader(new TSConfigReader());
 
+   // Add option to pass the config year to plugins.
+   app.options.addDeclaration({
+      name: 'mdnDataPath',
+      help: 'This is output path for the internal mdn-links plugin.',
+      type: ParameterType.String,
+      defaultValue: null,
+   });
+
    await app.bootstrapWithPlugins({
       name: config.name,
+
+      mdnDataPath,
 
       // Disables the source links as they reference the d.ts files.
       disableSources: config.disableSources ?? true,

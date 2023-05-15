@@ -12,14 +12,19 @@ export async function bundleDTS(config)
 {
    fs.ensureDirSync('./.doc-gen/bundled');
 
-   for (const name in config)
+   for (const entry of config.entries)
    {
-      const transformDir = `./.doc-gen/transformed/${name}`;
-      const bundleFilepath = `./.doc-gen/bundled/index-${name}.d.mts`;
+      const entryPath = `${config.year}/${entry.name}`;
+      const bundleDirPath = `./.doc-gen/bundled/${entryPath}`;
+
+      const transformDir = `./.doc-gen/transformed/${entryPath}`;
+      const bundleFilepath = `${bundleDirPath}/index.d.mts`;
+
+      fs.ensureDirSync(bundleDirPath);
 
       if (fs.existsSync(transformDir))
       {
-         console.log(`Bundling '${name}':`);
+         console.log(`Bundling '${entryPath}':`);
 
          // Delete any existing bundled index.d.mts file.
          if (fs.existsSync(bundleFilepath)) { fs.unlinkSync(bundleFilepath); }

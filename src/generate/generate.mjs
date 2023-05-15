@@ -1,9 +1,9 @@
-import { bundleDTS }    from './process/bundleDTS.js';
-import { processDTS }   from './process/processDTS.js';
-import { transformDTS } from './process/transformDTS.js';
-import { typedoc }      from './typedoc/typedoc.js';
+import { bundleDTS }    from './process/bundleDTS.mjs';
+import { processDTS }   from './process/processDTS.mjs';
+import { transformDTS } from './process/transformDTS.mjs';
+import { typedoc }      from './typedoc/typedoc.mjs';
 
-import { config }       from './config/generateConfig.js';
+import { config }       from './config/2023/config.mjs';
 
 // Initial processing of TS declaration libraries moving DTS files to `.doc-gen/source`.
 await processDTS(config);

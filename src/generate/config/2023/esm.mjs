@@ -1,11 +1,13 @@
 import { getFileList }     from '@typhonjs-utils/file-util';
 
-import { preProcessTSLib } from './preProcessTSLib.js';
+import { preProcessTSLib } from '../util/preProcessTSLib.mjs';
 
 /**
- * @type {import('../types').GenerateConfigEntry}
+ * @type {import('../../types').GenerateConfigEntry}
  */
 export const esm = {
+   name: 'esm',
+
    process: [{
       filepaths: getFileList({
          dir: './node_modules/typescript/lib',

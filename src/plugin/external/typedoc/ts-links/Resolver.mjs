@@ -1,6 +1,6 @@
 import { Application }  from 'typedoc';
 
-import { resolvers }    from './resolvers/index.js';
+import { resolvers }    from './resolvers/index.mjs';
 
 export class Resolver
 {

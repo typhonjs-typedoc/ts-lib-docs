@@ -1,4 +1,4 @@
-import { typesResolver } from './typesResolver.js';
+import { typesResolver } from './typesResolver.mjs';
 
 /**
  * An array of all resolvers.

@@ -1,4 +1,4 @@
-import { MDNConverter } from './MDNConverter.js';
+import { MDNConverter } from './MDNConverter.mjs';
 
 /**
  * Provides a plugin for Typedoc to link Typescript built-in declaration symbols to MDN and specification documentation.

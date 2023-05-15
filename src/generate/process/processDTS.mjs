@@ -12,14 +12,16 @@ export async function processDTS(config)
 {
    fs.ensureDirSync('./.doc-gen/source');
 
-   for (const name in config)
+   for (const entry of config.entries)
    {
-      console.log(`Processing '${name}':`);
+      const entryPath = `${config.year}/${entry.name}`;
 
-      fs.ensureDirSync(`./.doc-gen/source/${name}`);
-      fs.emptyDirSync(`./.doc-gen/source/${name}`);
+      console.log(`Processing '${entryPath}':`);
 
-      for (const process of config[name].process)
+      fs.ensureDirSync(`./.doc-gen/source/${entryPath}`);
+      fs.emptyDirSync(`./.doc-gen/source/${entryPath}`);
+
+      for (const process of entry.process)
       {
          // Await any filepaths list resolving as a Promise.
          const filepaths = process.filepaths instanceof Promise ? await process.filepaths : process.filepaths;
@@ -29,14 +31,15 @@ export async function processDTS(config)
             if (typeof filepath === 'string')
             {
                const filename = path.basename(filepath);
-               if (processDTSFile(filepath, `./.doc-gen/source/${name}/${filename}`, process.preProcess))
+               if (processDTSFile(filepath, `./.doc-gen/source/${entryPath}/${filename}`, process.preProcess))
                {
                   console.log(filename);
                }
             }
             else if (typeof filepath === 'object')
             {
-               if (processDTSFile(filepath.source, `./.doc-gen/source/${name}/${filepath.rename}`, process.preProcess))
+               if (processDTSFile(filepath.source, `./.doc-gen/source/${entryPath}/${filepath.rename}`,
+                process.preProcess))
                {
                   console.log(filepath.rename);
                }

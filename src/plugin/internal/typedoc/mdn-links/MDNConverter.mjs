@@ -1,4 +1,4 @@
-import fs               from 'node:fs';
+import fs               from 'fs-extra';
 
 import {
    Converter,
@@ -6,8 +6,8 @@ import {
    ProjectReflection,
    ReflectionKind }     from 'typedoc';
 
-import { MDNResolver }  from './MDNResolver.js';
-import { TSResolver }   from './TSResolver.js';
+import { MDNResolver }  from './MDNResolver.mjs';
+import { TSResolver }   from './TSResolver.mjs';
 
 /**
  * Provides symbol map generation linking MDN browser compatibility data to generated TS lib docs.
@@ -16,6 +16,13 @@ export class MDNConverter
 {
    /** @type {import('typedoc').Application} */
    #app;
+
+   /**
+    * This is the output path for the external symbol map.
+    *
+    * @type {string}
+    */
+   #mdnDataPath;
 
    #regexIsSymbol = /\[(?<inner>.*)]/;
 
@@ -52,6 +59,10 @@ export class MDNConverter
    constructor(app)
    {
       this.#app = app;
+
+      this.#mdnDataPath = app.options.getValue('mdnDataPath');
+
+      if (typeof this.#mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
 
       this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd.bind(this));
    }
@@ -153,11 +164,10 @@ export class MDNConverter
       MDNResolver.resolve(this.#symbolMapInternal, this.#symbolMapExternal);
       TSResolver.resolve(this.#symbolMapInternal, this.#symbolMapExternal);
 
-      fs.writeFileSync('./url-mapping.json', JSON.stringify(Object.fromEntries(this.#symbolMapExternal), null, 2),
-       'utf-8');
+      fs.ensureDirSync(this.#mdnDataPath);
 
-      fs.writeFileSync('./url-mapping-internal.json', JSON.stringify(Object.fromEntries(this.#symbolMapInternal), null, 2),
-       'utf-8');
+      fs.writeFileSync(`${this.#mdnDataPath}/url-mapping.json`,
+       JSON.stringify(Object.fromEntries(this.#symbolMapExternal)), 'utf-8');
    }
 }
 

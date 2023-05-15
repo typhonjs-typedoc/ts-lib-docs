@@ -7,10 +7,20 @@ import type { TypeDocOptions } from 'typedoc';
  * any temporary folders created in processing and provides the default `docs-<name>` output folder for generated docs.
  */
 type GenerateConfig = {
-   [name: string]: GenerateConfigEntry;
+   /**
+    * The year of the config. This will output generated docs to a specific yearly folder.
+    */
+   year: number;
+
+   /**
+    * A list of config entries to generate.
+    */
+   entries: GenerateConfigEntry[];
 };
 
 type GenerateConfigEntry = {
+   name: string;
+
    process: Iterable<ProcessConfig>
 
    transform: TransformConfig,

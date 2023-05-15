@@ -11,7 +11,7 @@ import {
    VariableDeclaration,
    VariableDeclarationKind }  from 'ts-morph';
 
-import { TransformData }      from './TransformData.js';
+import { TransformData }      from './TransformData.mjs';
 
 export class TransformProject
 {
@@ -33,13 +33,13 @@ export class TransformProject
    /**
     * @param {import('../../types').GenerateConfigEntry}  configEntry - Description of source data to process.
     *
-    * @param {string}   name - Name of the TransformConfig
+    * @param {number}   year - Year of the config.
     */
-   constructor(configEntry, name)
+   constructor(configEntry, year)
    {
       this.#transformConfig = configEntry.transform;
-      this.#sourceDir = `./.doc-gen/source/${name}`;
-      this.#outDir = `./.doc-gen/transformed/${name}`;
+      this.#sourceDir = `./.doc-gen/source/${year}/${configEntry.name}`;
+      this.#outDir = `./.doc-gen/transformed/${year}/${configEntry.name}`;
 
       fs.ensureDirSync(this.#outDir);
       fs.emptydirSync(this.#outDir);

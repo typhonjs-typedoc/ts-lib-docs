@@ -43,7 +43,8 @@
     "typedoc": ">=0.23.x"
   },
   "files": [
-    "/dist",
+    "/data",
+    "/dist/external",
     "/types"
   ],
   "browserslist": [">5%", "not IE 11"],

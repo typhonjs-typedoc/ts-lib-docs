@@ -1,6 +1,9 @@
 import type { ReflectionKind } from 'typedoc';
 
-export type DataSymbolLink = {
+/**
+ * Defines a documentation symbol mapping with any associated MDN compatibility data links.
+ */
+export type DataSymbolLinks = {
    /**
     * The partial link to the generated documentation.
     */
@@ -34,5 +37,5 @@ export default interface DataSymbolMap {
    /**
     * A documentation symbol with link data.
     */
-   [name: string]: DataSymbolLink;
+   [name: string]: DataSymbolLinks;
 }

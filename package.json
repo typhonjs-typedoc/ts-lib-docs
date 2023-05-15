@@ -10,12 +10,13 @@
   ],
   "sideEffects": false,
   "exports": {
-    "./plugin/ts-links": {
+    "./typedoc/ts-links/2023": {
       "types": "./types/index-plugin.d.ts",
-      "require": "./dist/plugin/ts-links/index.cjs"
+      "require": "./dist/plugin/external/typedoc/ts-links/index.cjs"
     }
   },
   "devDependencies": {
+    "@mdn/browser-compat-data" : "^5.2.57",
     "@types/dom-webcodecs": "^0.1.7",
     "@typhonjs-build-test/node": "^0.0.9",
     "@typhonjs-utils/file-util": "^0.0.10",
@@ -33,7 +34,7 @@
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
     "build-docs": "node src/generate/generate.js",
-    "build-plugin": "rollup -c",
+    "build-plugins": "rollup -c",
     "serve": "node src/serve/serve.js",
     "eslint": "eslint ."
   }

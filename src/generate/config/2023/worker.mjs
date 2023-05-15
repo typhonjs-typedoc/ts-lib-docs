@@ -26,6 +26,10 @@ export const worker = {
 
    typedoc: {
       name: 'Typescript Library Declarations (Web Worker)',
-      favicon: './assets/icons/worker.ico'
+      favicon: './assets/icons/worker.ico',
+      plugin: [
+         './dist/plugin/external/typedoc/ts-links/2023/esm/index.cjs',
+         './dist/plugin/external/typedoc/ts-links-checker/index.cjs'
+      ]
    }
 };

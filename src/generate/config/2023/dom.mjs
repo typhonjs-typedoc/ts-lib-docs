@@ -62,7 +62,11 @@ export const dom = {
 
    typedoc: {
       name: 'Typescript Library Declarations (DOM)',
-      favicon: './assets/icons/dom.ico'
+      favicon: './assets/icons/dom.ico',
+      plugin: [
+         './dist/plugin/external/typedoc/ts-links/2023/esm/index.cjs',
+         './dist/plugin/external/typedoc/ts-links-checker/index.cjs'
+      ]
    }
 };
 

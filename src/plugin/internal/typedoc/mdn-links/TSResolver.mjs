@@ -33,7 +33,9 @@ export class TSResolver
    /**
     * Tests if a DataSymbolLink already has defined TS data.
     *
-    * @param {DataSymbolLink} data -
+    * @param {DataSymbolLink} data - Symbol link data to test.
+    *
+    * @returns {boolean} Does the symbol link data have a TS url already?
     */
    static #hasTSData(data)
    {

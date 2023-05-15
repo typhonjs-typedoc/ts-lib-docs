@@ -84,7 +84,7 @@ export class MDNConverter
          const reflectionUrl = reflectionUrlMap.get(reflection);
 
          const url = reflectionUrl ? reflectionUrl : parentUrl +
-          (parentUrl && reflection.parent ? '#' + reflection.getAlias() : '');
+          (parentUrl && reflection.parent ? `#${reflection.getAlias()}` : '');
 
          if (this.#validReflectionKind.has(reflection.kind))
          {
@@ -104,14 +104,14 @@ export class MDNConverter
             this.#symbolMapInternal.set(reflection, {
                name: symbolName,
                parts: symbolParts
-            })
+            });
          }
 
          if (reflection.children)
          {
             for (const child of reflection.children) { visit(child, reflectionUrl ? reflectionUrl : url); }
          }
-      }
+      };
 
       visit(project);
    }
@@ -157,7 +157,7 @@ export class MDNConverter
    #handleResolveEnd(context)
    {
       const urlMappings = new DefaultTheme(this.#app.renderer).getUrls(context.project);
-      const reflectionUrlMap = new Map(urlMappings.map(mapping => [mapping.model, mapping.url]));
+      const reflectionUrlMap = new Map(urlMappings.map((mapping) => [mapping.model, mapping.url]));
 
       this.#buildSymbolMap(context.project, reflectionUrlMap);
 

@@ -1,4 +1,4 @@
-import browserCompatData from '@mdn/browser-compat-data'
+import browserCompatData from '@mdn/browser-compat-data';
 
 /**
  * Provides resolution for all Typescript lib symbols against the MDN browser compatibility data adding MDN link & spec
@@ -17,7 +17,7 @@ export class MDNResolver
     *    spec_url: string,
     *    status: import('@mdn/browser-compat-data').StatusBlock,
     *    support: import('@mdn/browser-compat-data').SupportBlock
-    * } | undefined)}
+    * } | undefined)} Attempts to resolve the symbol name against MDN compatibility data.
     */
    static #getMDNData(internalEntry, compatIdentifier)
    {
@@ -45,7 +45,9 @@ export class MDNResolver
    /**
     * Tests if a DataSymbolLink already has defined MDN data.
     *
-    * @param {DataSymbolLink} data -
+    * @param {DataSymbolLink} data - Symbol link data to test.
+    *
+    * @returns {boolean} If the symbol link data has MDN data already defined.
     */
    static #hasMDNCompatData(data)
    {

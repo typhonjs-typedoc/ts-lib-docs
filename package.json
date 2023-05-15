@@ -3,15 +3,27 @@
   "version": "2023.0.0",
   "description": "Provides generated documentation for built-in Typescript lib declarations and a TypeDoc plugin to link symbols to the published docs.",
   "license": "MPL-2.0",
-  "type": "module",
+  "type": "commonjs",
   "author": "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)",
   "contributors": [
     "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
   ],
   "sideEffects": false,
   "exports": {
+    "./json/dom/*": {
+      "types": "./types/index-json.d.mts",
+      "require": "./data/*/dom/url-mapping.json"
+    },
+    "./json/esm/*": {
+      "types": "./types/index-json.d.mts",
+      "require": "./data/*/esm/url-mapping.json"
+    },
+    "./json/worker/*": {
+      "types": "./types/index-json.d.mts",
+      "require": "./data/*/worker/url-mapping.json"
+    },
     "./typedoc/ts-links/2023": {
-      "types": "./types/index-plugin.d.ts",
+      "types": "./types/index-plugin.d.mts",
       "require": "./dist/plugin/external/typedoc/ts-links/index.cjs"
     }
   },
@@ -27,15 +39,17 @@
     "typedoc-plugin-extras": "^2.3.3",
     "typescript": "5.0.4"
   },
+  "peerDependencies" : {
+    "typedoc": ">=0.23.x"
+  },
   "files": [
     "/dist",
     "/types"
   ],
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
-    "build-docs": "node src/generate/generate.js",
+    "build-docs": "node src/generate/generate.mjs",
     "build-plugins": "rollup -c",
-    "serve": "node src/serve/serve.js",
     "eslint": "eslint ."
   }
 }

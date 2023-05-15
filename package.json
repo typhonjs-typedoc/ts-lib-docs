@@ -44,7 +44,7 @@
   },
   "files": [
     "/data",
-    "/dist/external",
+    "/dist/plugin/external",
     "/types"
   ],
   "browserslist": [">5%", "not IE 11"],

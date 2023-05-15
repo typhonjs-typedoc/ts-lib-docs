@@ -5,8 +5,6 @@ import {
    LogLevel,
    TSConfigReader }  from 'typedoc';
 
-import { generateUrlMap }  from './generateUrlMap.js';
-
 /**
  *
  * @param {import('./types').GenerateConfig} config -
@@ -36,6 +34,9 @@ export async function typedoc(config, logLevel = LogLevel.Info)
       {
          typedocConfig.plugin = ['typedoc-plugin-extras'];
       }
+
+      // Add internal symbol processing / MDN linking plugin.
+      typedocConfig.plugin.unshift('./dist/plugin/internal/typedoc/mdn-links/index.cjs');
 
       if (fs.existsSync(typedocConfig.entryPoints[0]))
       {
@@ -102,8 +103,6 @@ async function generate(config, logLevel)
    if (project)
    {
       await app.generateDocs(project, config.out);
-
-      // generateUrlMap(app, project);
    }
    else
    {

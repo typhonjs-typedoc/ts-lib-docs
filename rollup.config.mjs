@@ -3,7 +3,7 @@
  */
 export default [
    {
-      input: 'src/plugin/external/typedoc/ts-links/index.js',
+      input: 'src/plugin/external/typedoc/ts-links/index.mjs',
       external: ['typedoc'],
       output: {
          file: 'dist/plugin/external/typedoc/ts-links/index.cjs',
@@ -14,8 +14,8 @@ export default [
    },
 
    {
-      input: 'src/plugin/internal/typedoc/mdn-links/index.js',
-      external: ['@mdn/browser-compat-data', 'node:fs', 'typedoc'],
+      input: 'src/plugin/internal/typedoc/mdn-links/index.mjs',
+      external: ['@mdn/browser-compat-data', 'fs-extra', 'typedoc'],
       output: {
          file: 'dist/plugin/internal/typedoc/mdn-links/index.cjs',
          format: 'cjs',

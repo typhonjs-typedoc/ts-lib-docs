@@ -1,12 +1,17 @@
-import fs            from 'node:fs';
+import fs               from 'node:fs';
 
 import {
    Converter,
    DefaultTheme,
    ProjectReflection,
-   ReflectionKind
-} from 'typedoc';
+   ReflectionKind }     from 'typedoc';
 
+import { MDNResolver }  from './MDNResolver.js';
+import { TSResolver }   from './TSResolver.js';
+
+/**
+ * Provides symbol map generation linking MDN browser compatibility data to generated TS lib docs.
+ */
 export class MDNConverter
 {
    /** @type {import('typedoc').Application} */
@@ -80,7 +85,7 @@ export class MDNConverter
             if (!isSymbol && (currentValue === void 0 || currentValue?.kind !== ReflectionKind.Interface))
             {
                this.#symbolMapExternal.set(symbolName, {
-                  docLink: url,
+                  doc_url: url,
                   kind: reflection.kind
                });
             }
@@ -145,7 +150,13 @@ export class MDNConverter
 
       this.#buildSymbolMap(context.project, reflectionUrlMap);
 
+      MDNResolver.resolve(this.#symbolMapInternal, this.#symbolMapExternal);
+      TSResolver.resolve(this.#symbolMapInternal, this.#symbolMapExternal);
+
       fs.writeFileSync('./url-mapping.json', JSON.stringify(Object.fromEntries(this.#symbolMapExternal), null, 2),
+       'utf-8');
+
+      fs.writeFileSync('./url-mapping-internal.json', JSON.stringify(Object.fromEntries(this.#symbolMapInternal), null, 2),
        'utf-8');
    }
 }
@@ -153,15 +164,15 @@ export class MDNConverter
 /**
  * @typedef {object} DataSymbolLink
  *
- * @property {string}   docLink The partial link to the generated documentation.
+ * @property {string}   doc_url The partial link to the generated documentation.
  *
- * @property {number}   kind The reflection kind.
+ * @property {import('typedoc').ReflectionKind} kind The reflection kind.
  *
- * @property {string}   [mdnLink] Any associated MDN link.
+ * @property {string}   [mdn_url] Any associated MDN URL.
  *
- * @property {string}   [specLink] Any associated specification link.
+ * @property {string | string[]}   [spec_url] Any associated specification URLs.
  *
- * @property {string}   [tsLink] Any associated Typescript documentation link.
+ * @property {string}   [ts_url] Any associated Typescript documentation URL.
  */
 
 /**
@@ -171,9 +182,13 @@ export class MDNConverter
  *
  * @property {string[]} parts The separate symbol name parts used in MDN browser compat lookups.
  *
- * @property {string}   [mdnLink] Any associated MDN link.
+ * @property {string}   [mdn_url] Any associated MDN URL.
  *
- * @property {string}   [specLink] Any associated specification link.
+ * @property {string | string[]}   [spec_url] Any associated specification URLs.
  *
- * @property {string}   [tsLink] Any associated Typescript documentation link.
+ * @property {string}   [ts_url] Any associated Typescript documentation URL.
+ *
+ * @property {import('@mdn/browser-compat-data').StatusBlock} [status] MDN status block.
+ *
+ * @property {import('@mdn/browser-compat-data').SupportBlock} [support] MDN support block.
  */

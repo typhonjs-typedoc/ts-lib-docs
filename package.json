@@ -10,17 +10,29 @@
   ],
   "sideEffects": false,
   "exports": {
-    "./json/dom/*": {
-      "types": "./types/index-json.d.mts",
-      "require": "./data/*/dom/url-mapping.json"
+    "./json/dom/script-mapping/*": {
+      "types": "./types/index-json-mapping.d.mts",
+      "require": "./data/*/dom/symbol-mapping.json"
     },
-    "./json/esm/*": {
-      "types": "./types/index-json.d.mts",
-      "require": "./data/*/esm/url-mapping.json"
+    "./json/dom/script-names/*": {
+      "types": "./types/index-json-names.d.mts",
+      "require": "./data/*/dom/symbol-names.json"
     },
-    "./json/worker/*": {
-      "types": "./types/index-json.d.mts",
-      "require": "./data/*/worker/url-mapping.json"
+    "./json/esm/script-mapping/*": {
+      "types": "./types/index-json-mapping.d.mts",
+      "require": "./data/*/esm/symbol-mapping.json"
+    },
+    "./json/esm/script-names/*": {
+      "types": "./types/index-json-names.d.mts",
+      "require": "./data/*/esm/symbol-names.json"
+    },
+    "./json/worker/script-mapping/*": {
+      "types": "./types/index-json-mapping.d.mts",
+      "require": "./data/*/worker/symbol-mapping.json"
+    },
+    "./json/worker/script-names/*": {
+      "types": "./types/index-json-names.d.mts",
+      "require": "./data/*/worker/symbol-names.json"
     },
     "./typedoc/ts-links/dom/*": {
       "types": "./types/index-plugin.d.mts",

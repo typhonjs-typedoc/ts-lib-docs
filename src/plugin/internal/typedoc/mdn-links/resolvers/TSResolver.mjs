@@ -43,13 +43,11 @@ export class TSResolver
    }
 
    /**
-    * @param {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} symbolMapInternal -
-    *
-    * @param {Map<string, DataSymbolLink>} symbolMapExternal -
+    * @param {SymbolMaps} symbolMaps -
     */
-   static resolve(symbolMapInternal, symbolMapExternal)
+   static resolve(symbolMaps)
    {
-      for (const internalEntry of symbolMapInternal.values())
+      for (const internalEntry of symbolMaps.internal.values())
       {
          const templateHash = TSResolver.#templateLiteralTypes.get(internalEntry.name);
          if (templateHash)
@@ -57,7 +55,7 @@ export class TSResolver
             const ts_url = `https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html#${templateHash}`;
             internalEntry.ts_url = ts_url;
 
-            const externalEntry = symbolMapExternal.get(internalEntry.name);
+            const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !TSResolver.#hasTSData(externalEntry))
             {
                externalEntry.ts_url = ts_url;
@@ -73,7 +71,7 @@ export class TSResolver
 
             internalEntry.ts_url = ts_url;
 
-            const externalEntry = symbolMapExternal.get(internalEntry.name);
+            const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !TSResolver.#hasTSData(externalEntry))
             {
                externalEntry.ts_url = ts_url;

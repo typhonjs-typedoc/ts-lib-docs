@@ -6,8 +6,9 @@ import {
    ProjectReflection,
    ReflectionKind }     from 'typedoc';
 
-import { MDNResolver }  from './MDNResolver.mjs';
-import { TSResolver }   from './TSResolver.mjs';
+import {
+   MDNResolver,
+   TSResolver }         from './resolvers/index.js';
 
 /**
  * Provides symbol map generation linking MDN browser compatibility data to generated TS lib docs.
@@ -26,11 +27,13 @@ export class MDNConverter
 
    #regexIsSymbol = /\[(?<inner>.*)]/;
 
-   /** @type {Map<string, DataSymbolLink>} */
-   #symbolMapExternal = new Map();
-
-   /** @type {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} */
-   #symbolMapInternal = new Map();
+   /**
+    * @type {SymbolMaps}
+    */
+   #symbolMaps = {
+      external: new Map(),
+      internal: new Map()
+   }
 
    /**
     * Stores the valid reflection kinds when processing DeclarationReflections.
@@ -92,16 +95,16 @@ export class MDNConverter
 
             // In the case of processing TS libs often there is an interface defined and a subsequent function by the
             // same name so only update the symbol map if an existing interface doesn't exist.
-            const currentValue = this.#symbolMapExternal.get(symbolName);
+            const currentValue = this.#symbolMaps.external.get(symbolName);
             if (!isSymbol && (currentValue === void 0 || currentValue?.kind !== ReflectionKind.Interface))
             {
-               this.#symbolMapExternal.set(symbolName, {
+               this.#symbolMaps.external.set(symbolName, {
                   doc_url: url,
                   kind: reflection.kind
                });
             }
 
-            this.#symbolMapInternal.set(reflection, {
+            this.#symbolMaps.internal.set(reflection, {
                name: symbolName,
                parts: symbolParts
             });
@@ -161,13 +164,18 @@ export class MDNConverter
 
       this.#buildSymbolMap(context.project, reflectionUrlMap);
 
-      MDNResolver.resolve(this.#symbolMapInternal, this.#symbolMapExternal);
-      TSResolver.resolve(this.#symbolMapInternal, this.#symbolMapExternal);
+      MDNResolver.resolve(this.#symbolMaps);
+      TSResolver.resolve(this.#symbolMaps);
 
       fs.ensureDirSync(this.#mdnDataPath);
 
+      // Serialize the symbol map as object then save the keys / symbol names separately. Both of these JSON files are
+      // used by other plugins.
       fs.writeFileSync(`${this.#mdnDataPath}/url-mapping.json`,
-       JSON.stringify(Object.fromEntries(this.#symbolMapExternal)), 'utf-8');
+       JSON.stringify(Object.fromEntries(this.#symbolMaps.external)), 'utf-8');
+
+      fs.writeFileSync(`${this.#mdnDataPath}/symbol-names.json`,
+       JSON.stringify([...this.#symbolMaps.external.keys()]), 'utf-8');
    }
 }
 
@@ -201,4 +209,12 @@ export class MDNConverter
  * @property {import('@mdn/browser-compat-data').StatusBlock} [status] MDN status block.
  *
  * @property {import('@mdn/browser-compat-data').SupportBlock} [support] MDN support block.
+ */
+
+/**
+ * @typedef {object} SymbolMaps
+ *
+ * @property {Map<string, DataSymbolLink>} external - External data used by plugins.
+ *
+ * @property {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} internal - Data used internally.
  */

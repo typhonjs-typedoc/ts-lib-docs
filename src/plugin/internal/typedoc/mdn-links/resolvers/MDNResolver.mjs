@@ -56,13 +56,11 @@ export class MDNResolver
    }
 
    /**
-    * @param {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} symbolMapInternal -
-    *
-    * @param {Map<string, DataSymbolLink>} symbolMapExternal -
+    * @param {SymbolMaps} symbolMaps -
     */
-   static resolve(symbolMapInternal, symbolMapExternal)
+   static resolve(symbolMaps)
    {
-      for (const internalEntry of symbolMapInternal.values())
+      for (const internalEntry of symbolMaps.internal.values())
       {
          const mdnJSData = MDNResolver.#getMDNData(internalEntry, browserCompatData.javascript.builtins);
 
@@ -73,7 +71,7 @@ export class MDNResolver
             internalEntry.status = mdnJSData.status;
             internalEntry.support = mdnJSData.support;
 
-            const externalEntry = symbolMapExternal.get(internalEntry.name);
+            const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !MDNResolver.#hasMDNCompatData(externalEntry))
             {
                externalEntry.mdn_url = mdnJSData.mdn_url;
@@ -92,7 +90,7 @@ export class MDNResolver
             internalEntry.status = mdnAPIData.status;
             internalEntry.support = mdnAPIData.support;
 
-            const externalEntry = symbolMapExternal.get(internalEntry.name);
+            const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !MDNResolver.#hasMDNCompatData(externalEntry))
             {
                externalEntry.mdn_url = mdnAPIData.mdn_url;

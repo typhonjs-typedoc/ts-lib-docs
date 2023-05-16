@@ -12,26 +12,32 @@
   "exports": {
     "./json/dom/script-mapping/*": {
       "types": "./types/index-json-mapping.d.mts",
+      "import": "./data/*/dom/index-mapping.mjs",
       "require": "./data/*/dom/symbol-mapping.json"
     },
     "./json/dom/script-names/*": {
       "types": "./types/index-json-names.d.mts",
+      "import": "./data/*/dom/index-names.mjs",
       "require": "./data/*/dom/symbol-names.json"
     },
     "./json/esm/script-mapping/*": {
       "types": "./types/index-json-mapping.d.mts",
+      "import": "./data/*/esm/index-mapping.mjs",
       "require": "./data/*/esm/symbol-mapping.json"
     },
     "./json/esm/script-names/*": {
       "types": "./types/index-json-names.d.mts",
+      "import": "./data/*/esm/index-names.mjs",
       "require": "./data/*/esm/symbol-names.json"
     },
     "./json/worker/script-mapping/*": {
       "types": "./types/index-json-mapping.d.mts",
+      "import": "./data/*/worker/index-mapping.mjs",
       "require": "./data/*/worker/symbol-mapping.json"
     },
     "./json/worker/script-names/*": {
       "types": "./types/index-json-names.d.mts",
+      "import": "./data/*/worker/index-names.mjs",
       "require": "./data/*/worker/symbol-names.json"
     },
     "./typedoc/ts-links/dom/*": {
@@ -77,6 +83,7 @@
   "scripts": {
     "build-docs": "cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
     "build-plugins": "rollup -c config/rollup/rollup.config.plugins.mjs",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "test": "node test.mjs"
   }
 }

@@ -6,9 +6,11 @@ import {
    ProjectReflection,
    ReflectionKind }     from 'typedoc';
 
+import { PageRenderer } from './renderer/PageRenderer.mjs';
+
 import {
    MDNResolver,
-   TSResolver }         from './resolvers/index.js';
+   TSResolver }         from './resolvers/index.mjs';
 
 /**
  * Provides symbol map generation linking MDN browser compatibility data to generated TS lib docs.
@@ -41,19 +43,24 @@ export class MDNConverter
     * @type {Set<ReflectionKind>}
     */
    #validReflectionKind = new Set([
-      ReflectionKind.Class,
-      ReflectionKind.Interface,
-      ReflectionKind.Enum,
-      ReflectionKind.TypeAlias,
-      ReflectionKind.Function,
-      ReflectionKind.Method,
-      ReflectionKind.Property,
-      ReflectionKind.GetSignature,
-      ReflectionKind.SetSignature,
       ReflectionKind.CallSignature,
+      ReflectionKind.Class,
+      ReflectionKind.Constructor,
       ReflectionKind.ConstructorSignature,
+      ReflectionKind.Enum,
+      ReflectionKind.EnumMember,
+      ReflectionKind.Function,
+      ReflectionKind.GetSignature,
       ReflectionKind.IndexSignature,
-      ReflectionKind.Constructor
+      ReflectionKind.Interface,
+      ReflectionKind.Method,
+      ReflectionKind.Namespace,
+      ReflectionKind.Property,
+      ReflectionKind.SetSignature,
+      ReflectionKind.TypeAlias,     // TODO: There is a note that this will be deprecated in `0.25.x`!
+      ReflectionKind.TypeLiteral,
+      ReflectionKind.TypeParameter,
+      ReflectionKind.Variable
    ]);
 
    /**
@@ -67,7 +74,9 @@ export class MDNConverter
 
       if (typeof this.#mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
 
-      this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd.bind(this));
+      this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd, this);
+
+      new PageRenderer(app, this.#symbolMaps);
    }
 
    /**
@@ -171,7 +180,7 @@ export class MDNConverter
 
       // Serialize the symbol map as object then save the keys / symbol names separately. Both of these JSON files are
       // used by other plugins.
-      fs.writeFileSync(`${this.#mdnDataPath}/url-mapping.json`,
+      fs.writeFileSync(`${this.#mdnDataPath}/symbol-mapping.json`,
        JSON.stringify(Object.fromEntries(this.#symbolMaps.external)), 'utf-8');
 
       fs.writeFileSync(`${this.#mdnDataPath}/symbol-names.json`,

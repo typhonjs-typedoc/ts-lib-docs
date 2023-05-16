@@ -26,7 +26,7 @@ const libs = [
 const configs = [
    {
       input: 'src/plugin/internal/typedoc/mdn-links/index.mjs',
-      external: ['@mdn/browser-compat-data', 'fs-extra', 'typedoc'],
+      external: ['@mdn/browser-compat-data', 'cheerio', 'fs-extra', 'typedoc'],
       output: {
          file: 'dist/plugin/internal/typedoc/mdn-links/index.cjs',
          format: 'cjs',

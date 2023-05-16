@@ -33,9 +33,11 @@ export type DataSymbolLinks = {
 /**
  * Defines the JSON data for the generated documentation URL mappings.
  */
-export default interface DataSymbolMap {
+export declare interface DataSymbolMap {
    /**
     * A documentation symbol with link data.
     */
    [name: string]: DataSymbolLinks;
 }
+
+export default DataSymbolMap;

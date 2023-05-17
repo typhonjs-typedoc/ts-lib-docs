@@ -69,7 +69,12 @@
     "@typhonjs-utils/object": "^0.0.12",
     "@webgpu/types": "^0.1.32",
     "cheerio": "^1.0.0-rc.12",
+    "cssnano": "^6.0.1",
+    "postcss": "^8.4.23",
+    "postcss-cli": "^10.1.0",
+    "postcss-preset-env": "^8.3.2",
     "rollup-plugin-svelte": "^7.1.4",
+    "sass": "^1.62.1",
     "svelte": "^3.59.1",
     "svelte-preprocess" : "^5.0.3",
     "ts-morph": "^18",
@@ -87,7 +92,8 @@
   ],
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
-    "build-docs": "cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
+    "build-docs": "npm run build-css && cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
+    "build-css": "sass ./styles/custom.scss ./styles/custom.css && postcss ./styles/custom.css -p sass -u autoprefixer postcss-preset-env cssnano -m -o ./styles/custom.css",
     "build-plugins": "rollup -c config/rollup/rollup.config.plugins.mjs",
     "eslint": "eslint ."
   }

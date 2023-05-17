@@ -1,4 +1,8 @@
 import replace    from '@rollup/plugin-replace';
+
+// These plugins are for the mdn-links web components.
+
+import image      from '@rollup/plugin-image';
 import resolve    from '@rollup/plugin-node-resolve';
 import terser     from '@rollup/plugin-terser'
 import svelte     from 'rollup-plugin-svelte';
@@ -58,6 +62,8 @@ const configs = [
          sourcemap: true
       },
       plugins: [
+         image(),
+
          svelte({
             compilerOptions: {
                customElement: true

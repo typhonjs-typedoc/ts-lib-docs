@@ -19,6 +19,13 @@ export class PageRenderer
    #symbolMaps;
 
    /**
+    * Stores the localized links to this page that are loaded into the global scope at `globalThis.MDNLinks`.
+    *
+    * @type {Map<string, DataMDNLinks>}
+    */
+   #mdnLinks = new Map();
+
+   /**
     * @param {import('typedoc').Application} app -
     *
     * @param {SymbolMaps}  symbolMaps -
@@ -38,15 +45,47 @@ export class PageRenderer
     * @param {import('cheerio').Cheerio} $ -
     *
     * @param {PageEvent}   page -
+    *
+    * @returns {Map<string, DataMDNLinks>} The MDN links loaded into global script scope.
     */
-   #addScript($, page)
+   #addScripts($, page)
    {
       // Get asset path to script by counting the number of `/` characters then building the relative path.
       const count = (page.url.match(/\//) ?? []).length;
       const scriptPath = `${'../'.repeat(count)}assets/mdn-web-components.js`;
 
+      const headEl = $('head');
+
       // Append script to the head element.
-      $('head').append($(`<script src="${scriptPath}" type="module" />`));
+      headEl.append($(`<script src="${scriptPath}" type="module" />`));
+
+      // Load all link data into global variable MDNLinks ------------------------------------------------------------
+
+      /**
+       * This is where we abuse the static page nature of the default TypeDoc template and load an adhoc script that
+       * creates a global variable `MDNLinks` with all the link data for the current page and children. The web
+       * components access `globalThis.MDNLinks` and as such we can simply pass the name of the symbol or wrap an
+       * existing symbol string in the template with the MDNLinksPopup web component.
+       *
+       * Since this adhoc script is a normal JS script it loads before the ESM code for web components and is not
+       * deferred.
+       */
+
+      const mainLink = this.#symbolMaps.internal.get(page.model);
+
+      if (mainLink.hasLinks) { this.#mdnLinks.set(page.model.name, mainLink.mdnLinks); }
+
+      if (Array.isArray(page.model.children))
+      {
+         for (const child of page.model.children)
+         {
+            const childLink = this.#symbolMaps.internal.get(child);
+            if (childLink?.hasLinks) { this.#mdnLinks.set(child.name, childLink.mdnLinks); }
+         }
+      }
+
+      headEl.append($(`<script type="application/javascript">window.MDNLinks = new Map(${
+       JSON.stringify([...this.#mdnLinks])})</script>`))
    }
 
    /**
@@ -70,12 +109,31 @@ export class PageRenderer
     *
     * @param {import('cheerio').Cheerio}  $ -
     *
-    * @param {DataSymbolLinkInternal}     symbolDataInt -
+    * @param {PageEvent}   page - The main page.
     */
-   #augmentTitle($, symbolDataInt)
+   #augmentTitleLink($, page)
    {
       $('.tsd-page-title h1').wrap('<div class="mdn-title-layout"></div>').after(
-       `<wc-mdn-links data="${escapeAttr(symbolDataInt.mdnLinks)}" />`);
+       `<wc-mdn-links data="${escapeAttr(page.model.name)}" />`);
+   }
+
+   /**
+    * Augment all member links that are found in `#mdnLinks`.
+    *
+    * @param {import('cheerio').Cheerio}  $ -
+    */
+   #augmentMemberLinks($)
+   {
+      $('.tsd-panel.tsd-member .tsd-anchor-link').each((i, node) =>
+      {
+         const el = $(node);
+         const symbolName = el.find('span').text();
+         const mdnLink = this.#mdnLinks.get(symbolName);
+
+         if (mdnLink) { el.append(`<wc-mdn-links data="${escapeAttr(symbolName)}" />`) }
+
+         // console.log(`! SPAN TEXT: `, $(node).find('span').text());
+      });
    }
 
    /**
@@ -91,16 +149,14 @@ export class PageRenderer
 
       if (symbolDataInt)
       {
-         this.#addScript($, page);
+         // Append scripts to load web components and adhoc global MDNLinks. The loaded links are stored in `#mdnLinks`.
+         this.#addScripts($, page);
 
-         if (symbolDataInt.hasLinks) { this.#augmentTitle($, symbolDataInt); }
-
-         // console.log(`!! #handlePageEnd - A - has symbol data - name: ${symbolDataInt.name}; kind: ${page?.model?.kind}; url: ${page?.model?.url}`)
-
-      }
-      else
-      {
-         // console.log(`!! #handlePageEnd - B - NO symbol data - name: ${page?.model?.name}; kind: ${page?.model?.kind}; url: ${page?.model?.url}`)
+         if (symbolDataInt.hasLinks)
+         {
+            this.#augmentTitleLink($, page);
+            this.#augmentMemberLinks($);
+         }
       }
 
       page.contents = $.html();

@@ -93,8 +93,8 @@ export class MDNResolver
             internalEntry.mdnLinks.mdn_url = mdnAPIData.mdn_url;
             internalEntry.mdnLinks.spec_url = mdnAPIData.spec_url;
 
-            if (mdnJSData.status || mdnJSData.support) { internalEntry.hasCompat = true; }
-            if (mdnJSData.mdn_url || mdnJSData.spec_url) { internalEntry.hasLinks = true; }
+            if (mdnAPIData.status || mdnAPIData.support) { internalEntry.hasCompat = true; }
+            if (mdnAPIData.mdn_url || mdnAPIData.spec_url) { internalEntry.hasLinks = true; }
 
             const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !MDNResolver.#hasMDNCompatData(externalEntry))

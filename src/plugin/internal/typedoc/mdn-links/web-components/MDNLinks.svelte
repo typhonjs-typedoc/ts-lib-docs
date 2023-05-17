@@ -14,38 +14,43 @@
    {
       try
       {
-         /** @type {DataMDNLinks} */
          const unescaped = unescapeAttr(data)
 
-         const newButtons = [];
+         /** @type {DataMDNLinks} */
+         const mdnLinks = globalThis?.MDNLinks?.get(unescaped);
 
-         if (typeof unescaped.mdn_url === 'string')
+         if (mdnLinks)
          {
-            newButtons.push({ svg: svg.mdn, title: 'MDN Documentation', url: unescaped.mdn_url });
-         }
+            const newButtons = [];
 
-         if (typeof unescaped.ts_url === 'string')
-         {
-            newButtons.push({ svg: svg.ts, title: 'TS Documentation', url: unescaped.ts_url });
-         }
-
-         if (typeof unescaped.spec_url === 'string')
-         {
-            newButtons.push({ svg: svg.spec, title: 'Specification', url: unescaped.spec_url });
-         }
-         else if (Array.isArray(unescaped.spec_url))
-         {
-            for (const entry of unescaped.spec_url)
+            if (typeof mdnLinks.mdn_url === 'string')
             {
-               newButtons.push({ svg: svg.spec, title: 'Specification', url: entry });
+               newButtons.push({ svg: svg.mdn, title: 'MDN Documentation', url: mdnLinks.mdn_url });
             }
-         }
 
-         buttons = newButtons;
+            if (typeof mdnLinks.ts_url === 'string')
+            {
+               newButtons.push({ svg: svg.ts, title: 'TS Documentation', url: mdnLinks.ts_url });
+            }
+
+            if (typeof mdnLinks.spec_url === 'string')
+            {
+               newButtons.push({ svg: svg.spec, title: 'Specification', url: mdnLinks.spec_url });
+            }
+            else if (Array.isArray(mdnLinks.spec_url))
+            {
+               for (const entry of mdnLinks.spec_url)
+               {
+                  newButtons.push({ svg: svg.spec, title: 'Specification', url: entry });
+               }
+            }
+
+            buttons = newButtons;
+            }
       }
       catch (err)
       {
-         console.warn(`[mdn-links] Failure to deserialize link data.`);
+         console.warn(`[mdn-links] Failure to deserialize link data: `, data);
       }
    }
 </script>
@@ -53,7 +58,7 @@
 <div class=container>
    {#each buttons as button}
       <a href={button.url} target=_blank>
-         <img class=button-color alt={button.title} src={button.svg} title={button.title}>
+         <img alt={button.title} src={button.svg} title={button.title}>
       </a>
    {/each}
 </div>

@@ -115,7 +115,11 @@ export class MDNConverter
 
             this.#symbolMaps.internal.set(reflection, {
                name: symbolName,
-               parts: symbolParts
+               parts: symbolParts,
+               hasLinks: false,
+               hasCompat: false,
+               mdnCompat: {},
+               mdnLinks: {}
             });
          }
 
@@ -209,11 +213,27 @@ export class MDNConverter
  *
  * @property {string[]} parts The separate symbol name parts used in MDN browser compat lookups.
  *
+ * @property {boolean} hasCompat Indicates that there is MDN compatibility data.
+ *
+ * @property {boolean} hasLinks Indicates that there is MDN link data.
+ *
+ * @property {DataMDNLinks} mdnCompat - The MDN compatibility data.
+ *
+ * @property {DataMDNLinks} mdnLinks - The MDN links data.
+ */
+
+/**
+ * @typedef {object} DataMDNLinks
+ *
  * @property {string}   [mdn_url] Any associated MDN URL.
  *
  * @property {string | string[]}   [spec_url] Any associated specification URLs.
  *
  * @property {string}   [ts_url] Any associated Typescript documentation URL.
+ */
+
+/**
+ * @typedef {object} DataMDNCompat
  *
  * @property {import('@mdn/browser-compat-data').StatusBlock} [status] MDN status block.
  *

@@ -65,7 +65,8 @@ export class PageRenderer
    }
 
    /**
-    * Replaces the main header / title with a flex box element w/ mdn-links web component.
+    * Replaces the main header / title with a flex box element w/ mdn-links web component. `mdn-title-layout` uses
+    * a container query to resize the header font size.
     *
     * @param {import('cheerio').Cheerio}  $ -
     *
@@ -73,9 +74,8 @@ export class PageRenderer
     */
    #augmentTitle($, symbolDataInt)
    {
-      $('.col-content').append($(`<wc-mdn-links data="${escapeAttr(symbolDataInt.mdnLinks)}" />`));
-
-      // $('.col-content').replaceWith($(`<wc-mdn-links data="${escapeAttr(symbolDataInt.mdnLinks)}" />`));
+      $('.tsd-page-title h1').wrap('<div class="mdn-title-layout"></div>').after(
+       `<wc-mdn-links data="${escapeAttr(symbolDataInt.mdnLinks)}" />`);
    }
 
    /**

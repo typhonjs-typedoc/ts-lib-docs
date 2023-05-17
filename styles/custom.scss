@@ -18,6 +18,26 @@
   --mdn-container-border: 2px solid rgba(0, 0, 0, 0.2);
 }
 
+/* MDN layout ------------------------------------------------------------------------------------------------------- */
+
+// .tsd-page-title h1 is wrapped with this div. And MDNLinks appended and aligned right.
+.mdn-title-layout {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  container: mdn-title-wrapper / inline-size;
+
+  h1 {
+    margin-right: auto;
+  }
+
+  @container mdn-title-wrapper (min-width: 0) {
+    h1 {
+      font-size: clamp(1em, 4cqi, 3em);
+    }
+  }
+}
+
 /* Content ---------------------------------------------------------------------------------------------------------- */
 
 // `Index` details element

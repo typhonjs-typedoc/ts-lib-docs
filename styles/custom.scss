@@ -38,6 +38,11 @@
   }
 }
 
+// This expands the space and right aligns any associated MDNLinks web component appended to the flex layout.
+.tsd-panel.tsd-member .tsd-anchor-link .tsd-anchor-icon {
+  margin-right: auto;
+}
+
 /* Content ---------------------------------------------------------------------------------------------------------- */
 
 // `Index` details element

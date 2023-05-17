@@ -86,6 +86,8 @@ async function generate(config, logLevel, mdnDataPath)
    await app.bootstrapWithPlugins({
       name: config.name,
 
+      customCss: './styles/custom.css',
+
       mdnDataPath,
 
       // Disables the source links as they reference the d.ts files.

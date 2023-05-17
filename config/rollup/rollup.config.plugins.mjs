@@ -1,4 +1,8 @@
-import replace from '@rollup/plugin-replace';
+import replace    from '@rollup/plugin-replace';
+import resolve    from '@rollup/plugin-node-resolve';
+import terser     from '@rollup/plugin-terser'
+import svelte     from 'rollup-plugin-svelte';
+import preprocess from 'svelte-preprocess';
 
 /**
  * Stores the years to generate configs for below.
@@ -26,13 +30,46 @@ const libs = [
 const configs = [
    {
       input: 'src/plugin/internal/typedoc/mdn-links/index.mjs',
-      external: ['@mdn/browser-compat-data', 'cheerio', 'fs-extra', 'typedoc'],
+      external: [
+         '@mdn/browser-compat-data',
+         '@typhonjs-utils/file-util',
+         'cheerio',
+         'fs-extra',
+         'node:path',
+         'node:url',
+         'typedoc'
+      ],
       output: {
          file: 'dist/plugin/internal/typedoc/mdn-links/index.cjs',
          format: 'cjs',
          generatedCode: { constBindings: true },
          sourcemap: true
       }
+   },
+
+   {
+      input: 'src/plugin/internal/typedoc/mdn-links/web-components/index.mjs',
+      treeshake: false,
+      output: {
+         file: 'dist/plugin/internal/typedoc/mdn-links/mdn-web-components.js',
+         format: 'es',
+         generatedCode: { constBindings: true },
+         plugins: [terser()],
+         sourcemap: true
+      },
+      plugins: [
+         svelte({
+            compilerOptions: {
+               customElement: true
+            },
+            preprocess: preprocess()
+         }),
+
+         resolve({
+            browser: true,
+            dedupe: ['svelte']
+         }),
+      ]
    },
 
    {

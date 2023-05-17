@@ -67,8 +67,6 @@ export async function typedoc(config, logLevel = LogLevel.Info)
  */
 async function generate(config, logLevel, mdnDataPath)
 {
-   if (fs.existsSync(`./${config.out}`)) { fs.emptydirSync(`./${config.out}`); }
-
    // Create a new TypeDoc application instance
    const app = new Application();
 

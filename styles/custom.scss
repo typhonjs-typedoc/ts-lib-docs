@@ -1,0 +1,101 @@
+:root {
+  --mdn-link-button-border-radius: 5px;
+  --mdn-link-button-diameter: 20px;
+  --mdn-link-button-gap: 0.2em;
+  --mdn-link-container-padding: 0.1em;
+
+  --mdn-container-border-radius: 8px;
+  --mdn-container-padding: 1em;
+}
+
+:root[data-theme="light"] {
+  --mdn-container-background: rgba(0, 0, 0, 0.05);
+  --mdn-container-border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="dark"] {
+  --mdn-container-background: rgba(0, 0, 0, 0.1);
+  --mdn-container-border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Content ---------------------------------------------------------------------------------------------------------- */
+
+.tsd-panel-group.tsd-index-group details {
+  border: var(--mdn-container-border);
+  padding: var(--mdn-container-padding);
+  background: var(--mdn-container-background);
+  border-radius: var(--mdn-container-border-radius);
+
+  .tsd-index-heading {
+    margin: 0
+  }
+
+  .tsd-accordion-details section:not(:last-child) {
+    margin-bottom: 15px;
+  }
+}
+
+/* Main Container --------------------------------------------------------------------------------------------------- */
+
+.container {
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+/* Sidebar ---------------------------------------------------------------------------------------------------------- */
+
+.site-menu {
+  margin-top: 0;
+}
+
+.page-menu {
+  max-height: revert;
+  overflow: revert;
+  position: revert;
+  padding-left: 0.25rem;
+//width: calc(100% - 0.25rem);
+}
+
+/* Styling for sidebar `Settings` */
+.tsd-navigation.settings {
+  border: var(--mdn-container-border);
+  background: var(--mdn-container-background);
+  border-radius: var(--mdn-container-border-radius);
+  padding: var(--mdn-container-padding);
+
+  margin-top: 10px;
+}
+
+.tsd-filter-visibility h4 {
+  padding-top: 0;
+}
+
+/* Styling for sidebar `On This Page` */
+.tsd-index-accordion.tsd-page-navigation {
+  border: var(--mdn-container-border);
+  padding: var(--mdn-container-padding) 0 0 var(--mdn-container-padding);
+  background: var(--mdn-container-background);
+  border-radius: var(--mdn-container-border-radius);
+
+  position: sticky;
+  top: 50px;
+
+  ul {
+    padding-left: 0.5rem;
+  }
+
+  .tsd-accordion-details {
+    overflow: auto;
+    max-height: calc(100vh - 120px);
+  }
+}
+
+details[open] .tsd-accordion-summary {
+  padding-bottom: 10px;
+  border-bottom: var(--mdn-container-border);
+}
+
+/* Extra space between summary and content for all accordian details */
+//.tsd-accordion-details {
+//  margin-top: 10px;
+//}

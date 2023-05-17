@@ -20,6 +20,7 @@
 
 /* Content ---------------------------------------------------------------------------------------------------------- */
 
+// `Index` details element
 .tsd-panel-group.tsd-index-group details {
   border: var(--mdn-container-border);
   padding: var(--mdn-container-padding);
@@ -44,58 +45,62 @@
 
 /* Sidebar ---------------------------------------------------------------------------------------------------------- */
 
+// Hide `On This Page` when col-sidebar becomes activated and moves content to the left.
+@media (max-width: 1200px) {
+  .tsd-index-accordion.tsd-page-navigation {
+    display: none;
+  }
+}
+
 .site-menu {
   margin-top: 0;
 }
 
 .page-menu {
-  max-height: revert;
-  overflow: revert;
-  position: revert;
-  padding-left: 0.25rem;
-//width: calc(100% - 0.25rem);
-}
-
-/* Styling for sidebar `Settings` */
-.tsd-navigation.settings {
-  border: var(--mdn-container-border);
-  background: var(--mdn-container-background);
-  border-radius: var(--mdn-container-border-radius);
-  padding: var(--mdn-container-padding);
-
-  margin-top: 10px;
-}
-
-.tsd-filter-visibility h4 {
-  padding-top: 0;
-}
-
-/* Styling for sidebar `On This Page` */
-.tsd-index-accordion.tsd-page-navigation {
-  border: var(--mdn-container-border);
-  padding: var(--mdn-container-padding) 0 0 var(--mdn-container-padding);
-  background: var(--mdn-container-background);
-  border-radius: var(--mdn-container-border-radius);
-
+  display: flex;
+  flex-direction: column;
   position: sticky;
-  top: 50px;
 
-  ul {
-    padding-left: 0.5rem;
+  padding-left: 0.25rem;
+  max-height: calc(100vh - 52px); // Header bar + 10px bottom margin space for `On This Page`.
+  overflow: revert;
+
+  /* Styling for sidebar `Settings` */
+  .tsd-navigation.settings {
+    border: var(--mdn-container-border);
+    background: var(--mdn-container-background);
+    border-radius: var(--mdn-container-border-radius);
+    padding: var(--mdn-container-padding);
+
+    margin-top: 10px;
+
+    .tsd-filter-visibility h4 {
+      padding-top: 0;
+    }
   }
 
-  .tsd-accordion-details {
-    overflow: auto;
-    max-height: calc(100vh - 120px);
+  /* Styling for sidebar `On This Page` */
+  .tsd-index-accordion.tsd-page-navigation {
+    border: var(--mdn-container-border);
+    padding: var(--mdn-container-padding) 0 0 var(--mdn-container-padding);
+    background: var(--mdn-container-background);
+    border-radius: var(--mdn-container-border-radius);
+    overflow: hidden;
+
+    ul {
+      padding-left: 0.5rem;
+    }
+
+    // Make the details content overflow / scrollbars.
+    .tsd-accordion-details {
+      overflow: auto;
+      height: 100%;
+    }
+  }
+
+  // All accordions
+  details[open] .tsd-accordion-summary {
+    padding-bottom: 10px;
+    border-bottom: var(--mdn-container-border);
   }
 }
-
-details[open] .tsd-accordion-summary {
-  padding-bottom: 10px;
-  border-bottom: var(--mdn-container-border);
-}
-
-/* Extra space between summary and content for all accordian details */
-//.tsd-accordion-details {
-//  margin-top: 10px;
-//}

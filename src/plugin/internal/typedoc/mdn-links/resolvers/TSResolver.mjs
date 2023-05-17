@@ -53,7 +53,8 @@ export class TSResolver
          if (templateHash)
          {
             const ts_url = `https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html#${templateHash}`;
-            internalEntry.ts_url = ts_url;
+            internalEntry.mdnLinks.ts_url = ts_url;
+            internalEntry.hasLinks = true;
 
             const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !TSResolver.#hasTSData(externalEntry))
@@ -69,7 +70,8 @@ export class TSResolver
          {
             const ts_url = `https://www.typescriptlang.org/docs/handbook/utility-types.html#${utilHash}`;
 
-            internalEntry.ts_url = ts_url;
+            internalEntry.mdnLinks.ts_url = ts_url;
+            internalEntry.hasLinks = true;
 
             const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !TSResolver.#hasTSData(externalEntry))

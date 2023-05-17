@@ -66,10 +66,13 @@ export class MDNResolver
 
          if (mdnJSData)
          {
-            internalEntry.mdn_url = mdnJSData.mdn_url;
-            internalEntry.spec_url = mdnJSData.spec_url;
-            internalEntry.status = mdnJSData.status;
-            internalEntry.support = mdnJSData.support;
+            internalEntry.mdnCompat.status = mdnJSData.status;
+            internalEntry.mdnCompat.support = mdnJSData.support;
+            internalEntry.mdnLinks.mdn_url = mdnJSData.mdn_url;
+            internalEntry.mdnLinks.spec_url = mdnJSData.spec_url;
+
+            if (mdnJSData.status || mdnJSData.support) { internalEntry.hasCompat = true; }
+            if (mdnJSData.mdn_url || mdnJSData.spec_url) { internalEntry.hasLinks = true; }
 
             const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !MDNResolver.#hasMDNCompatData(externalEntry))
@@ -85,10 +88,13 @@ export class MDNResolver
 
          if (mdnAPIData)
          {
-            internalEntry.mdn_url = mdnAPIData.mdn_url;
-            internalEntry.spec_url = mdnAPIData.spec_url;
-            internalEntry.status = mdnAPIData.status;
-            internalEntry.support = mdnAPIData.support;
+            internalEntry.mdnCompat.status = mdnAPIData.status;
+            internalEntry.mdnCompat.support = mdnAPIData.support;
+            internalEntry.mdnLinks.mdn_url = mdnAPIData.mdn_url;
+            internalEntry.mdnLinks.spec_url = mdnAPIData.spec_url;
+
+            if (mdnJSData.status || mdnJSData.support) { internalEntry.hasCompat = true; }
+            if (mdnJSData.mdn_url || mdnJSData.spec_url) { internalEntry.hasLinks = true; }
 
             const externalEntry = symbolMaps.external.get(internalEntry.name);
             if (externalEntry && !MDNResolver.#hasMDNCompatData(externalEntry))

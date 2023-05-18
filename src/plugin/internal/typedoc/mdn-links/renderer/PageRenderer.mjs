@@ -19,13 +19,6 @@ export class PageRenderer
    #symbolMaps;
 
    /**
-    * Stores the localized links to this page that are loaded into the global scope at `globalThis.MDNLinks`.
-    *
-    * @type {Map<string, DataMDNLinks>}
-    */
-   #mdnLinks = new Map();
-
-   /**
     * @param {import('typedoc').Application} app -
     *
     * @param {SymbolMaps}  symbolMaps -
@@ -71,21 +64,36 @@ export class PageRenderer
        * deferred.
        */
 
+      /**
+       * Stores the localized links to this page that are loaded into the global scope at `globalThis.MDNLinks`.
+       *
+       * @type {Map<string, DataMDNLinks>}
+       */
+      const mdnLinks = new Map();
+
       const mainLink = this.#symbolMaps.internal.get(page.model);
 
-      if (mainLink.hasLinks) { this.#mdnLinks.set(page.model.name, mainLink.mdnLinks); }
+      if (mainLink.hasLinks)
+      {
+         mdnLinks.set(page.model.name, mainLink.mdnLinks);
+      }
 
       if (Array.isArray(page.model.children))
       {
          for (const child of page.model.children)
          {
             const childLink = this.#symbolMaps.internal.get(child);
-            if (childLink?.hasLinks) { this.#mdnLinks.set(child.name, childLink.mdnLinks); }
+            if (childLink?.hasLinks)
+            {
+               mdnLinks.set(child.name, childLink.mdnLinks);
+            }
          }
       }
 
       headEl.append($(`<script type="application/javascript">window.MDNLinks = new Map(${
-       JSON.stringify([...this.#mdnLinks])})</script>`))
+       JSON.stringify([...mdnLinks])})</script>`))
+
+      return mdnLinks;
    }
 
    /**
@@ -118,21 +126,21 @@ export class PageRenderer
    }
 
    /**
-    * Augment all member links that are found in `#mdnLinks`.
+    * Augment all member links that are found in `mdnLinks`.
     *
     * @param {import('cheerio').Cheerio}  $ -
+    *
+    * @param {Map<string, DataMDNLinks>} mdnLinks - The MDN links loaded into global script scope.
     */
-   #augmentMemberLinks($)
+   #augmentMemberLinks($, mdnLinks)
    {
       $('.tsd-panel.tsd-member .tsd-anchor-link').each((i, node) =>
       {
          const el = $(node);
          const symbolName = el.find('span').text();
-         const mdnLink = this.#mdnLinks.get(symbolName);
+         const mdnLink = mdnLinks.get(symbolName);
 
          if (mdnLink) { el.append(`<wc-mdn-links data="${escapeAttr(symbolName)}" />`) }
-
-         // console.log(`! SPAN TEXT: `, $(node).find('span').text());
       });
    }
 
@@ -149,13 +157,13 @@ export class PageRenderer
 
       if (symbolDataInt)
       {
-         // Append scripts to load web components and adhoc global MDNLinks. The loaded links are stored in `#mdnLinks`.
-         this.#addScripts($, page);
+         // Append scripts to load web components and adhoc global MDNLinks. The loaded links are returned.
+         const mdnLinks = this.#addScripts($, page);
 
          if (symbolDataInt.hasLinks)
          {
             this.#augmentTitleLink($, page);
-            this.#augmentMemberLinks($);
+            this.#augmentMemberLinks($, mdnLinks);
          }
       }
 

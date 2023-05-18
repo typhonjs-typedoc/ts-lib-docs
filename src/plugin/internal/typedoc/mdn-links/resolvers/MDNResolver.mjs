@@ -8,6 +8,29 @@ import browserCompatData from '@mdn/browser-compat-data';
 export class MDNResolver
 {
    /**
+    * Traverse inheritance tree and collect parents for each node.
+    *
+    * @param {DataSymbolParents[]}  [parents] - The array of parent nodes for the current node.
+    *
+    * @param {DataSymbolParents}    [node] - The current node in the inheritance tree.
+    *
+    * @returns {DataSymbolParents[]} Returns an array of all parent nodes for the given node.
+    */
+   #getParents(parents = [], node)
+   {
+      // Add the current node to the parents array if defined.
+      if (node) { parents.push(node); }
+
+      // If the node has parents, recurse into them
+      if (node.parents)
+      {
+         for (const parent of node.parents) { this.#getParents([...parents], parent); }
+      }
+
+      return parents;
+   }
+
+   /**
     * @param {DataSymbolLinkInternal}  internalEntry -
     *
     * @param {import('@mdn/browser-compat-data').Identifier} compatIdentifier -

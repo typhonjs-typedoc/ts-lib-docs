@@ -1,9 +1,9 @@
 import type { ReflectionKind } from 'typedoc';
 
 /**
- * Defines a documentation symbol mapping with any associated MDN compatibility data links.
+ * Defines a documentation reflection mapping with any associated MDN compatibility data links.
  */
-export type DataSymbolLinks = {
+export type DataReflectionLinks = {
    /**
     * The partial link to the generated documentation.
     */
@@ -33,11 +33,11 @@ export type DataSymbolLinks = {
 /**
  * Defines the JSON data for the generated documentation URL mappings.
  */
-export declare interface DataSymbolMap {
+export declare interface DataReflectionMap {
    /**
-    * A documentation symbol with link data.
+    * A documentation reflection with link data.
     */
-   [name: string]: DataSymbolLinks;
+   [name: string]: DataReflectionLinks;
 }
 
-export default DataSymbolMap;
+export default DataReflectionMap;

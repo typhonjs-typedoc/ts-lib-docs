@@ -35,7 +35,7 @@ export class MDNBuildReflectionMap
    ]);
 
    /**
-    * @param {SymbolMaps}                    reflectionMap -
+    * @param {ReflectionMaps}                reflectionMap -
     *
     * @param {import('typedoc').Application} app -
     *
@@ -68,23 +68,23 @@ export class MDNBuildReflectionMap
 
          if (this.#validReflectionKind.has(reflection.kind))
          {
-            const { isSymbol, symbolName, symbolParts } = this.#getReflectionData(reflection);
+            const { isSymbol, reflectionName, reflectionParts } = this.#getReflectionData(reflection);
 
             // In the case of processing TS libs often there is an interface defined and a subsequent function by the
             // same name so only update the symbol map if an existing interface doesn't exist.
-            const currentValue = reflectionMap.external.get(symbolName);
+            const currentValue = reflectionMap.external.get(reflectionName);
             if (!isSymbol && (currentValue === void 0 || currentValue?.kind !== ReflectionKind.Interface))
             {
-               reflectionMap.external.set(symbolName, {
+               reflectionMap.external.set(reflectionName, {
                   doc_url: url,
                   kind: reflection.kind
                });
             }
 
             reflectionMap.internal.set(reflection, {
-               name: symbolName,
+               name: reflectionName,
                parents: [],
-               parts: symbolParts,
+               parts: reflectionParts,
                hasLinks: false,
                hasCompat: false,
                mdnCompat: {},
@@ -104,7 +104,8 @@ export class MDNBuildReflectionMap
    /**
     * @param {import('typedoc').Reflection}  reflection -
     *
-    * @returns {{ isSymbol: boolean, symbolName: string, symbolParts: string[] }} The fully qualified symbol data.
+    * @returns {{ isSymbol: boolean, reflectionName: string, reflectionParts: string[] }} The fully qualified symbol
+    *          data.
     */
    static #getReflectionData(reflection)
    {
@@ -119,7 +120,7 @@ export class MDNBuildReflectionMap
          reflection = reflection.parent;
       }
 
-      const symbolName = parts.join('.');
+      const reflectionName = parts.join('.');
 
       let isSymbol = false;
 
@@ -133,6 +134,6 @@ export class MDNBuildReflectionMap
          }
       }
 
-      return { isSymbol, symbolName, symbolParts: parts };
+      return { isSymbol, reflectionName, reflectionParts: parts };
    }
 }

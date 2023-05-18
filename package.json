@@ -10,35 +10,35 @@
   ],
   "sideEffects": false,
   "exports": {
-    "./json/dom/script-mapping/*": {
+    "./json/dom/reflection-mapping/*": {
       "types": "./types/index-json-mapping.d.mts",
       "import": "./data/*/dom/index-mapping.mjs",
-      "require": "./data/*/dom/symbol-mapping.json"
+      "require": "./data/*/dom/reflection-mapping.json"
     },
-    "./json/dom/script-names/*": {
+    "./json/dom/reflection-names/*": {
       "types": "./types/index-json-names.d.mts",
       "import": "./data/*/dom/index-names.mjs",
-      "require": "./data/*/dom/symbol-names.json"
+      "require": "./data/*/dom/reflection-names.json"
     },
-    "./json/esm/script-mapping/*": {
+    "./json/esm/reflection-mapping/*": {
       "types": "./types/index-json-mapping.d.mts",
       "import": "./data/*/esm/index-mapping.mjs",
-      "require": "./data/*/esm/symbol-mapping.json"
+      "require": "./data/*/esm/reflection-mapping.json"
     },
-    "./json/esm/script-names/*": {
+    "./json/esm/reflection-names/*": {
       "types": "./types/index-json-names.d.mts",
       "import": "./data/*/esm/index-names.mjs",
-      "require": "./data/*/esm/symbol-names.json"
+      "require": "./data/*/esm/reflection-names.json"
     },
-    "./json/worker/script-mapping/*": {
+    "./json/worker/reflection-mapping/*": {
       "types": "./types/index-json-mapping.d.mts",
       "import": "./data/*/worker/index-mapping.mjs",
-      "require": "./data/*/worker/symbol-mapping.json"
+      "require": "./data/*/worker/reflection-mapping.json"
     },
-    "./json/worker/script-names/*": {
+    "./json/worker/reflection-names/*": {
       "types": "./types/index-json-names.d.mts",
       "import": "./data/*/worker/index-names.mjs",
-      "require": "./data/*/worker/symbol-names.json"
+      "require": "./data/*/worker/reflection-names.json"
     },
     "./typedoc/ts-links/dom/*": {
       "types": "./types/index-plugin.d.mts",

@@ -12,7 +12,7 @@ export class MDNProcessReflectionMap
     *
     * @param {import('typedoc').DeclarationReflection}   reflection -
     *
-    * @returns {DataSymbolParents} Any parent reflections.
+    * @returns {DataReflectionParents} Any parent reflections.
     */
    static #getInheritanceTree(project, reflection)
    {
@@ -61,6 +61,11 @@ export class MDNProcessReflectionMap
       return visit(reflection);
    }
 
+   /**
+    * @param {ReflectionMaps}    reflectionMap -
+    *
+    * @param {ProjectReflection} project -
+    */
    static processReflectionMap(reflectionMap, project)
    {
       // Resolve inheritance chains.

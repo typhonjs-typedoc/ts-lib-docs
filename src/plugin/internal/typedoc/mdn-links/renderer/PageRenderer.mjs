@@ -15,18 +15,18 @@ export class PageRenderer
    /** @type {import('typedoc').Application} */
    #app;
 
-   /** @type {SymbolMaps} */
-   #symbolMaps;
+   /** @type {ReflectionMaps} */
+   #reflectionMaps;
 
    /**
     * @param {import('typedoc').Application} app -
     *
-    * @param {SymbolMaps}  symbolMaps -
+    * @param {ReflectionMaps}  reflectionMaps -
     */
-   constructor(app, symbolMaps)
+   constructor(app, reflectionMaps)
    {
       this.#app = app;
-      this.#symbolMaps = symbolMaps;
+      this.#reflectionMaps = reflectionMaps;
 
       this.#app.renderer.on(PageEvent.END, this.#handlePageEnd, this);
       this.#app.renderer.once(RendererEvent.END, this.#handleRendererEnd, this);
@@ -71,7 +71,7 @@ export class PageRenderer
        */
       const mdnLinks = new Map();
 
-      const mainLink = this.#symbolMaps.internal.get(page.model);
+      const mainLink = this.#reflectionMaps.internal.get(page.model);
 
       if (mainLink.hasLinks)
       {
@@ -82,7 +82,7 @@ export class PageRenderer
       {
          for (const child of page.model.children)
          {
-            const childLink = this.#symbolMaps.internal.get(child);
+            const childLink = this.#reflectionMaps.internal.get(child);
             if (childLink?.hasLinks)
             {
                mdnLinks.set(child.name, childLink.mdnLinks);
@@ -149,7 +149,7 @@ export class PageRenderer
     */
    #handlePageEnd(page)
    {
-      const symbolDataInt = this.#symbolMaps.internal.get(page.model);
+      const symbolDataInt = this.#reflectionMaps.internal.get(page.model);
 
       const $ = load(page.contents);
 

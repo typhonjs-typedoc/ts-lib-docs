@@ -2,17 +2,17 @@ import browserCompatData from '@mdn/browser-compat-data';
 
 /**
  * Provides resolution for all Typescript lib symbols against the MDN browser compatibility data adding MDN link & spec
- * URLs to the internal and external symbol maps. Additionally, the internal symbol map also links the status and support
- * blocks to be displayed in the generated documentation.
+ * URLs to the internal and external symbol maps. Additionally, the internal symbol map also links the status and
+ * support blocks to be displayed in the generated documentation.
  */
 export class MDNResolver
 {
    /**
     * Traverse inheritance tree and collect parents for each node.
     *
-    * @param {DataSymbolLinkInternal}  startNode - The initial node to process.
+    * @param {DataIntReflectionLink}  startNode - The initial node to process.
     *
-    * @returns {DataSymbolParents[]} Returns an array of all parent nodes for the given node.
+    * @returns {DataReflectionParents[]} Returns an array of all parent nodes for the given node.
     */
    static #getParents(startNode)
    {
@@ -47,7 +47,7 @@ export class MDNResolver
 
 
    /**
-    * @param {DataSymbolLinkInternal}  internalEntry -
+    * @param {DataIntReflectionLink}  internalEntry -
     *
     * @param {import('@mdn/browser-compat-data').Identifier} compatIdentifier -
     *
@@ -112,20 +112,19 @@ export class MDNResolver
    }
 
    /**
-    * Tests if a DataSymbolLink already has defined MDN data.
+    * Tests if a DataExtReflectionLink already has defined MDN data.
     *
-    * @param {DataSymbolLink} data - Symbol link data to test.
+    * @param {DataExtReflectionLink} data - Reflection link data to test.
     *
-    * @returns {boolean} If the symbol link data has MDN data already defined.
+    * @returns {boolean} If the reflection link data has MDN data already defined.
     */
    static #hasMDNCompatData(data)
    {
-      return typeof data?.mdn_url === 'string' || typeof data?.spec_url === 'string' ||
-       typeof data?.status === 'object' || typeof data?.support === 'object';
+      return typeof data?.mdn_url === 'string' || typeof data?.spec_url === 'string';
    }
 
    /**
-    * @param {SymbolMaps} symbolMaps -
+    * @param {ReflectionMaps} symbolMaps -
     */
    static resolve(symbolMaps)
    {

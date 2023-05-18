@@ -31,11 +31,11 @@ export class TSResolver
    ]);
 
    /**
-    * Tests if a DataSymbolLink already has defined TS data.
+    * Tests if a DataExtReflectionLink already has defined TS data.
     *
-    * @param {DataSymbolLink} data - Symbol link data to test.
+    * @param {DataExtReflectionLink} data - Reflection link data to test.
     *
-    * @returns {boolean} Does the symbol link data have a TS url already?
+    * @returns {boolean} Does the reflection link data have a TS url already?
     */
    static #hasTSData(data)
    {
@@ -43,11 +43,11 @@ export class TSResolver
    }
 
    /**
-    * @param {SymbolMaps} symbolMaps -
+    * @param {ReflectionMaps} reflectionMaps -
     */
-   static resolve(symbolMaps)
+   static resolve(reflectionMaps)
    {
-      for (const internalEntry of symbolMaps.internal.values())
+      for (const internalEntry of reflectionMaps.internal.values())
       {
          const templateHash = TSResolver.#templateLiteralTypes.get(internalEntry.name);
          if (templateHash)
@@ -56,7 +56,7 @@ export class TSResolver
             internalEntry.mdnLinks.ts_url = ts_url;
             internalEntry.hasLinks = true;
 
-            const externalEntry = symbolMaps.external.get(internalEntry.name);
+            const externalEntry = reflectionMaps.external.get(internalEntry.name);
             if (externalEntry && !TSResolver.#hasTSData(externalEntry))
             {
                externalEntry.ts_url = ts_url;
@@ -73,7 +73,7 @@ export class TSResolver
             internalEntry.mdnLinks.ts_url = ts_url;
             internalEntry.hasLinks = true;
 
-            const externalEntry = symbolMaps.external.get(internalEntry.name);
+            const externalEntry = reflectionMaps.external.get(internalEntry.name);
             if (externalEntry && !TSResolver.#hasTSData(externalEntry))
             {
                externalEntry.ts_url = ts_url;

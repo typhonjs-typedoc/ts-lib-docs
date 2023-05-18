@@ -1,9 +1,9 @@
 /**
- * Defines a list of documentation symbol names.
+ * Defines a list of documentation reflection names.
  */
-export type DataSymbolNames = string[];
+export type DataReflectionNames = string[];
 
 /**
- * Defines the JSON data for the generated documentation symbol names.
+ * Defines the JSON data for the generated documentation reflection names.
  */
-export default DataSymbolNames;
+export default DataReflectionNames;

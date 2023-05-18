@@ -40,16 +40,9 @@
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  container: mdn-title-wrapper / inline-size;
 
   h1 {
     margin-right: auto;
-  }
-
-  @container mdn-title-wrapper (min-width: 0) {
-    h1 {
-      font-size: clamp(1em, 4cqi, 3em);
-    }
   }
 }
 
@@ -58,7 +51,27 @@
   margin-right: auto;
 }
 
+/* Container Queries ------------------------------------------------------------------------------------------------ */
+
+.col-content {
+  container: col-content / inline-size;
+}
+
+.page-menu {
+  container: page-menu / inline-size;
+}
+
+.tsd-navigation {
+  container: tsd-navigation / inline-size;
+}
+
 /* Content ---------------------------------------------------------------------------------------------------------- */
+
+@container col-content (min-width: 0) {
+  .tsd-page-title h1 {
+    font-size: clamp(1em, 4cqi, 3em);
+  }
+}
 
 // `Index` details element
 .tsd-panel-group.tsd-index-group details {

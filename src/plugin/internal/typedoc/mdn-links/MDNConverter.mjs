@@ -177,8 +177,9 @@ export class MDNConverter
 
          return {
             id: reflection.id,
-            name: reflection.getFullName(),
             kind: reflection.kind,
+            name: reflection.getFullName(),
+            parts: reflection.getFullName().split('.'),
             parents
          };
       }
@@ -230,6 +231,8 @@ export class MDNConverter
       const reflectionUrlMap = new Map(urlMappings.map((mapping) => [mapping.model, mapping.url]));
 
       this.#buildSymbolMap(context.project, reflectionUrlMap);
+
+
 
       // Resolve inheritance chains.
       for (const reflection of this.#symbolMaps.internal.keys())
@@ -318,6 +321,8 @@ export class MDNConverter
  *
  * @property {string}               name Name of reflection.
  *
+ * @property {string[]}             parts Individual parts of the reflection name split on `.`.
+ *
  * @property {DataSymbolParents[]}  parents Parent reflections.
  */
 
@@ -326,5 +331,5 @@ export class MDNConverter
  *
  * @property {Map<string, DataSymbolLink>}   external External data used by plugins.
  *
- * @property {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} internal Data used internally.
+ * @property {Map<import('typedoc').DeclarationReflection, DataSymbolLinkInternal>} internal Data used internally.
  */

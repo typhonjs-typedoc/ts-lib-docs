@@ -10,25 +10,41 @@ export class MDNResolver
    /**
     * Traverse inheritance tree and collect parents for each node.
     *
-    * @param {DataSymbolParents[]}  [parents] - The array of parent nodes for the current node.
-    *
-    * @param {DataSymbolParents}    [node] - The current node in the inheritance tree.
+    * @param {DataSymbolLinkInternal}  startNode - The initial node to process.
     *
     * @returns {DataSymbolParents[]} Returns an array of all parent nodes for the given node.
     */
-   #getParents(parents = [], node)
+   static #getParents(startNode)
    {
-      // Add the current node to the parents array if defined.
-      if (node) { parents.push(node); }
+      if (!startNode?.parents?.length) { return []; }
 
-      // If the node has parents, recurse into them
-      if (node.parents)
+      const processParents = (node, parents = []) =>
       {
-         for (const parent of node.parents) { this.#getParents([...parents], parent); }
+         // Add the current node to the parents array if defined.
+         if (node) { parents.push(node); }
+
+         // If the node has parents, recurse into them
+         if (node.parents)
+         {
+            for (const parent of node.parents) { processParents(parent, [...parents]); }
+         }
+
+         return parents;
       }
 
-      return parents;
+      const results = [];
+
+      if (startNode.parents)
+      {
+         for (const parent of startNode.parents)
+         {
+            results.push(...processParents(parent));
+         }
+      }
+
+      return results;
    }
+
 
    /**
     * @param {DataSymbolLinkInternal}  internalEntry -
@@ -56,19 +72,19 @@ export class MDNResolver
          current = current[part];
       }
 
-      // TODO THIS NEEDS TO BE FIXED! MUST TRAVERSE A TREE.
+      // TODO: This only handles interfaces currently!
       // Attempt to resolve any inheritedFrom data.
       if (!current && internalEntry.parents.length)
       {
-         for (const parent of internalEntry.parents)
+         const parents = this.#getParents(internalEntry);
+
+         for (const parent of parents)
          {
             // Start with the top-level javascript category in the compat data.
             let currentParent = compatIdentifier;
 
-            const parentParts = parent.name.split('.');
-
             // Traverse the compat data according to the parts of the symbol.
-            for (const part of parentParts)
+            for (const part of parent.parts)
             {
                if (!currentParent[part]) { currentParent = void 0; break; }
 

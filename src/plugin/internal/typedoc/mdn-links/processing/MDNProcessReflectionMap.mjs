@@ -1,9 +1,6 @@
 import {
-   Converter,
-   DefaultTheme,
    ProjectReflection,
-   ReferenceType,
-   ReflectionKind }     from 'typedoc';
+   ReferenceType }      from 'typedoc';
 
 export class MDNProcessReflectionMap
 {

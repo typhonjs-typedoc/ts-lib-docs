@@ -4,6 +4,7 @@ import {
    Converter,
    DefaultTheme,
    ProjectReflection,
+   ReferenceType,
    ReflectionKind }     from 'typedoc';
 
 import { PageRenderer } from './renderer/PageRenderer.mjs';
@@ -43,20 +44,16 @@ export class MDNConverter
     * @type {Set<ReflectionKind>}
     */
    #validReflectionKind = new Set([
-      ReflectionKind.CallSignature,
+      ReflectionKind.Accessor,
       ReflectionKind.Class,
       ReflectionKind.Constructor,
-      ReflectionKind.ConstructorSignature,
       ReflectionKind.Enum,
       ReflectionKind.EnumMember,
       ReflectionKind.Function,
-      ReflectionKind.GetSignature,
-      ReflectionKind.IndexSignature,
       ReflectionKind.Interface,
       ReflectionKind.Method,
       ReflectionKind.Namespace,
       ReflectionKind.Property,
-      ReflectionKind.SetSignature,
       ReflectionKind.TypeAlias,     // TODO: There is a note that this will be deprecated in `0.25.x`!
       ReflectionKind.TypeLiteral,
       ReflectionKind.TypeParameter,
@@ -115,6 +112,7 @@ export class MDNConverter
 
             this.#symbolMaps.internal.set(reflection, {
                name: symbolName,
+               parents: [],
                parts: symbolParts,
                hasLinks: false,
                hasCompat: false,
@@ -130,6 +128,62 @@ export class MDNConverter
       };
 
       visit(project);
+   }
+
+   /**
+    * TODO: THIS NEEDS TO BE VETTED! Currently only finding inheritance chains for main interfaces. Must validate
+    * functions / other reflection kinds.
+    *
+    * @param {ProjectReflection} project -
+    *
+    * @param {import('typedoc').DeclarationReflection}   reflection -
+    *
+    * @returns {DataSymbolParents} Any parent reflections.
+    */
+   #getInheritanceTree(project, reflection)
+   {
+      const visited = new Set();
+
+      const visit = (reflection) =>
+      {
+         if (visited.has(reflection)) { return null; }
+
+         visited.add(reflection);
+
+         let parents = [];
+
+         if (reflection.extendedTypes)
+         {
+            for (let extendedType of reflection.extendedTypes)
+            {
+               if (extendedType instanceof ReferenceType && extendedType._target)
+               {
+                  let parentReflection = project.getReflectionById(extendedType._target);
+
+                  // Keep resolving if another reference type is returned.
+                  while (parentReflection && parentReflection instanceof ReferenceType && parentReflection._target)
+                  {
+                     parentReflection = project.getReflectionById(extendedType._target);
+                  }
+
+                  if (parentReflection)
+                  {
+                     const parent = visit(parentReflection);
+                     if (parent) { parents.push(parent); }
+                  }
+               }
+            }
+         }
+
+         return {
+            id: reflection.id,
+            name: reflection.getFullName(),
+            kind: reflection.kind,
+            parents
+         };
+      }
+
+      return visit(reflection);
    }
 
    /**
@@ -177,6 +231,19 @@ export class MDNConverter
 
       this.#buildSymbolMap(context.project, reflectionUrlMap);
 
+      // Resolve inheritance chains.
+      for (const reflection of this.#symbolMaps.internal.keys())
+      {
+         if (reflection instanceof ProjectReflection) { continue; }
+
+         const result = this.#getInheritanceTree(context.project, reflection);
+
+         if (result.parents.length)
+         {
+            this.#symbolMaps.internal.get(reflection).parents = result.parents;
+         }
+      }
+
       MDNResolver.resolve(this.#symbolMaps);
       TSResolver.resolve(this.#symbolMaps);
 
@@ -193,57 +260,71 @@ export class MDNConverter
 }
 
 /**
- * @typedef {object} DataSymbolLink
- *
- * @property {string}   doc_url The partial link to the generated documentation.
- *
- * @property {import('typedoc').ReflectionKind} kind The reflection kind.
- *
- * @property {string}   [mdn_url] Any associated MDN URL.
- *
- * @property {string | string[]}   [spec_url] Any associated specification URLs.
- *
- * @property {string}   [ts_url] Any associated Typescript documentation URL.
- */
-
-/**
- * @typedef {object} DataSymbolLinkInternal
- *
- * @property {string}   name The fully qualified symbol name.
- *
- * @property {string[]} parts The separate symbol name parts used in MDN browser compat lookups.
- *
- * @property {boolean} hasCompat Indicates that there is MDN compatibility data.
- *
- * @property {boolean} hasLinks Indicates that there is MDN link data.
- *
- * @property {DataMDNLinks} mdnCompat - The MDN compatibility data.
- *
- * @property {DataMDNLinks} mdnLinks - The MDN links data.
- */
-
-/**
- * @typedef {object} DataMDNLinks
- *
- * @property {string}   [mdn_url] Any associated MDN URL.
- *
- * @property {string | string[]}   [spec_url] Any associated specification URLs.
- *
- * @property {string}   [ts_url] Any associated Typescript documentation URL.
- */
-
-/**
  * @typedef {object} DataMDNCompat
  *
- * @property {import('@mdn/browser-compat-data').StatusBlock} [status] MDN status block.
+ * @property {import('@mdn/browser-compat-data').StatusBlock}  [status] MDN status block.
  *
  * @property {import('@mdn/browser-compat-data').SupportBlock} [support] MDN support block.
  */
 
 /**
+ * @typedef {object} DataMDNLinks
+ *
+ * @property {string}            [mdn_url] Any associated MDN URL.
+ *
+ * @property {string | string[]} [spec_url] Any associated specification URLs.
+ *
+ * @property {string}            [ts_url] Any associated Typescript documentation URL.
+ */
+
+/**
+ * @typedef {object} DataSymbolLink
+ *
+ * @property {string}               doc_url The partial link to the generated documentation.
+ *
+ * @property {import('typedoc').ReflectionKind} kind The reflection kind.
+ *
+ * @property {string}               [mdn_url] Any associated MDN URL.
+ *
+ * @property {string | string[]}    [spec_url] Any associated specification URLs.
+ *
+ * @property {string}               [ts_url] Any associated Typescript documentation URL.
+ */
+
+/**
+ * @typedef {object} DataSymbolLinkInternal
+ *
+ * @property {string}               name The fully qualified symbol name.
+ *
+ * @property {string[]}             parts The separate symbol name parts used in MDN browser compat lookups.
+ *
+ * @property {DataSymbolParents[]}  parents An array of parent reflections.
+ *
+ * @property {boolean}              hasCompat Indicates that there is MDN compatibility data.
+ *
+ * @property {boolean}              hasLinks Indicates that there is MDN link data.
+ *
+ * @property {DataMDNLinks}         mdnCompat The MDN compatibility data.
+ *
+ * @property {DataMDNLinks}         mdnLinks The MDN links data.
+ */
+
+/**
+ * @typedef {object} DataSymbolParents
+ *
+ * @property {number}               id ID of reflection.
+ *
+ * @property {ReflectionKind}       kind ReflectionKind.
+ *
+ * @property {string}               name Name of reflection.
+ *
+ * @property {DataSymbolParents[]}  parents Parent reflections.
+ */
+
+/**
  * @typedef {object} SymbolMaps
  *
- * @property {Map<string, DataSymbolLink>} external - External data used by plugins.
+ * @property {Map<string, DataSymbolLink>}   external External data used by plugins.
  *
- * @property {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} internal - Data used internally.
+ * @property {Map<import('typedoc').Reflection, DataSymbolLinkInternal>} internal Data used internally.
  */

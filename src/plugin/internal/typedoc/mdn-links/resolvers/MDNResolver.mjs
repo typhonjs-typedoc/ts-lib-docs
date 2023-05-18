@@ -27,11 +27,41 @@ export class MDNResolver
       // Traverse the compat data according to the parts of the symbol.
       for (const part of internalEntry.parts)
       {
-         if (!current[part]) { return void 0; }
+         if (!current[part]) { current = void 0; break; }
 
          // Move to the next part.
          current = current[part];
       }
+
+      // TODO THIS NEEDS TO BE FIXED! MUST TRAVERSE A TREE.
+      // Attempt to resolve any inheritedFrom data.
+      if (!current && internalEntry.parents.length)
+      {
+         for (const parent of internalEntry.parents)
+         {
+            // Start with the top-level javascript category in the compat data.
+            let currentParent = compatIdentifier;
+
+            const parentParts = parent.name.split('.');
+
+            // Traverse the compat data according to the parts of the symbol.
+            for (const part of parentParts)
+            {
+               if (!currentParent[part]) { currentParent = void 0; break; }
+
+               // Move to the next part.
+               currentParent = currentParent[part];
+            }
+
+            if (currentParent)
+            {
+               current = currentParent;
+               break;
+            }
+         }
+      }
+
+      if (!current) { return void 0; }
 
       // Return the MDN / spec URLs and status / support blocks.
       return {

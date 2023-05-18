@@ -33,7 +33,7 @@ export class MDNConverter
    #reflectionMaps = {
       external: new Map(),
       internal: new Map()
-   }
+   };
 
    /**
     * @param {import('typedoc').Application} app - Typedoc application
@@ -57,7 +57,7 @@ export class MDNConverter
    #handleResolveEnd(context)
    {
       MDNBuildReflectionMap.buildReflectionMap(this.#reflectionMaps, this.#app, context.project);
-      MDNProcessReflectionMap.processReflectionMap(this.#reflectionMaps, context.project)
+      MDNProcessReflectionMap.processReflectionMap(this.#reflectionMaps, context.project);
 
       MDNResolver.resolve(this.#reflectionMaps);
       TSResolver.resolve(this.#reflectionMaps);

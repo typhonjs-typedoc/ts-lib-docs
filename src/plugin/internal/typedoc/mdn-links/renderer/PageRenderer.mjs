@@ -91,7 +91,7 @@ export class PageRenderer
       }
 
       headEl.append($(`<script type="application/javascript">window.MDNLinks = new Map(${
-       JSON.stringify([...mdnLinks])})</script>`))
+       JSON.stringify([...mdnLinks])})</script>`));
 
       return mdnLinks;
    }
@@ -140,7 +140,7 @@ export class PageRenderer
          const symbolName = el.find('span').text();
          const mdnLink = mdnLinks.get(symbolName);
 
-         if (mdnLink) { el.append(`<wc-mdn-links data="${escapeAttr(symbolName)}" />`) }
+         if (mdnLink) { el.append(`<wc-mdn-links data="${escapeAttr(symbolName)}" />`); }
       });
    }
 

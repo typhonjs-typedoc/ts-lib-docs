@@ -4,7 +4,7 @@ import replace    from '@rollup/plugin-replace';
 
 import image      from '@rollup/plugin-image';
 import resolve    from '@rollup/plugin-node-resolve';
-import terser     from '@rollup/plugin-terser'
+import terser     from '@rollup/plugin-terser';
 import svelte     from 'rollup-plugin-svelte';
 import preprocess from 'svelte-preprocess';
 

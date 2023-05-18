@@ -30,7 +30,7 @@ export class MDNResolver
          }
 
          return parents;
-      }
+      };
 
       const results = [];
 

@@ -24,11 +24,11 @@ export class MDNProcessReflectionMap
 
          visited.add(reflection);
 
-         let parents = [];
+         const parents = [];
 
          if (reflection.extendedTypes)
          {
-            for (let extendedType of reflection.extendedTypes)
+            for (const extendedType of reflection.extendedTypes)
             {
                if (extendedType instanceof ReferenceType && extendedType._target)
                {
@@ -56,7 +56,7 @@ export class MDNProcessReflectionMap
             parts: reflection.getFullName().split('.'),
             parents
          };
-      }
+      };
 
       return visit(reflection);
    }

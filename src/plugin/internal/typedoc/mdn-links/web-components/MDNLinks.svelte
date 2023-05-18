@@ -67,9 +67,9 @@
    .container {
       display: flex;
       align-items: center;
-      background: var(--mdn-container-background);
-      border-radius: var(--mdn-container-border-radius);
-      border: var(--mdn-container-border);
+      background: var(--dmt-container-background);
+      border-radius: var(--dmt-container-border-radius);
+      border: var(--dmt-container-border);
       gap: var(--mdn-link-button-gap);
       padding: var(--mdn-link-container-padding);
       width: fit-content;
@@ -79,7 +79,7 @@
    img {
       display: block;
       border-radius: var(--mdn-link-button-border-radius);
-      border: var(--mdn-container-border);
+      border: var(--dmt-container-border);
       width: var(--mdn-link-button-diameter);
       height: var(--mdn-link-button-diameter);
       opacity: 0.8;

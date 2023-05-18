@@ -4,18 +4,33 @@
   --mdn-link-button-gap: 0.2em;
   --mdn-link-container-padding: 0.1em;
 
-  --mdn-container-border-radius: 8px;
-  --mdn-container-padding: 1em;
+  --dmt-container-border-radius: 8px;
+  --dmt-container-padding: 1em;
+}
+
+
+:root[data-theme="dark"] {
+  --dmt-container-background: rgba(0, 0, 0, 0.1);
+  --dmt-container-border: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 :root[data-theme="light"] {
-  --mdn-container-background: rgba(0, 0, 0, 0.05);
-  --mdn-container-border: 2px solid rgba(0, 0, 0, 0.1);
+  --dmt-container-background: rgba(0, 0, 0, 0.05);
+  --dmt-container-border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
-:root[data-theme="dark"] {
-  --mdn-container-background: rgba(0, 0, 0, 0.1);
-  --mdn-container-border: 2px solid rgba(0, 0, 0, 0.2);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dmt-container-background: rgba(0, 0, 0, 0.1);
+    --dmt-container-border: 2px solid rgba(0, 0, 0, 0.2);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --dmt-container-background: rgba(0, 0, 0, 0.05);
+    --dmt-container-border: 2px solid rgba(0, 0, 0, 0.1);
+  }
 }
 
 /* MDN layout ------------------------------------------------------------------------------------------------------- */
@@ -47,10 +62,10 @@
 
 // `Index` details element
 .tsd-panel-group.tsd-index-group details {
-  border: var(--mdn-container-border);
-  padding: var(--mdn-container-padding);
-  background: var(--mdn-container-background);
-  border-radius: var(--mdn-container-border-radius);
+  border: var(--dmt-container-border);
+  padding: var(--dmt-container-padding);
+  background: var(--dmt-container-background);
+  border-radius: var(--dmt-container-border-radius);
 
   .tsd-index-heading {
     margin: 0
@@ -92,10 +107,10 @@
 
   /* Styling for sidebar `Settings` */
   .tsd-navigation.settings {
-    border: var(--mdn-container-border);
-    background: var(--mdn-container-background);
-    border-radius: var(--mdn-container-border-radius);
-    padding: var(--mdn-container-padding);
+    border: var(--dmt-container-border);
+    background: var(--dmt-container-background);
+    border-radius: var(--dmt-container-border-radius);
+    padding: var(--dmt-container-padding);
 
     margin-top: 10px;
 
@@ -106,10 +121,10 @@
 
   /* Styling for sidebar `On This Page` */
   .tsd-index-accordion.tsd-page-navigation {
-    border: var(--mdn-container-border);
-    padding: var(--mdn-container-padding) 0 0 var(--mdn-container-padding);
-    background: var(--mdn-container-background);
-    border-radius: var(--mdn-container-border-radius);
+    border: var(--dmt-container-border);
+    padding: var(--dmt-container-padding) 0 0 var(--dmt-container-padding);
+    background: var(--dmt-container-background);
+    border-radius: var(--dmt-container-border-radius);
     overflow: hidden;
 
     ul {
@@ -126,6 +141,6 @@
   // All accordions
   details[open] .tsd-accordion-summary {
     padding-bottom: 10px;
-    border-bottom: var(--mdn-container-border);
+    border-bottom: var(--dmt-container-border);
   }
 }

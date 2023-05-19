@@ -49,7 +49,7 @@ export class Resolver
       this.#options = options;
 
       const dataPath = path.resolve(fileURLToPath(import.meta.url),
-       `../../../../../../../../data/${options.year}/${options.lib}/symbol-mapping.json`);
+       `../../../../../../../../data/${options.year}/${options.lib}/reflection-mapping.json`);
 
       try
       {

@@ -56,6 +56,7 @@ export class PageRenderer
     */
    #augmentGlobal($)
    {
+      $('.tsd-navigation.settings').wrap(`<wc-dmt-wrap></wc-dmt-wrap>`);
    }
 
    /**

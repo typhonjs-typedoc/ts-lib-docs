@@ -6,6 +6,8 @@
 
    export let data = void 0;
 
+   let slotEl;
+
    $: if (data)
    {
       try
@@ -20,7 +22,7 @@
 </script>
 
 <div class=wrap-test>
-  <slot />
+  <slot bind:this={slotEl} />
 </div>
 
 <style>

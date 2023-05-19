@@ -56,6 +56,10 @@ export class PageRenderer
     */
    #augmentGlobal($)
    {
+      // On load set opacity to 0 on the body as there is a DOMContentLoaded handler in `index.js` that on rAF makes the
+      // body visible. This allows the default theme `main.js` to load before display along with the DMT web components.
+      $('body').prop('style', 'opacity: 0')
+
       $('.tsd-navigation.settings').wrap(`<wc-dmt-wrap></wc-dmt-wrap>`);
    }
 

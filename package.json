@@ -95,6 +95,7 @@
     "build-docs": "npm run build-css && cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
     "build-css": "sass ./styles/custom.scss ./styles/custom.css && postcss ./styles/custom.css -p sass -u autoprefixer postcss-preset-env cssnano -m -o ./styles/custom.css",
     "build-plugins": "rollup -c config/rollup/rollup.config.plugins.mjs",
+    "build-theme": "rollup -c config/rollup/rollup.config.dmt.mjs",
     "eslint": "eslint ."
   }
 }

@@ -32,10 +32,18 @@ export async function typedoc(config, logLevel = LogLevel.Info)
          {
             typedocConfig.plugin.push('typedoc-plugin-extras');
          }
+
+         if (!typedocConfig.plugin.includes('./dist/plugin/internal/typedoc/dmt-theme/index.cjs'))
+         {
+            typedocConfig.plugin.push('./dist/plugin/internal/typedoc/dmt-theme/index.cjs');
+         }
       }
       else
       {
-         typedocConfig.plugin = ['typedoc-plugin-extras'];
+         typedocConfig.plugin = [
+            'typedoc-plugin-extras',
+            './dist/plugin/internal/typedoc/dmt-theme/index.cjs'
+         ];
       }
 
       // Add internal symbol processing / MDN linking plugin.

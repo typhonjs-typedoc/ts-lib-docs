@@ -3,6 +3,4 @@
 .doc-gen/
 dist/
 docs/
-json/
-styles/custom.css*
 node_modules/

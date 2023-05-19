@@ -1,0 +1,9 @@
+/* Defines the CSS variables for the internal mdn-links plugin */
+:root {
+  --mdn-link-button-border-radius: 5px;
+  --mdn-link-button-diameter: 20px;
+  --mdn-link-button-gap: 0.2em;
+  --mdn-link-container-padding: 0.1em;
+}
+
+/*# sourceMappingURL=custom.css.map */

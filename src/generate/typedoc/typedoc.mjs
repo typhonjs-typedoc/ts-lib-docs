@@ -25,29 +25,12 @@ export async function typedoc(config, logLevel = LogLevel.Info)
          tsconfig: `./config/tsconfig/${entryPath}/tsconfig-docs.json`
       }, entry.typedoc);
 
-      // Ensure that there is a plugin array defined and if `typedoc-plugin-extras` is not included then add it.
-      if (Array.isArray(typedocConfig.plugin))
-      {
-         if (!typedocConfig.plugin.includes('typedoc-plugin-extras'))
-         {
-            typedocConfig.plugin.push('typedoc-plugin-extras');
-         }
+      // Ensure that there is a plugin array defined.
+      if (!Array.isArray(typedocConfig.plugin)) { typedocConfig.plugin = []; }
 
-         if (!typedocConfig.plugin.includes('./dist/plugin/internal/typedoc/dmt-theme/index.cjs'))
-         {
-            typedocConfig.plugin.push('./dist/plugin/internal/typedoc/dmt-theme/index.cjs');
-         }
-      }
-      else
-      {
-         typedocConfig.plugin = [
-            'typedoc-plugin-extras',
-            './dist/plugin/internal/typedoc/dmt-theme/index.cjs'
-         ];
-      }
-
-      // Add internal symbol processing / MDN linking plugin.
-      typedocConfig.plugin.unshift('./dist/plugin/internal/typedoc/mdn-links/index.cjs');
+      // Add DMT theme and internal reflection processing / mdn-links plugin.
+      typedocConfig.plugin.push('@typhonjs-typedoc/typedoc-theme-dmt',
+       './dist/plugin/internal/typedoc/mdn-links/index.cjs');
 
       if (fs.existsSync(typedocConfig.entryPoints[0]))
       {
@@ -92,6 +75,7 @@ async function generate(config, logLevel, mdnDataPath)
    await app.bootstrapWithPlugins({
       name: config.name,
 
+      // Adds mdn-links CSS variables.
       customCss: './styles/custom.css',
 
       mdnDataPath,
@@ -99,9 +83,9 @@ async function generate(config, logLevel, mdnDataPath)
       // Disables the source links as they reference the d.ts files.
       disableSources: config.disableSources ?? true,
 
-      entryPoints: config.entryPoints,
+      dmtFavicon: config.favicon,
 
-      favicon: config.favicon,
+      entryPoints: config.entryPoints,
 
       // Hide the documentation generator footer.
       hideGenerator: config.hideGenerator ?? true,
@@ -114,9 +98,14 @@ async function generate(config, logLevel, mdnDataPath)
 
       plugin: config.plugin,
 
-      theme: 'default',
+      // theme: 'default',
 
-      tsconfig: config.tsconfig
+      tsconfig: config.tsconfig,
+
+      // Only show the `inherited` filter.
+      visibilityFilters: {
+         inherited: true,
+      }
    });
 
    // Create TypeDoc ProjectReflection.

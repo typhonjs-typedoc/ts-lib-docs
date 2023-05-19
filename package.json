@@ -65,21 +65,16 @@
     "@rollup/plugin-terser": "^0.4.2",
     "@types/dom-webcodecs": "^0.1.7",
     "@typhonjs-build-test/node": "^0.0.9",
+    "@typhonjs-typedoc/typedoc-theme-dmt": "github:typhonjs-typedoc/typedoc-theme-dmt",
     "@typhonjs-utils/file-util": "^0.0.10",
     "@typhonjs-utils/object": "^0.0.12",
     "@webgpu/types": "^0.1.32",
     "cheerio": "^1.0.0-rc.12",
-    "cssnano": "^6.0.1",
-    "postcss": "^8.4.23",
-    "postcss-cli": "^10.1.0",
-    "postcss-preset-env": "^8.3.2",
     "rollup-plugin-svelte": "^7.1.4",
-    "sass": "^1.62.1",
     "svelte": "^3.59.1",
     "svelte-preprocess" : "^5.0.3",
     "ts-morph": "^18",
     "typedoc": "^0.24",
-    "typedoc-plugin-extras": "^2.3.3",
     "typescript": "5.0.4"
   },
   "peerDependencies" : {
@@ -92,10 +87,8 @@
   ],
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
-    "build-docs": "npm run build-css && cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
-    "build-css": "sass ./styles/custom.scss ./styles/custom.css && postcss ./styles/custom.css -p sass -u autoprefixer postcss-preset-env cssnano -m -o ./styles/custom.css",
+    "build-docs": "npm run build-plugins && cross-env CONFIG_YEAR=2023 node src/generate/generate.mjs",
     "build-plugins": "rollup -c config/rollup/rollup.config.plugins.mjs",
-    "build-theme": "rollup -c config/rollup/rollup.config.dmt.mjs",
     "eslint": "eslint ."
   }
 }

@@ -103,17 +103,10 @@ export class PageRenderer
     */
    #augmentGlobal($)
    {
-      // Remove `Protected`, `Private`, and `External` from member visibility settings.
-      $('#tsd-filter-options li').each(function()
-      {
-         const el = $(this);
-         if (!el.find('input[name=inherited]').length) { el.remove(); }
-      });
    }
 
    /**
-    * Replaces the main header / title with a flex box element w/ mdn-links web component. `mdn-title-layout` uses
-    * a container query to resize the header font size.
+    * Appends mdn-links web component to DMT title header flexbox.
     *
     * @param {import('cheerio').Cheerio}  $ -
     *
@@ -121,8 +114,7 @@ export class PageRenderer
     */
    #augmentTitleLink($, page)
    {
-      $('.tsd-page-title h1').wrap('<div class="mdn-title-layout"></div>').after(
-       `<wc-mdn-links data="${escapeAttr(page.model.name)}" />`);
+      $('.dmt-title-header-flex').append(`<wc-mdn-links data="${escapeAttr(page.model.name)}" />`);
    }
 
    /**

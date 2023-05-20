@@ -29,8 +29,10 @@ export async function typedoc(config, logLevel = LogLevel.Info)
       if (!Array.isArray(typedocConfig.plugin)) { typedocConfig.plugin = []; }
 
       // Add DMT theme and internal reflection processing / mdn-links plugin.
-      typedocConfig.plugin.push('@typhonjs-typedoc/typedoc-theme-dmt',
-       './dist/plugin/internal/typedoc/mdn-links/index.cjs');
+      typedocConfig.plugin.push(
+         '@typhonjs-typedoc/typedoc-theme-dmt',
+         './dist/plugin/internal/typedoc/mdn-links/index.cjs'
+      );
 
       if (fs.existsSync(typedocConfig.entryPoints[0]))
       {
@@ -98,7 +100,7 @@ async function generate(config, logLevel, mdnDataPath)
 
       plugin: config.plugin,
 
-      // theme: 'default',
+      theme: 'default-modern',
 
       tsconfig: config.tsconfig,
 

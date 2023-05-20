@@ -47,8 +47,6 @@ export class MDNConverter
       if (typeof this.#mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
 
       this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd, this);
-
-      new PageRenderer(app, this.#reflectionMaps);
    }
 
    /**
@@ -56,6 +54,9 @@ export class MDNConverter
     */
    #handleResolveEnd(context)
    {
+      // Register the PageRenderer in the resolve end callback to ensure that it runs after the theme callbacks.
+      new PageRenderer(this.#app, this.#reflectionMaps);
+
       MDNBuildReflectionMap.buildReflectionMap(this.#reflectionMaps, this.#app, context.project);
       MDNProcessReflectionMap.processReflectionMap(this.#reflectionMaps, context.project);
 

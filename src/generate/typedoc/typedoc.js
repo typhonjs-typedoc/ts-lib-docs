@@ -18,7 +18,7 @@ export async function typedoc(config, logLevel = LogLevel.Info)
    {
       const entryPath = `${config.year}/${entry.name}`;
 
-      /** @type {import('../types').TypeDocConfig} */
+      /** @type {import('../types.js').TypeDocConfig} */
       const typedocConfig = Object.assign({
          entryPoints: [`./.doc-gen/bundled/${entryPath}/index.d.mts`],
          out: `docs/${entryPath}`,
@@ -30,8 +30,9 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 
       // Add DMT theme and internal reflection processing / mdn-links plugin.
       typedocConfig.plugin.push(
-         '@typhonjs-typedoc/typedoc-theme-dmt',
-         './dist/plugin/internal/typedoc/mdn-links/index.cjs'
+         // '@typhonjs-typedoc/typedoc-theme-dmt',
+         'S:\\program\\Javascript\\projects\\TyphonJS\\typhonjs-typedoc\\typedoc-theme-dmt\\dist\\index.js',
+         './dist/plugin/internal/typedoc/mdn-links/index.js'
       );
 
       if (fs.existsSync(typedocConfig.entryPoints[0]))
@@ -50,7 +51,7 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 /**
  * Generate docs from TS declarations in `.doc-gen`.
  *
- * @param {import('../types').TypeDocConfig} config -
+ * @param {import('../types.js').TypeDocConfig} config -
  *
  * @param {LogLevel} logLevel - The log level to use when generating Typedoc documentation.
  *

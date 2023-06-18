@@ -33,9 +33,9 @@ const libs = [
  */
 const configs = [
    {
-      input: 'src/plugin/internal/typedoc/mdn-links/index.mjs',
+      input: 'src/plugin/internal/typedoc/mdn-links/index.js',
       external: [
-         '@mdn/browser-compat-data',
+         '@mdn/browser-compat-data/forLegacyNode',
          '@typhonjs-utils/file-util',
          'cheerio',
          'fs-extra',
@@ -44,15 +44,15 @@ const configs = [
          'typedoc'
       ],
       output: {
-         file: 'dist/plugin/internal/typedoc/mdn-links/index.cjs',
-         format: 'cjs',
+         file: 'dist/plugin/internal/typedoc/mdn-links/index.js',
+         format: 'es',
          generatedCode: { constBindings: true },
          sourcemap: true
       }
    },
 
    {
-      input: 'src/plugin/internal/typedoc/mdn-links/web-components/index.mjs',
+      input: 'src/plugin/internal/typedoc/mdn-links/web-components/index.js',
       treeshake: false,
       output: {
          file: 'dist/plugin/internal/typedoc/mdn-links/mdn-web-components.js',
@@ -79,11 +79,11 @@ const configs = [
    },
 
    {
-      input: 'src/plugin/external/typedoc/ts-links-checker/index.mjs',
+      input: 'src/plugin/external/typedoc/ts-links-checker/index.js',
       external: ['typedoc'],
       output: {
-         file: `dist/plugin/external/typedoc/ts-links-checker/index.cjs`,
-         format: 'cjs',
+         file: `dist/plugin/external/typedoc/ts-links-checker/index.js`,
+         format: 'es',
          generatedCode: { constBindings: true },
          sourcemap: true
       }
@@ -95,11 +95,11 @@ for (const year of years)
    for (const lib of libs)
    {
       configs.push({
-         input: 'src/plugin/external/typedoc/ts-links/index.mjs',
+         input: 'src/plugin/external/typedoc/ts-links/index.js',
          external: ['node:fs', 'node:path', 'node:url', 'typedoc'],
          output: {
-            file: `dist/plugin/external/typedoc/ts-links/${year}/${lib}/index.cjs`,
-            format: 'cjs',
+            file: `dist/plugin/external/typedoc/ts-links/${year}/${lib}/index.js`,
+            format: 'es',
             generatedCode: { constBindings: true },
             sourcemap: true
          },

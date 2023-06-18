@@ -1,7 +1,7 @@
-import { preProcessTSLib } from '../util/preProcessTSLib.mjs';
+import { preProcessTSLib } from '../util/preProcessTSLib.js';
 
 /**
- * @type {import('../../types').GenerateConfigEntry}
+ * @type {import('../../types.js').GenerateConfigEntry}
  */
 export const dom = {
    name: 'dom',
@@ -64,8 +64,8 @@ export const dom = {
       name: 'Typescript Library Declarations (DOM)',
       favicon: './assets/icons/dom.ico',
       plugin: [
-         './dist/plugin/external/typedoc/ts-links/2023/esm/index.cjs',
-         './dist/plugin/external/typedoc/ts-links-checker/index.cjs'
+         './dist/plugin/external/typedoc/ts-links/2023/esm/index.js',
+         './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]
    }
 };

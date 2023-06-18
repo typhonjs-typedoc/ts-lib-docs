@@ -1,7 +1,7 @@
-import { TransformProject }   from './transform/index.mjs';
+import { TransformProject }   from './transform/index.js';
 
 /**
- * @param {import('../types').GenerateConfig} config - Which doc categories to generate.
+ * @param {import('../types.js').GenerateConfig} config - Which doc categories to generate.
  *
  * @returns {Promise<void>}
  */

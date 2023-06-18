@@ -4,13 +4,13 @@ import { Converter }          from 'typedoc';
 
 import {
    MDNBuildReflectionMap,
-   MDNProcessReflectionMap }  from './processing/index.mjs';
+   MDNProcessReflectionMap }  from './processing/index.js';
 
-import { PageRenderer }       from './renderer/PageRenderer.mjs';
+import { PageRenderer }       from './renderer/PageRenderer.js';
 
 import {
    MDNResolver,
-   TSResolver }               from './resolvers/index.mjs';
+   TSResolver }               from './resolvers/index.js';
 
 /**
  * Provides symbol map generation linking MDN browser compatibility data to generated TS lib docs.

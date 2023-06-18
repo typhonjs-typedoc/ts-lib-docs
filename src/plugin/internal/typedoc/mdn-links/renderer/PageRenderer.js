@@ -8,7 +8,7 @@ import {
 
 import { load }            from 'cheerio';
 
-import { escapeAttr }      from '../utils.mjs';
+import { escapeAttr }      from '../utils.js';
 
 export class PageRenderer
 {

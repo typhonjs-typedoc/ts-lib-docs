@@ -1,4 +1,4 @@
-import browserCompatData from '@mdn/browser-compat-data';
+import browserCompatData from '@mdn/browser-compat-data/forLegacyNode';
 
 /**
  * Provides resolution for all Typescript lib symbols against the MDN browser compatibility data adding MDN link & spec

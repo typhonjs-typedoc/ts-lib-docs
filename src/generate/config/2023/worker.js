@@ -1,7 +1,7 @@
-import { preProcessTSLib } from '../util/preProcessTSLib.mjs';
+import { preProcessTSLib } from '../util/preProcessTSLib.js';
 
 /**
- * @type {import('../../types').GenerateConfigEntry}
+ * @type {import('../../types.js').GenerateConfigEntry}
  */
 export const worker = {
    name: 'worker',
@@ -28,8 +28,8 @@ export const worker = {
       name: 'Typescript Library Declarations (Web Worker)',
       favicon: './assets/icons/worker.ico',
       plugin: [
-         './dist/plugin/external/typedoc/ts-links/2023/esm/index.cjs',
-         './dist/plugin/external/typedoc/ts-links-checker/index.cjs'
+         './dist/plugin/external/typedoc/ts-links/2023/esm/index.js',
+         './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]
    }
 };

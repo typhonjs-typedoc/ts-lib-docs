@@ -1,9 +1,9 @@
 import { getFileList }     from '@typhonjs-utils/file-util';
 
-import { preProcessTSLib } from '../util/preProcessTSLib.mjs';
+import { preProcessTSLib } from '../util/preProcessTSLib.js';
 
 /**
- * @type {import('../../types').GenerateConfigEntry}
+ * @type {import('../../types.js').GenerateConfigEntry}
  */
 export const esm = {
    name: 'esm',
@@ -76,7 +76,7 @@ export const esm = {
       name: 'Typescript Library Declarations (ES2023)',
       favicon: './assets/icons/esm.ico',
       plugin: [
-         './dist/plugin/external/typedoc/ts-links-checker/index.cjs'
+         './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]
    }
 };

@@ -2,9 +2,9 @@
 <svelte:options tag=wc-mdn-links />
 
 <script>
-   import * as svg         from './assets/index.mjs';
+   import * as svg         from './assets/index.js';
 
-   import { unescapeAttr } from '../utils.mjs';
+   import { unescapeAttr } from '../utils.js';
 
    export let data = void 0;
 

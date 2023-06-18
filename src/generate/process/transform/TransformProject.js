@@ -11,11 +11,11 @@ import {
    VariableDeclaration,
    VariableDeclarationKind }  from 'ts-morph';
 
-import { TransformData }      from './TransformData.mjs';
+import { TransformData }      from './TransformData.js';
 
 export class TransformProject
 {
-   /** @type {import('../../types').TransformConfig} */
+   /** @type {import('../../types.js').TransformConfig} */
    #transformConfig;
 
    /** @type {string} */
@@ -31,7 +31,7 @@ export class TransformProject
    #transformData;
 
    /**
-    * @param {import('../../types').GenerateConfigEntry}  configEntry - Description of source data to process.
+    * @param {import('../../types.js').GenerateConfigEntry}  configEntry - Description of source data to process.
     *
     * @param {number}   year - Year of the config.
     */

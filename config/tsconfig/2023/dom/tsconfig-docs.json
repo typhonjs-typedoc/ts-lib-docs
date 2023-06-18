@@ -9,6 +9,6 @@
     "types": []
   },
   "include" : [
-    "../../../../.doc-gen/bundled/2023/dom/index.d.mts"
+    "../../../../.doc-gen/bundled/2023/dom/index.d.ts"
   ]
 }

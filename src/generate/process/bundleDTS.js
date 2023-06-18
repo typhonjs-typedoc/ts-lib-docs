@@ -18,7 +18,7 @@ export async function bundleDTS(config)
       const bundleDirPath = `./.doc-gen/bundled/${entryPath}`;
 
       const transformDir = `./.doc-gen/transformed/${entryPath}`;
-      const bundleFilepath = `${bundleDirPath}/index.d.mts`;
+      const bundleFilepath = `${bundleDirPath}/index.d.ts`;
 
       fs.ensureDirSync(bundleDirPath);
 
@@ -26,7 +26,7 @@ export async function bundleDTS(config)
       {
          console.log(`Bundling '${entryPath}':`);
 
-         // Delete any existing bundled index.d.mts file.
+         // Delete any existing bundled index.d.ts file.
          if (fs.existsSync(bundleFilepath)) { fs.unlinkSync(bundleFilepath); }
 
          const filepaths = await getFileList({ dir: transformDir, resolve: true });

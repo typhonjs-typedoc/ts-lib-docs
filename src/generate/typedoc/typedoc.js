@@ -20,7 +20,7 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 
       /** @type {import('../types.js').TypeDocConfig} */
       const typedocConfig = Object.assign({
-         entryPoints: [`./.doc-gen/bundled/${entryPath}/index.d.mts`],
+         entryPoints: [`./.doc-gen/bundled/${entryPath}/index.d.ts`],
          out: `docs/${entryPath}`,
          tsconfig: `./config/tsconfig/${entryPath}/tsconfig-docs.json`
       }, entry.typedoc);

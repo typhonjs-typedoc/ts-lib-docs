@@ -30,8 +30,7 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 
       // Add DMT theme and internal reflection processing / mdn-links plugin.
       typedocConfig.plugin.push(
-         // '@typhonjs-typedoc/typedoc-theme-dmt',
-         'S:\\program\\Javascript\\projects\\TyphonJS\\typhonjs-typedoc\\typedoc-theme-dmt\\dist\\index.js',
+         '@typhonjs-typedoc/typedoc-theme-dmt',
          './dist/plugin/internal/typedoc/mdn-links/index.js'
       );
 

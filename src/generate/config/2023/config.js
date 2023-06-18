@@ -10,8 +10,8 @@ export const config = {
 
    entries: [
       esm,
-      // dom,
-      // worker
+      dom,
+      worker
    ]
 };
 

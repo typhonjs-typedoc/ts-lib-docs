@@ -78,7 +78,7 @@
     "typedoc": "^0.24.8",
     "typescript": "5.1.3",
 
-    "svelte-retag": ">=1.x.x"
+    "svelte-tag": ">=1.x.x"
   },
   "peerDependencies" : {
     "typedoc": ">=0.24.x"

@@ -74,10 +74,11 @@
     "rollup-plugin-svelte": "^7.1.5",
     "svelte": "^3.59.1",
     "svelte-preprocess" : "^5.0.4",
-    "svelte-tag": "^1.0.2",
     "ts-morph": "^18",
     "typedoc": "^0.24.8",
-    "typescript": "5.1.3"
+    "typescript": "5.1.3",
+
+    "svelte-retag": ">=1.x.x"
   },
   "peerDependencies" : {
     "typedoc": ">=0.24.x"

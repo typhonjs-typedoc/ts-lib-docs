@@ -2,6 +2,7 @@ import fs                     from 'fs-extra';
 import ts                     from 'typescript';
 
 import {
+   ClassDeclaration,
    FunctionDeclaration,
    InterfaceDeclaration,
    ModuleDeclaration,
@@ -95,11 +96,33 @@ export class TransformProject
          }
       }
 
+      await this.#transformClasses();
       await this.#transformFunctions();
       await this.#transformInterfaces();
       await this.#transformNamespaces();
       await this.#transformTypeAliases();
       await this.#transformVariables();
+   }
+
+   /**
+    * Merges two ClassDeclaration from target into source.
+    *
+    * TODO: Presently, only WebXR declarations define classes and none need to be merged. This method may be required
+    * in the future.
+    *
+    * @param {ClassDeclaration}  sourceNode - Source class.
+    *
+    * @param {ClassDeclaration}  targetNode - Target class to merge.
+    *
+    * @param {object}            [options] - Options.
+    *
+    * @param {string}            [options.indent='\t'] - Indent string to prepend.
+    *
+    * @param {boolean}           [options.mergeOverride=false] - Override duplicate members.
+    */
+   #mergeClasses(sourceNode, targetNode, { indent = '\t', mergeOverride = false } = {}) // eslint-disable-line no-unused-vars
+   {
+      throw new Error(`Merging classes to be implemented`)
    }
 
    /**
@@ -273,6 +296,42 @@ export class TransformProject
       interfaceNode.replaceWithText(`${modifiers} interface ${interfaceNode.getName()}${typeParameters ?
        `<${typeParameters}>` : ''} ${heritageClauses ? heritageClauses : ''} {\n${sortedMembers.map(
         (member) => member.getFullText()).join('')}\n}`);
+   }
+
+   /**
+    * Transforms each class tracked by name either adding new methods declarations.
+    *
+    * @returns {Promise<void>}
+    */
+   async #transformClasses()
+   {
+      for (const [name, nodes] of this.#transformData.getEntries(ClassDeclaration))
+      {
+         const classNode = nodes[0].node;
+
+         if (nodes.length > 1)
+         {
+            console.log(`Updating class: ${name}`);
+
+            for (let cntr = 1; cntr < nodes.length; cntr++)
+            {
+               const nodeEntry = nodes[cntr];
+               this.#mergeClasses(classNode, nodeEntry.node, { mergeOverride: nodeEntry.mergeOverride });
+            }
+
+            // TODO: Currently there are no merged classes / WebXR declarations are the only source of classes.
+            // this.#sortClasses(classNode);
+         }
+
+         // Create a new source file.
+         const newSourceFile = this.#project.createSourceFile(`${this.#outDir}/class-${name}.d.ts`);
+
+         // Add the class to the new source file.
+         newSourceFile.addClass(classNode.getStructure());
+
+         // Save the new source file to disk
+         await newSourceFile.save();
+      }
    }
 
    /**

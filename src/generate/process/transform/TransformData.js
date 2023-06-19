@@ -1,4 +1,5 @@
 import {
+   ClassDeclaration,
    FunctionDeclaration,
    InterfaceDeclaration,
    ModuleDeclaration,
@@ -9,6 +10,9 @@ import {
 
 export class TransformData
 {
+   /** @type {Map<string, { node: ClassDeclaration, mergeOverride: boolean }[]>} */
+   #classes = new Map();
+
    /** @type {Map<string, { node: FunctionDeclaration, mergeOverride: boolean }[]>} */
    #functions = new Map();
 
@@ -42,6 +46,11 @@ export class TransformData
 
       switch (node.getKind())
       {
+         case SyntaxKind.ClassDeclaration:
+            if (!this.#classes.has(name)) { this.#classes.set(name, [{ node, mergeOverride }]); }
+            else { this.#classes.get(name).push({ node, mergeOverride }); }
+            return true;
+
          case SyntaxKind.FunctionDeclaration:
             if (!this.#functions.has(name)) { this.#functions.set(name, [{ node, mergeOverride }]); }
             else { this.#functions.get(name).push({ node, mergeOverride }); }
@@ -90,6 +99,9 @@ export class TransformData
    {
       switch (kind)
       {
+         case ClassDeclaration:
+            return this.#classes.entries();
+
          case FunctionDeclaration:
             return this.#functions.entries();
 
@@ -118,6 +130,13 @@ export class TransformData
    toString()
    {
       let result = '';
+
+      const classNames = Array.from(this.#classes.keys()).sort();
+      if (classNames.length)
+      {
+         result += 'Classes:\n';
+         for (const name of classNames) { result += `\t${name}: ${this.#classes.get(name).length}\n`; }
+      }
 
       const functionNames = Array.from(this.#functions.keys()).sort();
       if (functionNames.length)

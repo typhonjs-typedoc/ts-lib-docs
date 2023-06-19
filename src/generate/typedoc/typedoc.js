@@ -97,6 +97,11 @@ async function generate(config, logLevel, mdnDataPath)
       // Sets log level.
       logLevel: config.logLevel ?? logLevel,
 
+      // New option in 0.24.8 required to render full navigation tree.
+      navigation: {
+        fullTree: true
+      },
+
       // Output directory for the generated documentation.
       out: config.out,
 

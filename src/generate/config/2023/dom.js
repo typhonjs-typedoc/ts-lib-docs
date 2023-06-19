@@ -22,10 +22,6 @@ export const dom = {
             {
                source: './node_modules/@webgpu/types/dist/index.d.ts',
                rename: 'extra.webgpu.d.ts'
-            },
-            {
-               source: './node_modules/@types/dom-webcodecs/index.d.ts',
-               rename: 'extra.dom.webcodecs.d.ts'
             }
          ],
 
@@ -33,15 +29,15 @@ export const dom = {
       },
 
       {
-         // Needs special handling to uncomment so types and add a missing type declaration.
+         // Needs special handling to remove unnecessary abstract classes.
          filepaths: [
             {
-               source: './node_modules/@types/dom-webcodecs/webcodecs.generated.d.ts',
-               rename: 'extra.dom.webcodecs.generated.d.ts'
+               source: './node_modules/@types/webxr/index.d.ts',
+               rename: 'extra.webxr.d.ts'
             }
          ],
 
-         preProcess: [preProcessTSLib, preProcessWebCodec]
+         preProcess: [preProcessTSLib, preProcessWebXR]
       }
    ],
 
@@ -51,7 +47,8 @@ export const dom = {
          'lib.dom.iterable.d.ts',
          'extra.dom.webcodecs.d.ts',
          'extra.dom.webcodecs.generated.d.ts',
-         'extra.webgpu.d.ts'
+         'extra.webgpu.d.ts',
+         'extra.webxr.d.ts'
       ],
 
       // The interfaces defined here must merge & override / replace any existing lib.dom values.
@@ -71,24 +68,16 @@ export const dom = {
 };
 
 /**
- * Currently in the @types/dom-webcodecs package several required type aliases are commented out (2023.5.10).
+ * Currently in the @types/webxr package empty abstract classes duplicate interfaces. These abstract classes can be
+ * removed except for `XRLayer`.
  *
  * @param {string}   srcData - Source declaration
  *
  * @returns {string} Processed declaration.
  */
-function preProcessWebCodec(srcData)
+function preProcessWebXR(srcData)
 {
-   srcData = srcData.replace('// type AlphaOption', 'type AlphaOption');
-   srcData = srcData.replace('// type AvcBitstreamFormat', 'type AvcBitstreamFormat');
-   srcData = srcData.replace('// type BitrateMode', 'type BitrateMode');
-   srcData = srcData.replace('// type CodecState', 'type CodecState');
-   srcData = srcData.replace('// type EncodedVideoChunkType', 'type EncodedVideoChunkType');
-   srcData = srcData.replace('// type LatencyMode', 'type LatencyMode');
-   srcData = srcData.replace('// type VideoPixelFormat', 'type VideoPixelFormat');
-
-   // Entirely missing from types!
-   srcData += 'type VideoEncoderBitrateMode = "constant" | "variable";';
+   srcData = srcData.replaceAll(/declare abstract class (?!.*XRLayer).*}/gm, '');
 
    return srcData;
 }

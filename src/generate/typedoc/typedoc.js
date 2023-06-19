@@ -92,6 +92,8 @@ async function generate(config, logLevel, mdnDataPath)
       // Hide the documentation generator footer.
       hideGenerator: config.hideGenerator ?? true,
 
+      kindSortOrder,
+
       // Sets log level.
       logLevel: config.logLevel ?? logLevel,
 
@@ -123,3 +125,36 @@ async function generate(config, logLevel, mdnDataPath)
       console.error('Error: No project generated');
    }
 }
+
+/**
+ * Provides a small alteration to the default kind sort order putting `Class` below `Interface`. Only the WebXR
+ * declarations have a few classes.
+ *
+ * @type {string[]}
+ */
+const kindSortOrder = [
+   'Reference',
+   'Project',
+   'Module',
+   'Namespace',
+   'Enum',
+   'EnumMember',
+   'Interface',
+   'Class',
+   'TypeAlias',
+   'Constructor',
+   'Property',
+   'Variable',
+   'Function',
+   'Accessor',
+   'Method',
+   'ObjectLiteral',
+   'Parameter',
+   'TypeParameter',
+   'TypeLiteral',
+   'CallSignature',
+   'ConstructorSignature',
+   'IndexSignature',
+   'GetSignature',
+   'SetSignature'
+]

@@ -80,18 +80,24 @@ async function generate(config, logLevel, mdnDataPath)
       // Adds mdn-links CSS variables.
       customCss: './styles/custom.css',
 
+      // Path to stored reflection data.
       mdnDataPath,
 
       // Disables the source links as they reference the d.ts files.
       disableSources: config.disableSources ?? true,
 
+      // Sets favicon.
       dmtFavicon: config.favicon,
+
+      // Removes the default module page including from navigation & breadcrumbs
+      dmtRemoveDefaultModule: true,
 
       entryPoints: config.entryPoints,
 
       // Hide the documentation generator footer.
       hideGenerator: config.hideGenerator ?? true,
 
+      // Adjust reflection kind sort order placing classes below interfaces.
       kindSortOrder,
 
       // Sets log level.

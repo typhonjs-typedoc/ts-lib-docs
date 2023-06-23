@@ -1,14 +1,17 @@
-import fs                  from 'fs-extra';
-import path                from 'node:path';
-import { fileURLToPath }   from 'node:url';
+import path                   from 'node:path';
+import { fileURLToPath }      from 'node:url';
+
+import { packAndDeflateB64 }  from '#runtime/data/format/msgpack/compress';
+
+import fs                     from 'fs-extra';
+
+import { load }               from 'cheerio';
 
 import {
    PageEvent,
-   RendererEvent }         from 'typedoc';
+   RendererEvent }            from 'typedoc';
 
-import { load }            from 'cheerio';
-
-import { escapeAttr }      from '../utils.js';
+import { escapeAttr }         from '../utils.js';
 
 export class PageRenderer
 {
@@ -90,8 +93,7 @@ export class PageRenderer
          }
       }
 
-      headEl.append($(`<script type="application/javascript">window.MDNLinks = new Map(${
-       JSON.stringify([...mdnLinks])})</script>`));
+      headEl.append($(`<meta name="MDNLinks" data-bcmp="${packAndDeflateB64(mdnLinks)}">`));
 
       return mdnLinks;
    }

@@ -1,5 +1,5 @@
 <!-- Svelte option to indicate this component is a web component -->
-<svelte:options tag=wc-mdn-links />
+<svelte:options customElement=wc-mdn-links />
 
 <script>
    import * as svg         from './assets/index.js';
@@ -17,7 +17,7 @@
          const unescaped = unescapeAttr(data)
 
          /** @type {DataMDNLinks} */
-         const mdnLinks = globalThis?.MDNLinks?.get(unescaped);
+         const mdnLinks = globalThis?.MDNLinks?.[unescaped];
 
          if (mdnLinks)
          {
@@ -55,13 +55,15 @@
    }
 </script>
 
-<div class=container>
-   {#each buttons as button}
-      <a href={button.url} target=_blank>
-         <img alt={button.title} src={button.svg} title={button.title}>
-      </a>
-   {/each}
-</div>
+{#if buttons?.length}
+   <div class=container>
+      {#each buttons as button}
+         <a href={button.url} target=_blank>
+            <img alt={button.title} src={button.svg} title={button.title}>
+         </a>
+      {/each}
+   </div>
+{/if}
 
 <style>
    .container {

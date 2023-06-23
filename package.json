@@ -9,6 +9,9 @@
     "Michael Leahy <support@typhonjs.io> (https://github.com/typhonrt)"
   ],
   "sideEffects": false,
+  "imports": {
+    "#runtime/*": "@typhonjs-svelte/runtime-base/*"
+  },
   "exports": {
     "./json/dom/reflection-mapping/*": {
       "types": "./types/index-json-mapping.d.ts",
@@ -58,7 +61,7 @@
     }
   },
   "devDependencies": {
-    "@mdn/browser-compat-data" : "^5.2.65",
+    "@mdn/browser-compat-data" : "^5.2.66",
     "@rollup/plugin-node-resolve" : "^15.1.0",
     "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-replace" : "^5.0.2",
@@ -66,13 +69,15 @@
     "@types/dom-webcodecs": "^0.1.7",
     "@types/webxr": "^0.5.2",
     "@typhonjs-build-test/node": "^0.0.9",
+    "@typhonjs-build-test/rollup-plugin-pkg-imports": "^0.0.2",
+    "@typhonjs-svelte/runtime-base": "github:typhonjs-svelte/runtime-base",
     "@typhonjs-typedoc/typedoc-theme-dmt": "github:typhonjs-typedoc/typedoc-theme-dmt",
     "@typhonjs-utils/file-util": "^0.0.10",
     "@typhonjs-utils/object": "^0.0.17",
     "@webgpu/types": "^0.1.32",
     "cheerio": "^1.0.0-rc.12",
     "rollup-plugin-svelte": "^7.1.5",
-    "svelte": "^3.59.1",
+    "svelte": "^4.0.0",
     "svelte-preprocess" : "^5.0.4",
     "ts-morph": "^18",
     "typedoc": "^0.24.8",
@@ -81,7 +86,7 @@
     "svelte-tag": ">=1.x.x"
   },
   "peerDependencies" : {
-    "typedoc": ">=0.24.x"
+    "typedoc": ">=0.24.8"
   },
   "files": [
     "/data",

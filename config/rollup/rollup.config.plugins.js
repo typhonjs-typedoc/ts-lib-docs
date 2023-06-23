@@ -1,12 +1,12 @@
-import replace    from '@rollup/plugin-replace';
+import replace             from '@rollup/plugin-replace';
 
 // These plugins are for the mdn-links web components.
-
-import image      from '@rollup/plugin-image';
-import resolve    from '@rollup/plugin-node-resolve';
-import terser     from '@rollup/plugin-terser';
-import svelte     from 'rollup-plugin-svelte';
-import preprocess from 'svelte-preprocess';
+import { importsResolve }  from "@typhonjs-build-test/rollup-plugin-pkg-imports";
+import image               from '@rollup/plugin-image';
+import resolve             from '@rollup/plugin-node-resolve';
+import terser              from '@rollup/plugin-terser';
+import svelte              from 'rollup-plugin-svelte';
+import preprocess          from 'svelte-preprocess';
 
 /**
  * Stores the years to generate configs for below.
@@ -35,6 +35,7 @@ const configs = [
    {
       input: 'src/plugin/internal/typedoc/mdn-links/index.js',
       external: [
+         '#runtime/data/format/msgpack/compress',
          '@mdn/browser-compat-data/forLegacyNode',
          '@typhonjs-utils/file-util',
          'cheerio',
@@ -70,6 +71,8 @@ const configs = [
             },
             preprocess: preprocess()
          }),
+
+         importsResolve(),
 
          resolve({
             browser: true,

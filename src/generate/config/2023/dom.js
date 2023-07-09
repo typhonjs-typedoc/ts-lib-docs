@@ -16,16 +16,24 @@ export const dom = {
                rename: 'extra.dom.webcodecs.d.ts'
             },
             {
-               source: './node_modules/@types/dom-webcodecs/webcodecs.generated.d.ts',
-               rename: 'extra.dom.webcodecs.generated.d.ts'
-            },
-            {
                source: './node_modules/@webgpu/types/dist/index.d.ts',
                rename: 'extra.webgpu.d.ts'
             }
          ],
 
          preProcess: [preProcessTSLib]
+      },
+
+      {
+         // Needs special handling to remove commented out aliases that are necessary / not included in TS dom library.
+         filepaths: [
+            {
+               source: './node_modules/@types/dom-webcodecs/webcodecs.generated.d.ts',
+               rename: 'extra.dom.webcodecs.generated.d.ts'
+            }
+         ],
+
+         preProcess: [preProcessTSLib, preProcessWebCodec]
       },
 
       {
@@ -66,6 +74,21 @@ export const dom = {
       ]
    }
 };
+
+/**
+ * Currently in the @types/dom-webcodecs package some commented out type aliases need to be made available. The
+ * `AllowSharedBufferSource` alias must be uncommented.
+ *
+ * @param {string}   srcData - Source declaration
+ *
+ * @returns {string} Processed declaration.
+ */
+function preProcessWebCodec(srcData)
+{
+   srcData = srcData.replaceAll(/\/\/ type AllowSharedBufferSource/gm, 'type AllowSharedBufferSource');
+
+   return srcData;
+}
 
 /**
  * Currently in the @types/webxr package empty abstract classes duplicate interfaces. These abstract classes can be

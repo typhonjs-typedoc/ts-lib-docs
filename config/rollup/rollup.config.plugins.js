@@ -112,7 +112,7 @@ for (const year of years)
                values: {
                   REPLACE_YEAR: year,
                   REPLACE_LIB: `'${lib}'`,
-                  REPLACE_HOST: `'http://localhost:63342/ts-lib-docs/docs/${year}/${lib}'`
+                  REPLACE_HOST: `'https://typhonjs-typedoc.github.io/ts-lib-docs/${year}/${lib}'`
                }
             })
          ]

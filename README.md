@@ -15,13 +15,15 @@ provides links to MDN docs _and_ relevant specifications embedded in the API doc
 ------------
 
 If you are using TypeDoc to generate documentation there are several plugins available to link all TS built-in lib 
-symbols to the hosted TS Lib docs. 
+symbols to the hosted TS Lib docs. You can find the NPM package here: [@typhonjs-typedoc/ts-lib-docs](https://www.npmjs.com/package/@typhonjs-typedoc/ts-lib-docs) 
 
-Include the following in your `dependencies` in `package.json`:
+Include the following in your `devDependencies` in `package.json`:
 ```json
 {
-   "dependencies": {
-      "@typhonjs-typedoc/ts-lib-docs": "2023.7.10"
+   "devDependencies": {
+      "@typhonjs-typedoc/ts-lib-docs": "2023.7.10",
+      "@typhonjs-typedoc/typedoc-theme-dmt": "^0.1.0",
+      "typedoc": "^0.24.8"
    }
 }
 ```
@@ -47,12 +49,12 @@ the above example.
 A brand new Typedoc theme [@typhonjs-typedoc/typedoc-theme-dmt](https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-theme-dmt) / 
 (Default Modern Theme) / theme augmentation is used to generate the TS Lib docs. The biggest feature is a massive 
 reduction in disk space utilized upwards of 90% for large documentation projects like this one along with an 80% speed 
-improvement when generating docs. 
+improvement when generating docs. The DMT theme is not necessary to link your TypeDoc doc generation. 
 
 ------------
 
-Please note that these API docs are presently hosted through Github pages while a permanent hosting location is found. 
-IE if this gets popular GH bandwidth concerns may come into play.
+Please note that the TS Lib API docs are presently hosted through Github pages while a permanent hosting location is 
+found. IE if this gets popular GH bandwidth concerns may come into play.
 
 You may open an issue at [ts-lib-docs](https://github.com/typhonjs-typedoc/ts-lib-docs) repository for discussion / 
 feedback.

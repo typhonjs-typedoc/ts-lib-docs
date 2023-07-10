@@ -21,10 +21,11 @@ Include the following in your `dependencies` in `package.json`:
 ```json
 {
    "dependencies": {
-      "@typhonjs-typedoc/ts-lib-docs": "0.1.0"
+      "@typhonjs-typedoc/ts-lib-docs": "2023.7.10"
    }
 }
 ```
+The date of generation `<year>.<month>.<day>` is used instead of normal SEMVER.
 
 Then in your TypeDoc configuration / JSON include:
 

@@ -10,7 +10,40 @@
 <div class="col-content">
 <div class="tsd-page-title">
 <h2>Typescript Library Declarations (DOM)</h2></div>
-<div class="tsd-panel tsd-typography"><a id="md:api-docs-typescript-libs" class="tsd-anchor"></a><h1><a href="#md:api-docs-typescript-libs">api-docs-typescript-libs</a></h1><p>Provides API docs for Typescript libs DOM, ES2023, and Web Worker APIs</p>
+<div class="tsd-panel tsd-typography"><p>Provides comprehensive API docs for the Typescript built-in libs covering the <a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/dom/">DOM</a>, 
+<a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/esm/">ES2023</a>, and 
+<a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/worker/">Web Worker</a> APIs. The DOM API docs also include the 
+WebCodecs, WebGPU, and WebXR APIs.</p>
+<p>The docs are generated from the following sources:</p>
+<ul>
+<li>Typescript built-in libs (5.1.6)</li>
+<li>@types/dom-webcodecs (0.1.8)</li>
+<li>@webgpu/types (0.1.32)</li>
+<li>@types/webxr (0.5.2)</li>
+</ul>
+<p>The <code>@mdn/browser-compat-data</code> (5.3.1) package is cross-linked against all symbols and a web component 
+provides links to MDN docs <em>and</em> relevant specifications embedded in the API docs provided.</p>
+<hr>
+<p>If you are using TypeDoc to generate documentation there are several plugins available to link all TS built-in lib 
+symbols to the hosted TS Lib docs. </p>
+<p>Include the following in your <code>dependencies</code> in <code>package.json</code>:</p>
+<pre><code class="language-json"><span class="hl-0">{</span><br><span class="hl-0">   </span><span class="hl-1">"dependencies"</span><span class="hl-0">: {</span><br><span class="hl-0">      </span><span class="hl-1">"@typhonjs-typedoc/ts-lib-docs"</span><span class="hl-0">: </span><span class="hl-2">"0.1.0"</span><br><span class="hl-0">   }</span><br><span class="hl-0">}</span>
+</code><button>Copy</button></pre>
+<p>Then in your TypeDoc configuration / JSON include:</p>
+<pre><code class="language-json"><span class="hl-0">{</span><br><span class="hl-0">   </span><span class="hl-1">"plugin"</span><span class="hl-0">: [         </span><br><span class="hl-0">      </span><span class="hl-2">"@typhonjs-typedoc/typedoc-theme-dmt"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-2">"@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/dom/2023"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-2">"@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/esm/2023"</span><br><span class="hl-0">   ]</span><br><span class="hl-0">}</span>
+</code><button>Copy</button></pre>
+<p>You should choose either the "dom" or "worker" <code>ts-lib-docs</code> plugin and not both. The "worker" plugin is omitted from 
+the above example.</p>
+<hr>
+<p>A brand new Typedoc theme <a href="https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-theme-dmt">@typhonjs-typedoc/typedoc-theme-dmt</a> / 
+(Default Modern Theme) / theme augmentation is used to generate the TS Lib docs. The biggest feature is a massive 
+reduction in disk space utilized upwards of 90% for large documentation projects like this one along with an 80% speed 
+improvement when generating docs. </p>
+<hr>
+<p>Please note that these API docs are presently hosted through Github pages while a permanent hosting location is found. 
+IE if this gets popular GH bandwidth concerns may come into play.</p>
+<p>You may open an issue at <a href="https://github.com/typhonjs-typedoc/ts-lib-docs">ts-lib-docs</a> repository for discussion / 
+feedback.</p>
 </div></div>
 <div class="col-sidebar">
 <div class="page-menu">
@@ -23,13 +56,6 @@
 <ul id="tsd-filter-options">
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked=""><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li></ul></form></div>
 <div class="tsd-theme-toggle">
-<h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
-<details open="" class="tsd-index-accordion tsd-page-navigation"><summary class="tsd-accordion-summary">
-<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="#icon-chevronDown"></use></svg>On This Page</h3></summary>
-<div class="tsd-accordion-details" tabindex="-1">
-<ul>
-<li>
-<ul>
-<li><a href="#md:api-docs-typescript-libs"><span>api-<wbr>docs-<wbr>typescript-<wbr>libs</span></a></li></ul></li></ul></div></details></div>
+<h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div></div>
 <div class="site-menu" tabindex="-1"><wc-dmt-nav pageurl="\u0022index.html\u0022"></wc-dmt-nav></div></div></div>
 <div class="overlay"></div></body></html>

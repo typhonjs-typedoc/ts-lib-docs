@@ -1,3 +1,11 @@
+![@typhonjs-typedoc/ts-lib-docs](https://i.imgur.com/vzvOB5E.jpg)
+
+[![NPM](https://img.shields.io/npm/v/@typhonjs-typedoc/ts-lib-docs.svg?label=npm)](https://www.npmjs.com/package/@typhonjs-typedoc/ts-lib-docs)
+[![Code Style](https://img.shields.io/badge/code%20style-allman-yellowgreen.svg?style=flat)](https://en.wikipedia.org/wiki/Indent_style#Allman_style)
+[![License](https://img.shields.io/badge/license-MPLv2-yellowgreen.svg?style=flat)](https://github.com/typhonjs-typedoc/ts-lib-docs/blob/main/LICENSE)
+[![Discord](https://img.shields.io/discord/737953117999726592?label=TyphonJS%20Discord)](https://discord.gg/mnbgN8f)
+[![Twitch](https://img.shields.io/twitch/status/typhonrt?style=social)](https://www.twitch.tv/typhonrt)
+
 Provides comprehensive API docs for the Typescript built-in libs covering the [DOM](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/dom/), 
 [ES2023](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/esm/), and 
 [Web Worker](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/worker/) APIs. The DOM API docs also include the 
@@ -21,7 +29,7 @@ Include the following in your `devDependencies` in `package.json`:
 ```json
 {
    "devDependencies": {
-      "@typhonjs-typedoc/ts-lib-docs": "2023.7.10",
+      "@typhonjs-typedoc/ts-lib-docs": "2023.7.12",
       "@typhonjs-typedoc/typedoc-theme-dmt": "^0.1.0",
       "typedoc": "^0.24.8"
    }

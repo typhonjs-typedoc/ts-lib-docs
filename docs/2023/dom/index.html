@@ -10,9 +10,9 @@
 <div class="col-content">
 <div class="tsd-page-title">
 <h2>Typescript Library Declarations (DOM)</h2></div>
-<div class="tsd-panel tsd-typography"><p>Provides comprehensive API docs for the Typescript built-in libs covering the <a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/dom/">DOM</a>, 
-<a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/esm/">ES2023</a>, and 
-<a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/worker/">Web Worker</a> APIs. The DOM API docs also include the 
+<div class="tsd-panel tsd-typography"><p>Provides comprehensive API docs for the Typescript built-in libs covering the <a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/dom/">DOM</a>,
+<a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/esm/">ES2023</a>, and
+<a href="https://typhonjs-typedoc.github.io/ts-lib-docs/2023/worker/">Web Worker</a> APIs. The DOM API docs also include the
 WebCodecs, WebGPU, and WebXR APIs.</p>
 <p>The docs are generated from the following sources:</p>
 <ul>
@@ -21,29 +21,29 @@ WebCodecs, WebGPU, and WebXR APIs.</p>
 <li>@webgpu/types (0.1.32)</li>
 <li>@types/webxr (0.5.2)</li>
 </ul>
-<p>The <code>@mdn/browser-compat-data</code> (5.3.1) package is cross-linked against all symbols and a web component 
+<p>The <code>@mdn/browser-compat-data</code> (5.3.1) package is cross-linked against all symbols and a web component
 provides links to MDN docs <em>and</em> relevant specifications embedded in the API docs provided.</p>
 <hr>
-<p>If you are using TypeDoc to generate documentation there are several plugins available to link all TS built-in lib 
+<p>If you are using TypeDoc to generate documentation there are several plugins available to link all TS built-in lib
 symbols to the hosted TS Lib docs. You can find the NPM package here: <a href="https://www.npmjs.com/package/@typhonjs-typedoc/ts-lib-docs">@typhonjs-typedoc/ts-lib-docs</a> </p>
 <p>Include the following in your <code>devDependencies</code> in <code>package.json</code>:</p>
-<pre><code class="language-json"><span class="hl-0">{</span><br><span class="hl-0">   </span><span class="hl-1">"devDependencies"</span><span class="hl-0">: {</span><br><span class="hl-0">      </span><span class="hl-1">"@typhonjs-typedoc/ts-lib-docs"</span><span class="hl-0">: </span><span class="hl-2">"2023.7.10"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-1">"@typhonjs-typedoc/typedoc-theme-dmt"</span><span class="hl-0">: </span><span class="hl-2">"^0.1.0"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-1">"typedoc"</span><span class="hl-0">: </span><span class="hl-2">"^0.24.8"</span><br><span class="hl-0">   }</span><br><span class="hl-0">}</span>
+<pre><code class="language-json"><span class="hl-0">{</span><br><span class="hl-0">   </span><span class="hl-1">"devDependencies"</span><span class="hl-0">: {</span><br><span class="hl-0">      </span><span class="hl-1">"@typhonjs-typedoc/ts-lib-docs"</span><span class="hl-0">: </span><span class="hl-2">"2023.7.12"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-1">"@typhonjs-typedoc/typedoc-theme-dmt"</span><span class="hl-0">: </span><span class="hl-2">"^0.1.0"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-1">"typedoc"</span><span class="hl-0">: </span><span class="hl-2">"^0.24.8"</span><br><span class="hl-0">   }</span><br><span class="hl-0">}</span>
 </code><button>Copy</button></pre>
 <p>The date of generation <code>&lt;year&gt;.&lt;month&gt;.&lt;day&gt;</code> is used instead of normal SEMVER.</p>
 <p>Then in your TypeDoc configuration / JSON include:</p>
 <pre><code class="language-json"><span class="hl-0">{</span><br><span class="hl-0">   </span><span class="hl-1">"plugin"</span><span class="hl-0">: [         </span><br><span class="hl-0">      </span><span class="hl-2">"@typhonjs-typedoc/typedoc-theme-dmt"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-2">"@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/dom/2023"</span><span class="hl-0">,</span><br><span class="hl-0">      </span><span class="hl-2">"@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/esm/2023"</span><br><span class="hl-0">   ]</span><br><span class="hl-0">}</span>
 </code><button>Copy</button></pre>
-<p>You should choose either the "dom" or "worker" <code>ts-lib-docs</code> plugin and not both. The "worker" plugin is omitted from 
+<p>You should choose either the "dom" or "worker" <code>ts-lib-docs</code> plugin and not both. The "worker" plugin is omitted from
 the above example.</p>
 <hr>
-<p>A brand new Typedoc theme <a href="https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-theme-dmt">@typhonjs-typedoc/typedoc-theme-dmt</a> / 
-(Default Modern Theme) / theme augmentation is used to generate the TS Lib docs. The biggest feature is a massive 
-reduction in disk space utilized upwards of 90% for large documentation projects like this one along with an 80% speed 
+<p>A brand new Typedoc theme <a href="https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-theme-dmt">@typhonjs-typedoc/typedoc-theme-dmt</a> /
+(Default Modern Theme) / theme augmentation is used to generate the TS Lib docs. The biggest feature is a massive
+reduction in disk space utilized upwards of 90% for large documentation projects like this one along with an 80% speed
 improvement when generating docs. The DMT theme is not necessary to link your TypeDoc doc generation. </p>
 <hr>
-<p>Please note that the TS Lib API docs are presently hosted through Github pages while a permanent hosting location is 
+<p>Please note that the TS Lib API docs are presently hosted through Github pages while a permanent hosting location is
 found. IE if this gets popular GH bandwidth concerns may come into play.</p>
-<p>You may open an issue at <a href="https://github.com/typhonjs-typedoc/ts-lib-docs">ts-lib-docs</a> repository for discussion / 
+<p>You may open an issue at <a href="https://github.com/typhonjs-typedoc/ts-lib-docs">ts-lib-docs</a> repository for discussion /
 feedback.</p>
 </div></div>
 <div class="col-sidebar">

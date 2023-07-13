@@ -1,6 +1,6 @@
 {
   "name": "@typhonjs-typedoc/ts-lib-docs",
-  "version": "2023.7.10",
+  "version": "2023.7.12",
   "description": "Provides generated documentation for built-in Typescript lib declarations and a TypeDoc plugin to link symbols to the published docs.",
   "license": "MPL-2.0",
   "type": "module",
@@ -75,7 +75,7 @@
     "@typhonjs-build-test/node": "^0.0.9",
     "@typhonjs-build-test/rollup-plugin-pkg-imports": "^0.0.2",
     "@typhonjs-svelte/runtime-base": "github:typhonjs-svelte/runtime-base#0.1.0",
-    "@typhonjs-typedoc/typedoc-theme-dmt": "github:typhonjs-typedoc/typedoc-theme-dmt",
+    "@typhonjs-typedoc/typedoc-theme-dmt": "^0.1.0",
     "@typhonjs-utils/file-util": "^0.0.10",
     "@typhonjs-utils/object": "^0.0.17",
     "@webgpu/types": "^0.1.32",
@@ -95,6 +95,9 @@
     "/dist/plugin/external",
     "/types"
   ],
+  "bugs": "https://github.com/typhonjs-typedoc/ts-lib-docs/issues",
+  "homepage": "https://github.com/typhonjs-typedoc/ts-lib-docs#readme",
+  "repository": "github:typhonjs-typedoc/ts-lib-docs",
   "browserslist": [">5%", "not IE 11"],
   "scripts": {
     "build-docs": "npm run build-plugins && cross-env CONFIG_YEAR=2023 node src/generate/generate.js",

@@ -1,4 +1,8 @@
 # Changelog
+## 2023.7.12 release
+- Better readme / fixed package.json repo links
+- No functional changes.
+
 ## 2023.7.10 release
 - Initial release!
 

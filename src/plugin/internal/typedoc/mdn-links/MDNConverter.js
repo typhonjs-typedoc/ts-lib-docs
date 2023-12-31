@@ -42,10 +42,6 @@ export class MDNConverter
    {
       this.#app = app;
 
-      this.#mdnDataPath = app.options.getValue('mdnDataPath');
-
-      if (typeof this.#mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
-
       this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd, this);
    }
 
@@ -54,6 +50,10 @@ export class MDNConverter
     */
    #handleResolveEnd(context)
    {
+      const mdnDataPath = this.#app.options.getValue('mdnDataPath');
+
+      if (typeof mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
+
       // Register the PageRenderer in the resolve end callback to ensure that it runs after the theme callbacks.
       new PageRenderer(this.#app, this.#reflectionMaps);
 
@@ -63,14 +63,14 @@ export class MDNConverter
       MDNResolver.resolve(this.#reflectionMaps);
       TSResolver.resolve(this.#reflectionMaps);
 
-      fs.ensureDirSync(this.#mdnDataPath);
+      fs.ensureDirSync(mdnDataPath);
 
       // Serialize the symbol map as object then save the keys / symbol names separately. Both of these JSON files are
       // used by other plugins.
-      fs.writeFileSync(`${this.#mdnDataPath}/reflection-mapping.json`,
+      fs.writeFileSync(`${mdnDataPath}/reflection-mapping.json`,
        JSON.stringify(Object.fromEntries(this.#reflectionMaps.external)), 'utf-8');
 
-      fs.writeFileSync(`${this.#mdnDataPath}/reflection-names.json`,
+      fs.writeFileSync(`${mdnDataPath}/reflection-names.json`,
        JSON.stringify([...this.#reflectionMaps.external.keys()]), 'utf-8');
    }
 }

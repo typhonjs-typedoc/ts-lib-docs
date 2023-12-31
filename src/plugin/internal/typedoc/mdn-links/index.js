@@ -1,4 +1,6 @@
-import { MDNConverter } from './MDNConverter.js';
+import { MDNConverter }    from './MDNConverter.js';
+
+import { ParameterType }   from 'typedoc';
 
 /**
  * Provides a plugin for Typedoc to link Typescript built-in declaration symbols to MDN and specification documentation.
@@ -8,6 +10,14 @@ import { MDNConverter } from './MDNConverter.js';
  */
 export function load(app)
 {
+   // Add option to pass the config year to plugins.
+   app.options.addDeclaration({
+      name: 'mdnDataPath',
+      help: 'This is output path for the internal mdn-links plugin.',
+      type: ParameterType.String,
+      defaultValue: null,
+   });
+
    new MDNConverter(app);
 }
 

@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
+    "module": "es2022",
     "target": "es2022",
     "noImplicitAny": true,
     "sourceMap": false,
-    "moduleResolution" : "NodeNext",
+    "moduleResolution" : "Bundler",
     "lib": ["ES2023"],
     "types": [],
     "skipLibCheck" : true

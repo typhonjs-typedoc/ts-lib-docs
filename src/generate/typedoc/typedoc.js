@@ -3,7 +3,6 @@ import fs            from 'fs-extra';
 import {
    Application,
    LogLevel,
-   ParameterType,
    TSConfigReader }  from 'typedoc';
 
 /**
@@ -61,20 +60,7 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 async function generate(config, logLevel, mdnDataPath)
 {
    // Create a new TypeDoc application instance
-   const app = new Application();
-
-   // Set TypeDoc options
-   app.options.addReader(new TSConfigReader());
-
-   // Add option to pass the config year to plugins.
-   app.options.addDeclaration({
-      name: 'mdnDataPath',
-      help: 'This is output path for the internal mdn-links plugin.',
-      type: ParameterType.String,
-      defaultValue: null,
-   });
-
-   await app.bootstrapWithPlugins({
+   const app = await Application.bootstrapWithPlugins({
       name: config.name,
 
       // Adds mdn-links CSS variables.
@@ -89,9 +75,6 @@ async function generate(config, logLevel, mdnDataPath)
       // Sets favicon.
       dmtFavicon: config.favicon,
 
-      // Removes the default module page including from navigation & breadcrumbs
-      dmtRemoveDefaultModule: true,
-
       entryPoints: config.entryPoints,
 
       // Hide the documentation generator footer.
@@ -101,12 +84,8 @@ async function generate(config, logLevel, mdnDataPath)
       kindSortOrder,
 
       // Sets log level.
-      logLevel: config.logLevel ?? logLevel,
-
-      // New option in 0.24.8 required to render full navigation tree.
-      navigation: {
-         fullTree: true
-      },
+      // logLevel: config.logLevel ?? logLevel,
+      logLevel: LogLevel.Verbose,
 
       // Output directory for the generated documentation.
       out: config.out,
@@ -119,12 +98,12 @@ async function generate(config, logLevel, mdnDataPath)
 
       // Only show the `inherited` filter.
       visibilityFilters: {
-         inherited: true,
+         inherited: true
       }
-   });
+   }, [new TSConfigReader()]);
 
    // Create TypeDoc ProjectReflection.
-   const project = app.convert();
+   const project = await app.convert();
 
    // Generate documentation and URL map.
    if (project)
@@ -159,7 +138,6 @@ const kindSortOrder = [
    'Function',
    'Accessor',
    'Method',
-   'ObjectLiteral',
    'Parameter',
    'TypeParameter',
    'TypeLiteral',

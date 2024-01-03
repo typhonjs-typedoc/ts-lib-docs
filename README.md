@@ -6,18 +6,20 @@
 [![Discord](https://img.shields.io/discord/737953117999726592?label=TyphonJS%20Discord)](https://discord.gg/mnbgN8f)
 [![Twitch](https://img.shields.io/twitch/status/typhonrt?style=social)](https://www.twitch.tv/typhonrt)
 
+Note: I should have made a branch as preparation for generating 2024 docs is checked into the main repo. 
+
 Provides comprehensive API docs for the Typescript built-in libs covering the [DOM](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/dom/), 
 [ES2023](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/esm/), and 
 [Web Worker](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/worker/) APIs. The DOM API docs also include the 
 WebCodecs, WebGPU, and WebXR APIs.
 
 The docs are generated from the following sources:
-- Typescript built-in libs (5.1.6)
-- @types/dom-webcodecs (0.1.8)
-- @webgpu/types (0.1.32)
-- @types/webxr (0.5.2)
+- Typescript built-in libs (5.3.3)
+- @types/dom-webcodecs (0.1.11)
+- @webgpu/types (0.1.40)
+- @types/webxr (0.5.10)
 
-The `@mdn/browser-compat-data` (5.3.1) package is cross-linked against all symbols and a web component 
+The `@mdn/browser-compat-data` (5.5.4) package is cross-linked against all symbols and a web component 
 provides links to MDN docs _and_ relevant specifications embedded in the API docs provided.
 
 ------------
@@ -30,8 +32,8 @@ Include the following in your `devDependencies` in `package.json`:
 {
    "devDependencies": {
       "@typhonjs-typedoc/ts-lib-docs": "2023.7.12",
-      "@typhonjs-typedoc/typedoc-theme-dmt": "^0.1.0",
-      "typedoc": "^0.24.8"
+      "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.0",
+      "typedoc": "^0.25.0"
    }
 }
 ```
@@ -52,12 +54,15 @@ Then in your TypeDoc configuration / JSON include:
 You should choose either the "dom" or "worker" `ts-lib-docs` plugin and not both. The "worker" plugin is omitted from 
 the above example.
 
-------------
+### Synergy
 
-A brand new Typedoc theme [@typhonjs-typedoc/typedoc-theme-dmt](https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-theme-dmt) / 
-(Default Modern Theme) / theme augmentation is used to generate the TS Lib docs. The biggest feature is a massive 
-reduction in disk space utilized upwards of 90% for large documentation projects like this one along with an 80% speed 
-improvement when generating docs. The DMT theme is not necessary to link your TypeDoc doc generation. 
+- The TS Lib docs are generated with the Default Modern Theme / [@typhonjs-typedoc/typedoc-theme-dmt](https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-theme-dmt). This is a 
+theme augmentation that adds features and fixes rough edges of the default TypeDoc theme.
+
+
+- A zero / low configuration CLI frontend [@typhonjs-typedoc/typedoc-pkg](https://www.npmjs.com/package/@typhonjs-typedoc/typedoc-pkg) 
+is available for TypeDoc that supports generating documentation from repositories utilizing `package.json` configured 
+with export condition types. 
 
 ------------
 

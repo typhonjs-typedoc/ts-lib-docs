@@ -9,9 +9,9 @@ export const config = {
    year: 2024,
 
    entries: [
-      // esm,
+      esm,
       dom,
-      // worker
+      worker
    ]
 };
 

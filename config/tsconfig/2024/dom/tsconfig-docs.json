@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "es2022",
+    "target": "es2022",
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "moduleResolution" : "Bundler",
+    "lib": ["DOM", "ES2023"],
+    "types": []
+  },
+  "include" : [
+    "../../../../.doc-gen/bundled/2024/dom/index.d.ts"
+  ]
+}

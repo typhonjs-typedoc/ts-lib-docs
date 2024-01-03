@@ -61,6 +61,13 @@ async function generate(config, logLevel, mdnDataPath)
 {
    // Create a new TypeDoc application instance
    const app = await Application.bootstrapWithPlugins({
+      // Default Modern Theme options --------------------------------------------------------------------------------
+
+      // Sets favicon.
+      dmtFavicon: config.favicon,
+
+      // TypeDoc options ---------------------------------------------------------------------------------------------
+
       name: config.name,
 
       // Adds mdn-links CSS variables.
@@ -71,9 +78,6 @@ async function generate(config, logLevel, mdnDataPath)
 
       // Disables the source links as they reference the d.ts files.
       disableSources: config.disableSources ?? true,
-
-      // Sets favicon.
-      dmtFavicon: config.favicon,
 
       entryPoints: config.entryPoints,
 
@@ -128,8 +132,8 @@ const kindSortOrder = [
    'Module',
    'Enum',
    'EnumMember',
-   'Interface',
    'Namespace',
+   'Interface',
    'Class',
    'TypeAlias',
    'Constructor',

@@ -60,8 +60,8 @@
     },
     "./typedoc/ts-links-checker": {
       "types": "./types/index-plugin.d.ts",
-      "import": "./dist/plugin/external/typedoc/ts-links-checker.js",
-      "default": "./dist/plugin/external/typedoc/ts-links-checker.js"
+      "import": "./dist/plugin/external/typedoc/ts-links-checker/index.js",
+      "default": "./dist/plugin/external/typedoc/ts-links-checker/index.js"
     }
   },
   "devDependencies": {

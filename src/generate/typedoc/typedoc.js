@@ -66,6 +66,11 @@ async function generate(config, logLevel, mdnDataPath)
       // Sets favicon.
       dmtFavicon: config.favicon,
 
+      // Turn off theme animation due to large codebases.
+      dmtSettings: {
+        animation: false
+      },
+
       // TypeDoc options ---------------------------------------------------------------------------------------------
 
       name: config.name,

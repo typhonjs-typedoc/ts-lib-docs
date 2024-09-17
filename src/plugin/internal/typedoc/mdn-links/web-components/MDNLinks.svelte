@@ -66,6 +66,11 @@
 {/if}
 
 <style>
+   a:focus-visible {
+      border-radius: 0.25rem;
+      outline: var(--dmt-outline-focus-visible);
+   }
+
    .container {
       display: flex;
       align-items: center;

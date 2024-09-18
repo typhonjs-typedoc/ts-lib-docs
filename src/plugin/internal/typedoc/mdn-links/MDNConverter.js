@@ -21,13 +21,6 @@ export class MDNConverter
    #app;
 
    /**
-    * This is the output path for the external symbol map.
-    *
-    * @type {string}
-    */
-   #mdnDataPath;
-
-   /**
     * @type {ReflectionMaps}
     */
    #reflectionMaps = {
@@ -42,7 +35,7 @@ export class MDNConverter
    {
       this.#app = app;
 
-      this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd, this);
+      this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd.bind(this));
    }
 
    /**
@@ -50,6 +43,11 @@ export class MDNConverter
     */
    #handleResolveEnd(context)
    {
+      /**
+       * This is the output path for the external symbol map.
+       *
+       * @type {string}
+       */
       const mdnDataPath = this.#app.options.getValue('mdnDataPath');
 
       if (typeof mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }

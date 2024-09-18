@@ -6,20 +6,18 @@
 [![Discord](https://img.shields.io/discord/737953117999726592?label=TyphonJS%20Discord)](https://discord.gg/mnbgN8f)
 [![Twitch](https://img.shields.io/twitch/status/typhonrt?style=social)](https://www.twitch.tv/typhonrt)
 
-Note: I should have made a branch as preparation for generating 2024 docs is checked into the main repo. 
-
-Provides comprehensive API docs for the Typescript built-in libs covering the [DOM](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/dom/), 
-[ES2023](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/esm/), and 
-[Web Worker](https://typhonjs-typedoc.github.io/ts-lib-docs/2023/worker/) APIs. The DOM API docs also include the 
+Provides comprehensive API docs for the Typescript built-in libs covering the [DOM](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/dom/), 
+[ES2023](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/es/), and 
+[Web Worker](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/worker/) APIs. The DOM API docs also include the 
 WebCodecs, WebGPU, and WebXR APIs.
 
 The docs are generated from the following sources:
-- Typescript built-in libs (5.3.3)
+- Typescript built-in libs (5.6.2)
 - @types/dom-webcodecs (0.1.11)
-- @webgpu/types (0.1.40)
-- @types/webxr (0.5.10)
+- @webgpu/types (0.1.45)
+- @types/webxr (0.5.20)
 
-The `@mdn/browser-compat-data` (5.5.4) package is cross-linked against all symbols and a web component 
+The `@mdn/browser-compat-data` (5.6.1) package is cross-linked against all symbols and a web component 
 provides links to MDN docs _and_ relevant specifications embedded in the API docs provided.
 
 ------------
@@ -31,9 +29,9 @@ Include the following in your `devDependencies` in `package.json`:
 ```json
 {
    "devDependencies": {
-      "@typhonjs-typedoc/ts-lib-docs": "2023.7.12",
+      "@typhonjs-typedoc/ts-lib-docs": "2024.9.18",
       "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.0",
-      "typedoc": "^0.25.0"
+      "typedoc": "^0.26.6"
    }
 }
 ```
@@ -45,14 +43,14 @@ Then in your TypeDoc configuration / JSON include:
 {
    "plugin": [         
       "@typhonjs-typedoc/typedoc-theme-dmt",
-      "@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/dom/2023",
-      "@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/esm/2023"
+      "@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/dom/2024",
+      "@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/es/2024"
    ]
 }
 ```
 
 You should choose either the "dom" or "worker" `ts-lib-docs` plugin and not both. The "worker" plugin is omitted from 
-the above example.
+the above example. The `es` plugin includes the Typescript built-in library Javascript API.
 
 ### Synergy
 

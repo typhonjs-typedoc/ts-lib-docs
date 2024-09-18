@@ -31,8 +31,8 @@ export class PageRenderer
       this.#app = app;
       this.#reflectionMaps = reflectionMaps;
 
-      this.#app.renderer.on(PageEvent.END, this.#handlePageEnd, this);
-      this.#app.renderer.once(RendererEvent.END, this.#handleRendererEnd, this);
+      this.#app.renderer.on(PageEvent.END, this.#handlePageEnd.bind(this));
+      this.#app.renderer.on(RendererEvent.END, this.#handleRendererEnd.bind(this));
    }
 
    /**

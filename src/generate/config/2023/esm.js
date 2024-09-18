@@ -74,7 +74,7 @@ export const esm = {
 
    typedoc: {
       name: 'Typescript Library Declarations (ES2023)',
-      favicon: './assets/icons/esm.ico',
+      favicon: './assets/icons/es.ico',
       plugin: [
          './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]

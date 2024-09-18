@@ -5,8 +5,8 @@ import { preProcessTSLib } from '../util/preProcessTSLib.js';
 /**
  * @type {import('../../types.js').GenerateConfigEntry}
  */
-export const esm = {
-   name: 'esm',
+export const es = {
+   name: 'es',
 
    process: [{
       filepaths: getFileList({
@@ -69,13 +69,14 @@ export const esm = {
          'lib.es2022.sharedmemory.d.ts',
          'lib.es2022.string.d.ts',
          'lib.es2023.array.d.ts',
-         'lib.es2023.collection.d.ts'
+         'lib.es2023.collection.d.ts',
+         'lib.es2023.intl.d.ts'
       ]
    },
 
    typedoc: {
-      name: 'Typescript Library Declarations (ES2024)',
-      favicon: './assets/icons/esm.ico',
+      name: 'Typescript Library Declarations (ES2023)',
+      favicon: './assets/icons/es.ico',
       plugin: [
          './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]

@@ -1,5 +1,5 @@
 import { dom }    from './dom.js';
-import { esm }    from './esm.js';
+import { es }     from './es.js';
 import { worker } from './worker.js';
 
 /**
@@ -9,8 +9,8 @@ export const config = {
    year: 2024,
 
    entries: [
-      esm,
       dom,
+      es,
       worker
    ]
 };

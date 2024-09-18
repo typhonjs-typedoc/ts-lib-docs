@@ -11,6 +11,7 @@ export const dom = {
          filepaths: [
             './node_modules/typescript/lib/lib.dom.d.ts',
             './node_modules/typescript/lib/lib.dom.iterable.d.ts',
+            './node_modules/typescript/lib/lib.dom.asynciterable.d.ts',
             {
                source: './node_modules/@types/dom-webcodecs/index.d.ts',
                rename: 'extra.dom.webcodecs.d.ts'
@@ -53,6 +54,7 @@ export const dom = {
       filenames: [
          'lib.dom.d.ts',
          'lib.dom.iterable.d.ts',
+         'lib.dom.asynciterable.d.ts',
          'extra.dom.webcodecs.d.ts',
          'extra.dom.webcodecs.generated.d.ts',
          'extra.webgpu.d.ts',
@@ -69,7 +71,7 @@ export const dom = {
       name: 'Typescript Library Declarations (DOM)',
       favicon: './assets/icons/dom.ico',
       plugin: [
-         './dist/plugin/external/typedoc/ts-links/2023/esm/index.js',
+         './dist/plugin/external/typedoc/ts-links/2024/es/index.js',
          './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]
    }

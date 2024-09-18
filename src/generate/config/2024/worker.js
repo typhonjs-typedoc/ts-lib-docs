@@ -11,6 +11,7 @@ export const worker = {
          './node_modules/typescript/lib/lib.webworker.d.ts',
          './node_modules/typescript/lib/lib.webworker.importscripts.d.ts',
          './node_modules/typescript/lib/lib.webworker.iterable.d.ts',
+         './node_modules/typescript/lib/lib.webworker.asynciterable.d.ts',
       ],
 
       preProcess: [preProcessTSLib]
@@ -20,7 +21,8 @@ export const worker = {
       filenames: [
          'lib.webworker.d.ts',
          'lib.webworker.importscripts.d.ts',
-         'lib.webworker.iterable.d.ts'
+         'lib.webworker.iterable.d.ts',
+         'lib.webworker.asynciterable.d.ts'
       ]
    },
 
@@ -28,7 +30,7 @@ export const worker = {
       name: 'Typescript Library Declarations (Web Worker)',
       favicon: './assets/icons/worker.ico',
       plugin: [
-         './dist/plugin/external/typedoc/ts-links/2023/esm/index.js',
+         './dist/plugin/external/typedoc/ts-links/2024/es/index.js',
          './dist/plugin/external/typedoc/ts-links-checker/index.js'
       ]
    }

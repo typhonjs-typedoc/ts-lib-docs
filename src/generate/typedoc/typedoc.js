@@ -15,8 +15,6 @@ export async function typedoc(config, logLevel = LogLevel.Info)
 {
    for (const entry of config.entries)
    {
-      if (entry.name !== 'es') { continue; }
-
       const entryPath = `${config.year}/${entry.name}`;
 
       /** @type {import('../types.js').TypeDocConfig} */

@@ -22,7 +22,7 @@ depth component after executing the render pass.</p>
 to prior to executing the render pass. Ignored if <a href="GPURenderPassDepthStencilAttachment.html#stencilLoadOp" class="tsd-kind-property">GPURenderPassDepthStencilAttachment#stencilLoadOp</a>
 is not GPULoadOp#"clear".
 The value will be converted to the type of the stencil aspect of <code>view</code> by taking the same
-number of LSBs as the number of bits in the stencil aspect of one texel block of <code>view</code>.</p>
+number of LSBs as the number of bits in the stencil aspect of one texel block|texel of <code>view</code>.</p>
 </div><div class="tsd-comment tsd-typography"></div></section><section class="tsd-panel tsd-member"><a id="stencilLoadOp" class="tsd-anchor"></a><h3 class="tsd-anchor-link"><code class="tsd-tag">Optional</code><span>stencil<wbr>Load<wbr>Op</span><a href="#stencilLoadOp" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3><div class="tsd-signature"><span class="tsd-kind-property">stencil<wbr>Load<wbr>Op</span><span class="tsd-signature-symbol">?:</span> <a href="../types/GPULoadOp.html" class="tsd-signature-type tsd-kind-type-alias">GPULoadOp</a></div><div class="tsd-comment tsd-typography"><p>Indicates the load operation to perform on <a href="GPURenderPassDepthStencilAttachment.html#view" class="tsd-kind-property">GPURenderPassDepthStencilAttachment#view</a>'s
 stencil component prior to executing the render pass.
 Note: It is recommended to prefer clearing; see GPULoadOp#"clear" for details.</p>

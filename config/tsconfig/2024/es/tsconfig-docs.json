@@ -10,6 +10,6 @@
     "skipLibCheck" : true
   },
   "include" : [
-    "../../../../.doc-gen/bundled/2024/esm/index.d.ts"
+    "../../../../.doc-gen/bundled/2024/es/index.d.ts"
   ]
 }

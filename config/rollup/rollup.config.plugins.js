@@ -14,7 +14,7 @@ import preprocess          from 'svelte-preprocess';
  * @type {string[]}
  */
 const years = [
-   '2023'
+   '2024'
 ];
 
 /**
@@ -24,7 +24,7 @@ const years = [
  */
 const libs = [
    'dom',
-   'esm',
+   'es',
    'worker'
 ];
 

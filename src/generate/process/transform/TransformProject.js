@@ -7,6 +7,7 @@ import {
    InterfaceDeclaration,
    ModuleDeclaration,
    Project,
+   StructureKind,
    SyntaxKind,
    TypeAliasDeclaration,
    VariableDeclaration,
@@ -47,8 +48,8 @@ export class TransformProject
 
       this.#project = new Project({
          compilerOptions: {
-            target: ts.ScriptTarget.ES2022,
-            module: ts.ModuleKind.ES2022,
+            target: ts.ScriptTarget.ESNext,
+            module: ts.ModuleKind.ESNext
          }
       });
 
@@ -147,6 +148,8 @@ export class TransformProject
          const targetMemberName = targetMember.getSymbol()?.getName();
          if (!targetMemberName) { continue; }
 
+         const targetMemberStruct = targetMember.getStructure();
+
          if (mergeOverride)
          {
             const sourceMembers = sourceNode.getMembers();
@@ -154,20 +157,60 @@ export class TransformProject
 
             if (!sourceMember)
             {
-               console.log(`${indent}adding member: ${targetMemberName}`);
-               sourceNode.addMember(targetMember.getStructure());
+               switch (targetMemberStruct.kind)
+               {
+                  case StructureKind.GetAccessor:
+                     console.log(`${indent}adding getter: ${targetMemberName}`);
+                     sourceNode.addGetAccessor(targetMemberStruct);
+                     break;
+                  case StructureKind.SetAccessor:
+                     console.log(`${indent}adding setter: ${targetMemberName}`);
+                     sourceNode.addSetAccessor(targetMemberStruct);
+                     break;
+                  default:
+                     console.log(`${indent}adding member: ${targetMemberName}`);
+                     sourceNode.addMember(targetMemberStruct);
+                     break;
+               }
             }
             else
             {
-               console.log(`${indent}replacing member: ${targetMemberName}`);
                sourceMember.remove();
-               sourceNode.addMember(targetMember.getStructure());
+
+               switch (targetMemberStruct.kind)
+               {
+                  case StructureKind.GetAccessor:
+                     console.log(`${indent}replacing getter: ${targetMemberName}`);
+                     sourceNode.addGetAccessor(targetMemberStruct);
+                     break;
+                  case StructureKind.SetAccessor:
+                     console.log(`${indent}replacing setter: ${targetMemberName}`);
+                     sourceNode.addSetAccessor(targetMemberStruct);
+                     break;
+                  default:
+                     console.log(`${indent}replacing member: ${targetMemberName}`);
+                     sourceNode.addMember(targetMemberStruct);
+                     break;
+               }
             }
          }
          else
          {
-            console.log(`${indent}adding member: ${targetMemberName}`);
-            sourceNode.addMember(targetMember.getStructure());
+            switch (targetMemberStruct.kind)
+            {
+               case StructureKind.GetAccessor:
+                  console.log(`${indent}adding getter: ${targetMemberName}`);
+                  sourceNode.addGetAccessor(targetMemberStruct);
+                  break;
+               case StructureKind.SetAccessor:
+                  console.log(`${indent}adding setter: ${targetMemberName}`);
+                  sourceNode.addSetAccessor(targetMemberStruct);
+                  break;
+               default:
+                  console.log(`${indent}adding member: ${targetMemberName}`);
+                  sourceNode.addMember(targetMemberStruct);
+                  break;
+            }
          }
       }
    }

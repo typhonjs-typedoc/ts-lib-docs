@@ -34,6 +34,10 @@ export const es = {
          'lib.es2015.symbol.d.ts',
          'lib.es2015.symbol.wellknown.d.ts',
          'lib.es2016.array.include.d.ts',
+         'lib.es2016.intl.d.ts',
+         'lib.es2017.intl.d.ts',
+         'lib.es2017.arraybuffer.d.ts',
+         'lib.es2017.date.d.ts',
          'lib.es2017.intl.d.ts',
          'lib.es2017.object.d.ts',
          'lib.es2017.sharedmemory.d.ts',
@@ -66,16 +70,22 @@ export const es = {
          'lib.es2022.intl.d.ts',
          'lib.es2022.object.d.ts',
          'lib.es2022.regexp.d.ts',
-         'lib.es2022.sharedmemory.d.ts',
          'lib.es2022.string.d.ts',
          'lib.es2023.array.d.ts',
          'lib.es2023.collection.d.ts',
-         'lib.es2023.intl.d.ts'
+         'lib.es2023.intl.d.ts',
+         'lib.es2024.arraybuffer.d.ts',
+         'lib.es2024.collection.d.ts',
+         'lib.es2024.object.d.ts',
+         'lib.es2024.promise.d.ts',
+         'lib.es2024.regexp.d.ts',
+         'lib.es2024.sharedmemory.d.ts',
+         'lib.es2024.string.d.ts',
       ]
    },
 
    typedoc: {
-      name: 'Typescript Library Declarations (ES2023)',
+      name: 'Typescript Library Declarations (ES2024)',
       favicon: './assets/icons/es.ico',
       plugin: [
          './dist/plugin/external/typedoc/ts-links-checker/index.js'

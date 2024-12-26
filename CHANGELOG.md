@@ -1,5 +1,5 @@
 # Changelog
-## 2025.12.25 release
+## 2024.12.25 release
 - Regenerated to capture `ES2024` TS built-in lib declaration additions.
 
 The docs are generated from the following sources:

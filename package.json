@@ -1,6 +1,6 @@
 {
   "name": "@typhonjs-typedoc/ts-lib-docs",
-  "version": "2024.9.18",
+  "version": "2024.12.25-next.1",
   "description": "Provides generated documentation for built-in Typescript lib declarations and a TypeDoc plugin to link symbols to the published docs.",
   "license": "MPL-2.0",
   "type": "module",
@@ -81,30 +81,36 @@
     }
   },
   "devDependencies": {
-    "@mdn/browser-compat-data" : "^5.6.1",
-    "@rollup/plugin-node-resolve" : "^15.2.3",
+    "@mdn/browser-compat-data" : "^5.6.26",
+    "@rollup/plugin-node-resolve" : "^16.0.0",
     "@rollup/plugin-image": "^3.0.3",
-    "@rollup/plugin-replace" : "^5.0.7",
+    "@rollup/plugin-replace" : "^6.0.2",
     "@rollup/plugin-terser": "^0.4.4",
-    "@types/dom-webcodecs": "^0.1.11",
+    "@types/dom-webcodecs": "^0.1.13",
     "@types/webxr": "0.5.20",
-    "@typhonjs-build-test/node": "^0.0.11",
     "@typhonjs-build-test/rollup-plugin-pkg-imports": "^0.5.0",
-    "@typhonjs-svelte/runtime-base": "github:typhonjs-svelte/runtime-base#0.1.0",
-    "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.0-next.15",
+    "@typhonjs-config/eslint-config": "^0.6.3",
+    "@typhonjs-svelte/runtime-base": "github:typhonjs-svelte/runtime-base#0.2.0-next.2",
+    "@typhonjs-typedoc/typedoc-theme-dmt": "^0.3.1",
     "@typhonjs-utils/file-util": "^0.1.0",
     "@typhonjs-utils/object": "^0.1.0",
-    "@webgpu/types": "^0.1.45",
+    "@webgpu/types": "^0.1.52",
     "cheerio": "^1.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.1",
+    "fs-extra": "^11.2.0",
+    "got": "^14.4.5",
+    "rollup": "^4.29.1",
     "rollup-plugin-svelte": "^7.2.2",
+    "sirv-cli" : "^3.0.0",
     "svelte": "^4.2.19",
     "svelte-preprocess" : "^6.0",
-    "ts-morph": "^23",
-    "typedoc": "0.26.7",
-    "typescript": "5.6.2"
+    "ts-morph": "^24",
+    "typedoc": "0.27.6",
+    "typescript": "5.7.2"
   },
   "peerDependencies" : {
-    "typedoc": ">=0.25.0"
+    "typedoc": ">=0.25.0 || 0.26.x || 0.27.x || 0.28.x || 0.29.x || 0.30.x || 0.31.x"
   },
   "files": [
     "/data",
@@ -123,6 +129,7 @@
   "scripts": {
     "build-docs": "npm run build-plugins && cross-env CONFIG_YEAR=2024 node src/generate/generate.js",
     "build-plugins": "rollup -c config/rollup/rollup.config.plugins.js",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "sirv": "npx sirv-cli docs/2024/worker --host"
   }
 }

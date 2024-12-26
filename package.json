@@ -1,6 +1,6 @@
 {
   "name": "@typhonjs-typedoc/ts-lib-docs",
-  "version": "2024.12.25-next.1",
+  "version": "2024.12.25",
   "description": "Provides generated documentation for built-in Typescript lib declarations and a TypeDoc plugin to link symbols to the published docs.",
   "license": "MPL-2.0",
   "type": "module",

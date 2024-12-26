@@ -1,5 +1,4 @@
 import {
-   DefaultTheme,
    ProjectReflection,
    ReflectionKind }     from 'typedoc';
 
@@ -43,8 +42,7 @@ export class MDNBuildReflectionMap
     */
    static buildReflectionMap(reflectionMap, app, project)
    {
-      const urlMappings = new DefaultTheme(app.renderer).getUrls(project);
-
+      const urlMappings = app.renderer.theme.getUrls(project);
       /**
        * Creates a top level URL mapping for all main HTML pages.
        *
@@ -64,7 +62,7 @@ export class MDNBuildReflectionMap
          const reflectionUrl = reflectionUrlMap.get(reflection);
 
          const url = reflectionUrl ? reflectionUrl : parentUrl +
-          (parentUrl && reflection.parent ? `#${reflection.getAlias()}` : '');
+          (parentUrl && reflection.parent ? `#${reflection.name.replace(/\W/g, "_")}` : '');
 
          if (this.#validReflectionKind.has(reflection.kind))
          {

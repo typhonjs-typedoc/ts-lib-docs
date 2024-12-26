@@ -1,6 +1,9 @@
 import fs                     from 'fs-extra';
 
-import { Converter }          from 'typedoc';
+import {
+   Converter,
+   RendererEvent
+}          from 'typedoc';
 
 import {
    MDNBuildReflectionMap,
@@ -36,12 +39,13 @@ export class MDNConverter
       this.#app = app;
 
       this.#app.converter.on(Converter.EVENT_RESOLVE_END, this.#handleResolveEnd.bind(this));
+      this.#app.renderer.on(RendererEvent.BEGIN, this.#handleRendererBegin.bind(this), -200);
    }
 
    /**
     * @param {import('typedoc').Context}  context -
     */
-   #handleResolveEnd(context)
+   #handleRendererBegin(context)
    {
       /**
        * This is the output path for the external symbol map.
@@ -49,11 +53,6 @@ export class MDNConverter
        * @type {string}
        */
       const mdnDataPath = this.#app.options.getValue('mdnDataPath');
-
-      if (typeof mdnDataPath !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
-
-      // Register the PageRenderer in the resolve end callback to ensure that it runs after the theme callbacks.
-      new PageRenderer(this.#app, this.#reflectionMaps);
 
       MDNBuildReflectionMap.buildReflectionMap(this.#reflectionMaps, this.#app, context.project);
       MDNProcessReflectionMap.processReflectionMap(this.#reflectionMaps, context.project);
@@ -70,5 +69,13 @@ export class MDNConverter
 
       fs.writeFileSync(`${mdnDataPath}/reflection-names.json`,
        JSON.stringify([...this.#reflectionMaps.external.keys()]), 'utf-8');
+   }
+
+   /**
+    */
+   #handleResolveEnd()
+   {
+      // Register the PageRenderer in the resolve end callback to ensure that it runs after the theme callbacks.
+      new PageRenderer(this.#app, this.#reflectionMaps);
    }
 }

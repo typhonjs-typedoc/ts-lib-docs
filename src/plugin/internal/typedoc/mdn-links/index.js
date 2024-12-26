@@ -16,6 +16,10 @@ export function load(app)
       help: 'This is output path for the internal mdn-links plugin.',
       type: ParameterType.String,
       defaultValue: null,
+      validate: (value) =>
+      {
+         if (typeof value !== 'string') { throw new TypeError(`'mdnDataPath' option is not a string.`); }
+      }
    });
 
    new MDNConverter(app);

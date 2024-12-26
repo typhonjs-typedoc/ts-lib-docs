@@ -62,7 +62,7 @@ export class MDNBuildReflectionMap
          const reflectionUrl = reflectionUrlMap.get(reflection);
 
          const url = reflectionUrl ? reflectionUrl : parentUrl +
-          (parentUrl && reflection.parent ? `#${reflection.name.replace(/\W/g, "_")}` : '');
+          (parentUrl && reflection.parent ? `#${reflection.name.replace(/\W/g, "_").toLowerCase()}` : '');
 
          if (this.#validReflectionKind.has(reflection.kind))
          {

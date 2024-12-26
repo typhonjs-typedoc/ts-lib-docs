@@ -7,17 +7,17 @@
 [![Twitch](https://img.shields.io/twitch/status/typhonrt?style=social)](https://www.twitch.tv/typhonrt)
 
 Provides comprehensive API docs for the Typescript built-in libs covering the [DOM](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/dom/), 
-[ES2023](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/es/), and 
+[ES2024](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/es/), and 
 [Web Worker](https://typhonjs-typedoc.github.io/ts-lib-docs/2024/worker/) APIs. The DOM API docs also include the 
 WebCodecs, WebGPU, and WebXR APIs.
 
 The docs are generated from the following sources:
 - Typescript built-in libs (5.6.2)
-- @types/dom-webcodecs (0.1.11)
-- @webgpu/types (0.1.45)
+- @types/dom-webcodecs (0.1.13)
+- @webgpu/types (0.1.52)
 - @types/webxr (0.5.20)
 
-The `@mdn/browser-compat-data` (5.6.1) package is cross-linked against all symbols and a web component 
+The `@mdn/browser-compat-data` (5.6.26) package is cross-linked against all symbols and a web component 
 provides links to MDN docs _and_ relevant specifications embedded in the API docs provided.
 
 ------------
@@ -25,13 +25,16 @@ provides links to MDN docs _and_ relevant specifications embedded in the API doc
 If you are using TypeDoc to generate documentation there are several plugins available to link all TS built-in lib 
 symbols to the hosted TS Lib docs. You can find the NPM package here: [@typhonjs-typedoc/ts-lib-docs](https://www.npmjs.com/package/@typhonjs-typedoc/ts-lib-docs) 
 
-Include the following in your `devDependencies` in `package.json`:
-```json
+The following dev dependencies will allow you to generate API docs in the same exact style of `ts-lib-docs`.
+You only need `ts-lib-docs` and are free to choose whatever recent TypeDoc configuration you like.
+
+However, to match the style of `ts-lib-docs` include the following in your `devDependencies` in `package.json`:
+```json5
 {
    "devDependencies": {
-      "@typhonjs-typedoc/ts-lib-docs": "2024.9.18",
-      "@typhonjs-typedoc/typedoc-theme-dmt": "^0.2.0",
-      "typedoc": "^0.26.6"
+      "@typhonjs-typedoc/ts-lib-docs": "2024.12.25",
+      "@typhonjs-typedoc/typedoc-theme-dmt": "^0.3.0", // This is optional
+      "typedoc": "^0.27.3"
    }
 }
 ```
@@ -39,10 +42,10 @@ The date of generation `<year>.<month>.<day>` is used instead of normal SEMVER.
 
 Then in your TypeDoc configuration / JSON include:
 
-```json
+```json5
 {
    "plugin": [         
-      "@typhonjs-typedoc/typedoc-theme-dmt",
+      "@typhonjs-typedoc/typedoc-theme-dmt",  // This is optional
       "@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/dom/2024",
       "@typhonjs-typedoc/ts-lib-docs/typedoc/ts-links/es/2024"
    ]

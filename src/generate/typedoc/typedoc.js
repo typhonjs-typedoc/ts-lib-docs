@@ -155,4 +155,4 @@ const kindSortOrder = [
    'IndexSignature',
    'GetSignature',
    'SetSignature'
-]
+];

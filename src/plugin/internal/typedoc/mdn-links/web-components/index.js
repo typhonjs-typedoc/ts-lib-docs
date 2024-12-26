@@ -11,7 +11,7 @@ if (!globalThis.MDNLinks)
       const metaMDNLinks = document.querySelector('meta[name="MDNLinks"]');
       globalThis.MDNLinks = globalThis?.dmtInflateAndUnpackB64?.(metaMDNLinks.getAttribute('data-bcmp'));
    }
-   catch(err)
+   catch (err)
    {
       console.warn(`[ts-lib-docs] Failed to inflate and unpack MDN links data.`);
    }

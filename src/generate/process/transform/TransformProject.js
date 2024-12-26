@@ -122,7 +122,7 @@ export class TransformProject
     */
    #mergeClasses(sourceNode, targetNode, { indent = '\t', mergeOverride = false } = {}) // eslint-disable-line no-unused-vars
    {
-      throw new Error(`Merging classes to be implemented`)
+      throw new Error(`Merging classes to be implemented`);
    }
 
    /**

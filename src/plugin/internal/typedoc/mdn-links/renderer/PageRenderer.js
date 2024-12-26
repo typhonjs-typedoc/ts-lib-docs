@@ -103,7 +103,7 @@ export class PageRenderer
     *
     * @param {import('cheerio').Cheerio}  $ -
     */
-   #augmentGlobal($)
+   #augmentGlobal($) // eslint-disable-line no-unused-vars
    {
    }
 

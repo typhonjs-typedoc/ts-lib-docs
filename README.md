@@ -12,7 +12,7 @@ Provides comprehensive API docs for the Typescript built-in libs covering the [D
 WebCodecs, WebGPU, and WebXR APIs.
 
 The docs are generated from the following sources:
-- Typescript built-in libs (5.6.2)
+- Typescript built-in libs (5.7.2)
 - @types/dom-webcodecs (0.1.13)
 - @webgpu/types (0.1.52)
 - @types/webxr (0.5.20)
